@@ -19,12 +19,29 @@ export default function Map() {
           center: [tokyo.lng, tokyo.lat],
           zoom: zoom
         });
+
+        const marker = new maptilersdk.Marker({color: "#FF0000"})
+        .setLngLat([tokyo.lng, tokyo.lat])
+        .addTo(map.current);
+
+        marker.getElement().title = "Test Title"
+
+        marker.getElement().addEventListener("click", () => {
+            console.log(marker.getElement().title)
+          });
       
       }, [tokyo.lng, tokyo.lat, zoom]);
 
     return (
     <div className="map-wrap">
-        <div ref={mapContainer} className="map" />
+        <div ref={mapContainer} className="map">
+          <Marker
+            longitude={tokyo.lng}
+            latitude={tokyo.lat}
+            color="#FF0000"
+            onClick={() => alert('Marker clicked!')}
+          />
+        </div>
     </div>
     );
   }
