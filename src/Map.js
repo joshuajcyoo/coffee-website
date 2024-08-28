@@ -24,24 +24,17 @@ export default function Map() {
         .setLngLat([tokyo.lng, tokyo.lat])
         .addTo(map.current);
 
-        marker.getElement().title = "Test Title"
+        marker.getElement().title = "Test"
 
         marker.getElement().addEventListener("click", () => {
-            console.log(marker.getElement().title)
+            console.log(marker.getElement())
           });
       
       }, [tokyo.lng, tokyo.lat, zoom]);
 
     return (
     <div className="map-wrap">
-        <div ref={mapContainer} className="map">
-          <Marker
-            longitude={tokyo.lng}
-            latitude={tokyo.lat}
-            color="#FF0000"
-            onClick={() => alert('Marker clicked!')}
-          />
-        </div>
+        <div ref={mapContainer} className="map" />
     </div>
     );
   }
