@@ -6,7 +6,7 @@ import './Map.css';
 export default function Map() {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const tokyo = { lng: -118.30864605232344, lat: 34.06136799199684 };
+    const koreatown = { lng: -118.30864605232344, lat: 34.06136799199684 };
     const zoom = 11;
     maptilersdk.config.apiKey = 'bFXUsq2lCBRLxW1UauI0';
 
@@ -16,21 +16,21 @@ export default function Map() {
         map.current = new maptilersdk.Map({
           container: mapContainer.current,
           style: maptilersdk.MapStyle.STREETS,
-          center: [tokyo.lng, tokyo.lat],
+          center: [koreatown.lng, koreatown.lat],
           zoom: zoom
         });
 
         const marker = new maptilersdk.Marker({color: "#FF0000"})
-        .setLngLat([tokyo.lng, tokyo.lat])
+        .setLngLat([koreatown.lng, koreatown.lat])
         .addTo(map.current);
 
-        marker.getElement().title = "Test"
+        marker.getElement().title = "3THYME"
 
         marker.getElement().addEventListener("click", () => {
-            console.log(marker.getElement())
+            console.log(marker.getElement().title)
           });
       
-      }, [tokyo.lng, tokyo.lat, zoom]);
+      }, [koreatown.lng, koreatown.lat, zoom]);
 
     return (
     <div className="map-wrap">
