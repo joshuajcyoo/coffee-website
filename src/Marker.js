@@ -3,9 +3,9 @@ import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './Map.css';
 
-export default function Marker({map, markerData}) {
+export default function Marker({map, markerData, selectCafe}) {
     useEffect(() => {
-        if (map) {
+        if (map && markerData.visible) {
             const marker = new maptilersdk.Marker({color: markerData.color_code})
             .setLngLat([markerData.longitude, markerData.latitude])
             .addTo(map);
@@ -13,7 +13,7 @@ export default function Marker({map, markerData}) {
             marker.getElement().title = markerData.name
 
             marker.getElement().addEventListener("click", () => {
-                console.log(marker.getElement().title)
+                selectCafe(markerData);
             });
         }
     }, [map, markerData]);
