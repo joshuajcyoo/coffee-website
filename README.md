@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# A Working Guide to LA Coffee Shops
+
+Deployed [here](https://joshuajcyoo.github.io/coffee-website/)
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
