@@ -1,40 +1,38 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import Marker from './Marker';
 import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './Map.css';
 
-export default function Map() {
+export default function Map({lng, lat, zoom, data, selectCafe}) {
     const mapContainer = useRef(null);
-    const map = useRef(null);
-    const tokyo = { lng: -118.30864605232344, lat: 34.06136799199684 };
-    const zoom = 11;
     maptilersdk.config.apiKey = 'bFXUsq2lCBRLxW1UauI0';
 
+    const [map, setMap] = useState(null);
+
     useEffect(() => {
-        if (map.current) return; // stops map from intializing more than once
-      
-        map.current = new maptilersdk.Map({
+        setMap(new maptilersdk.Map({
           container: mapContainer.current,
           style: maptilersdk.MapStyle.STREETS,
-          center: [tokyo.lng, tokyo.lat],
+          center: [lng, lat],
           zoom: zoom
-        });
-
-        const marker = new maptilersdk.Marker({color: "#FF0000"})
-        .setLngLat([tokyo.lng, tokyo.lat])
-        .addTo(map.current);
-
-        marker.getElement().title = "Test"
-
-        marker.getElement().addEventListener("click", () => {
-            console.log(marker.getElement())
-          });
-      
-      }, [tokyo.lng, tokyo.lat, zoom]);
+        }));
+    }, [lng, lat, zoom, data]);
 
     return (
     <div className="map-wrap">
-        <div ref={mapContainer} className="map" />
+        <div ref={mapContainer} className="map">
+        </div>
+        <Marker 
+          map={map} 
+          markerData={data[0]} 
+          selectCafe={selectCafe}
+        />
+        <Marker 
+          map={map} 
+          markerData={data[1]} 
+          selectCafe={selectCafe}
+        />
     </div>
     );
   }
