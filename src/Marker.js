@@ -1,22 +1,30 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './Map.css';
 
 export default function Marker({map, markerData, selectCafe}) {
+    const [theMarker, setTheMarker] = useState(null);
+
     useEffect(() => {
         if (map && markerData.visible) {
-            const marker = new maptilersdk.Marker({color: markerData.color_code})
+            if (theMarker) theMarker.remove();
+            var color = markerData.color_code;
+            if (markerData.is_selected) color = "#e6353d";
+            const marker = new maptilersdk.Marker({color: color})
             .setLngLat([markerData.longitude, markerData.latitude])
             .addTo(map);
 
             marker.getElement().title = markerData.name
 
-            marker.getElement().addEventListener("click", () => {
+            marker.getElement().addEventListener("click", (event) => {
+                event.preventDefault(); 
+                event.stopPropagation();
                 selectCafe(markerData);
             });
+            setTheMarker(marker);
         }
-    }, [map, markerData]);
+    }, [map, markerData, selectCafe]);
     
     return (null);
 }

@@ -11,28 +11,28 @@ export default function Map({lng, lat, zoom, data, selectCafe}) {
     const [map, setMap] = useState(null);
 
     useEffect(() => {
-        setMap(new maptilersdk.Map({
-          container: mapContainer.current,
-          style: maptilersdk.MapStyle.STREETS,
-          center: [lng, lat],
-          zoom: zoom
-        }));
-    }, [lng, lat, zoom, data]);
+      setMap(new maptilersdk.Map({
+        container: mapContainer.current,
+        style: maptilersdk.MapStyle.STREETS,
+        center: [lng, lat],
+        zoom: zoom
+      }));
+    }, [lng, lat, zoom]);
 
     return (
-    <div className="map-wrap">
-        <div ref={mapContainer} className="map">
-        </div>
-        <Marker 
-          map={map} 
-          markerData={data[0]} 
-          selectCafe={selectCafe}
-        />
-        <Marker 
-          map={map} 
-          markerData={data[1]} 
-          selectCafe={selectCafe}
-        />
-    </div>
+      <div className="map-wrap">
+          <div ref={mapContainer} className="map">
+          </div>
+          <Marker 
+            map={map} 
+            markerData={data[0]} 
+            selectCafe={selectCafe}
+          />
+          <Marker 
+            map={map} 
+            markerData={data[1]} 
+            selectCafe={selectCafe}
+          />
+      </div>
     );
   }
