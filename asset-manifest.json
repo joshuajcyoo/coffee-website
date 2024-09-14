@@ -1,15 +1,25 @@
 {
   "files": {
-    "main.css": "/coffee-website/static/css/main.54a71016.css",
-    "main.js": "/coffee-website/static/js/main.4ce4fc0a.js",
-    "static/js/453.c73e2dcf.chunk.js": "/coffee-website/static/js/453.c73e2dcf.chunk.js",
+    "main.css": "/coffee-website/static/css/main.bda3c612.css",
+    "main.js": "/coffee-website/static/js/main.0a8978e6.js",
+    "static/js/453.8e4c5fdf.chunk.js": "/coffee-website/static/js/453.8e4c5fdf.chunk.js",
+    "static/media/Montserrat-Bold.ttf": "/coffee-website/static/media/Montserrat-Bold.50f0257aa1e905f4bfaf.ttf",
+    "static/media/Montserrat-SemiBold.ttf": "/coffee-website/static/media/Montserrat-SemiBold.93b37a465fc4ec0d0415.ttf",
+    "static/media/Lora-Medium.ttf": "/coffee-website/static/media/Lora-Medium.7cf7e60abc1dce6d19ee.ttf",
+    "static/media/Lora-Regular.ttf": "/coffee-website/static/media/Lora-Regular.1a662fb4f602b5400e3f.ttf",
+    "static/media/Lora-Bold.ttf": "/coffee-website/static/media/Lora-Bold.c27317484b1d2ac06532.ttf",
+    "static/media/yelplogo.png": "/coffee-website/static/media/yelplogo.5d7ca8e18f5c4df64ab6.png",
+    "static/media/Mulish-Bold.ttf": "/coffee-website/static/media/Mulish-Bold.6cb68186a91bb3fcb0b7.ttf",
+    "static/media/Mulish-ExtraBold.ttf": "/coffee-website/static/media/Mulish-ExtraBold.06b5157c67b69344b4be.ttf",
+    "static/media/Mulish-Regular.ttf": "/coffee-website/static/media/Mulish-Regular.d3d302e1573fb1c8db5b.ttf",
+    "static/media/googlemapslogo.png": "/coffee-website/static/media/googlemapslogo.afb7d7f9259f705190ea.png",
     "index.html": "/coffee-website/index.html",
-    "main.54a71016.css.map": "/coffee-website/static/css/main.54a71016.css.map",
-    "main.4ce4fc0a.js.map": "/coffee-website/static/js/main.4ce4fc0a.js.map",
-    "453.c73e2dcf.chunk.js.map": "/coffee-website/static/js/453.c73e2dcf.chunk.js.map"
+    "main.bda3c612.css.map": "/coffee-website/static/css/main.bda3c612.css.map",
+    "main.0a8978e6.js.map": "/coffee-website/static/js/main.0a8978e6.js.map",
+    "453.8e4c5fdf.chunk.js.map": "/coffee-website/static/js/453.8e4c5fdf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.54a71016.css",
-    "static/js/main.4ce4fc0a.js"
+    "static/css/main.bda3c612.css",
+    "static/js/main.0a8978e6.js"
   ]
 }
