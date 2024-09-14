@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
-import './Map.css';
+import './App.css';
 
 export default function Marker({map, markerData, selectCafe}) {
     const [theMarker, setTheMarker] = useState(null);
