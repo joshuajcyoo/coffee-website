@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/coffee-website/static/css/main.bda3c612.css",
-    "main.js": "/coffee-website/static/js/main.0a8978e6.js",
+    "main.css": "/coffee-website/static/css/main.e4205003.css",
+    "main.js": "/coffee-website/static/js/main.1fc7b500.js",
     "static/js/453.8e4c5fdf.chunk.js": "/coffee-website/static/js/453.8e4c5fdf.chunk.js",
     "static/media/Montserrat-Bold.ttf": "/coffee-website/static/media/Montserrat-Bold.50f0257aa1e905f4bfaf.ttf",
     "static/media/Montserrat-SemiBold.ttf": "/coffee-website/static/media/Montserrat-SemiBold.93b37a465fc4ec0d0415.ttf",
@@ -14,12 +14,12 @@
     "static/media/Mulish-Regular.ttf": "/coffee-website/static/media/Mulish-Regular.d3d302e1573fb1c8db5b.ttf",
     "static/media/googlemapslogo.png": "/coffee-website/static/media/googlemapslogo.afb7d7f9259f705190ea.png",
     "index.html": "/coffee-website/index.html",
-    "main.bda3c612.css.map": "/coffee-website/static/css/main.bda3c612.css.map",
-    "main.0a8978e6.js.map": "/coffee-website/static/js/main.0a8978e6.js.map",
+    "main.e4205003.css.map": "/coffee-website/static/css/main.e4205003.css.map",
+    "main.1fc7b500.js.map": "/coffee-website/static/js/main.1fc7b500.js.map",
     "453.8e4c5fdf.chunk.js.map": "/coffee-website/static/js/453.8e4c5fdf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bda3c612.css",
-    "static/js/main.0a8978e6.js"
+    "static/css/main.e4205003.css",
+    "static/js/main.1fc7b500.js"
   ]
 }
