@@ -24,7 +24,6 @@ function Card({cardData, isExpanded, handleCardClick}) {
                 </div>  
             </div>
 
-            {isExpanded && (
             <div className="card-content">
                 <hr className="card-divider" />
                 <div className='card-image-container'>
@@ -51,12 +50,12 @@ function Card({cardData, isExpanded, handleCardClick}) {
                     </div>
                 </div>
             </div>
-            )}
         </div>
     );
 }
 
 export default function ResultsPanel({data, selectCafe, pickSortingOption}) {
+    
     // define functions for each sorting options
     // to use js sort(), return -1, 0, or 1 based on whatever property u care about
     const latLessThan = (cafe1, cafe2) => {
@@ -70,6 +69,16 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption}) {
     };
 
     const [expandedCard, setExpandedCard] = useState(null);
+
+    useEffect(() => {
+        const selectedCard = data.find((element) => element.is_selected);
+        if (selectedCard) {
+            setExpandedCard(selectedCard.id);
+        }
+        else {
+            setExpandedCard(null);
+        }
+    }, [data]);
 
     const handleCardClick = (cardData) => {
         setExpandedCard((id) => (id === cardData.id ? null : cardData.id));
@@ -92,6 +101,20 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption}) {
                 (element) => element.visible && 
                 <Card key={element.id} cardData={element} selectCafe={selectCafe} isExpanded={element.id === expandedCard} handleCardClick={handleCardClick}/>
             )}
+            {/* {data.map((element) => {
+                    if (expandedCard === null || element.id === expandedCard) {
+                        return element.visible && (
+                            <Card
+                                key={element.id}
+                                cardData={element}
+                                selectCafe={selectCafe}
+                                isExpanded={element.id === expandedCard}
+                                handleCardClick={handleCardClick}
+                            />
+                        );
+                    }
+                    return null;
+                })} */}
             </div>
         </div>
     )

@@ -18,7 +18,16 @@ export default function Map({lng, lat, zoom, data, selectCafe}) {
         center: [lng, lat],
         zoom: zoom
       }));
-    }, [lng, lat, zoom, data]);
+    }, []);
+
+    useEffect(() => {
+      if (theMap) {
+          theMap.jumpTo({
+          center: [lng, lat],
+          zoom: zoom
+          });
+      }
+    }, [lng, lat, zoom]);
 
     return (
       <div className="map-wrap">

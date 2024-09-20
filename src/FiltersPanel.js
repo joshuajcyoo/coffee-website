@@ -53,6 +53,13 @@ export default function FiltersPanel({data, addFilter}) {
             [name]: checked
         }));
     };
+
+    const toggleFilter = (filter) => {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          [filter]: !prevFilters[filter],
+        }));
+      };      
     
     const handleNeighborhood = (neighborhood) => {
         setSelectedNeighborhood(neighborhood);
@@ -63,7 +70,7 @@ export default function FiltersPanel({data, addFilter}) {
     };
 
     const neighborhoodOptions = [
-        { value: 'All Neighborhoods', label: 'All Neighborhoods', color: '#AAAAAA' },
+        { value: 'All Neighborhoods', label: 'All Neighborhoods', color: '#5F5F5F' },
         { value: 'USC/South Central', label: 'USC/South Central', color: '#FF6961' },
         { value: 'Koreatown/Mid-City', label: 'Koreatown/Mid-City', color: '#867BC0' },
         { value: 'Echo Park/Silver Lake/Chinatown', label: 'Echo Park/Silver Lake/Chinatown', color: '#F6C25C' },
@@ -80,8 +87,7 @@ export default function FiltersPanel({data, addFilter}) {
             ...styles,
             boxShadow: 'none',
             border: 'none',
-            fontSize: '1.0rem',    // Smaller font size
-            minHeight: '30px',     // Reduced height
+            fontSize: 'clamp(0.8rem, 1.2vw, 1.5rem)',    // Smaller font size
             cursor: 'pointer',      // Set the cursor to pointer
             ':hover': { cursor: 'pointer', backgroundColor: '#C9C9C9' },
             backgroundColor: selectedNeighborhood ? selectedNeighborhood.color : '#555555'
@@ -103,6 +109,7 @@ export default function FiltersPanel({data, addFilter}) {
             ...styles,
             paddingTop: 0,  // Remove padding at the top
             paddingBottom: 0,  // Remove padding at the bottom
+            fontSize: 'clamp(0.8rem, 1.2vw, 1.5rem)'
         }),
         singleValue: (styles, { data }) => ({
             ...styles,
@@ -140,6 +147,7 @@ export default function FiltersPanel({data, addFilter}) {
                 </select> */}
 
             <Select
+                id="neighborhood-select"
                 options={neighborhoodOptions}
                 onChange={handleNeighborhood}
                 styles={customStyles}
@@ -149,26 +157,80 @@ export default function FiltersPanel({data, addFilter}) {
             </div>
             
             <div id="more-filters-container">
-                <button onClick={toggleModal}>
-                    More Filters
+                <button id="more-filters-button" onClick={toggleModal}>
+                    More Filters +
                 </button>
 
                 <Modal show={showModal} handleClose={toggleModal}>
-                    <h2>Additional Filters</h2>
-                    <div><label><input type="checkbox" name="has_outlets" checked={filters.has_outlets} onChange={handleCheckboxChange}/>
-                    Has Outlets</label></div>
-                    <div><label><input type="checkbox" name="open_late" checked={filters.open_late} onChange={handleCheckboxChange}/>
-                    Open Late</label></div>
-                    <div><label><input type="checkbox" name="closes_early" checked={filters.closes_early} onChange={handleCheckboxChange}/>
-                    Closes Early</label></div>
-                    <div><label><input type="checkbox" name="has_food" checked={filters.has_food} onChange={handleCheckboxChange}/>
-                    Has Food</label></div>
-                    <div><label><input type="checkbox" name="high_prices" checked={filters.high_prices} onChange={handleCheckboxChange}/>
-                    High Prices</label></div>
-                    <div><label><input type="checkbox" name="wifi_issues" checked={filters.wifi_issues} onChange={handleCheckboxChange}/>
-                    Wifi Issues</label></div>
-                    <div><label><input type="checkbox" name="outdoor_area" checked={filters.outdoor_area} onChange={handleCheckboxChange}/>
-                    Outdoor Area</label></div>
+                    <div id="more-filters-title"><h2>More Filters</h2></div>
+                    <div className="filter-row">
+                        <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''}`} onClick={() => toggleFilter('has_outlets')}>
+                            <span><img className="filter-icon" src="https://cdn-icons-png.flaticon.com/128/3159/3159502.png"></img></span>
+                            <span className='filter-checkbox'>Outlets</span>
+                            <span className="info-icon">
+                                i
+                                <span className="info-tooltip">Coffee shops with some accessible outlets for charging.</span>
+                            </span>
+                        </div>
+                        <div id="filter-has-food" className={`filter-item bubble ${filters.has_food ? 'selected' : ''}`} onClick={() => toggleFilter('has_food')}>
+                            <span><img className="filter-icon" src="https://cdn-icons-png.flaticon.com/128/1689/1689974.png"></img></span>
+                            <span className='filter-checkbox'>Food Menu</span>
+                            <span className="info-icon">
+                                i
+                                <span className="info-tooltip">Coffee shops that offer sufficient food menus (more than traditional pastries).</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="filter-open-late" className='filter-item'>
+                        <label>
+                            <input type="checkbox" name="open_late" checked={filters.open_late} onChange={handleCheckboxChange}/>
+                            <span className='filter-checkbox'>Open Late</span>
+                        </label>
+                        <span className="info-icon">
+                            i
+                            <span className="info-tooltip">Coffee shops that stay open until 6PM or later.</span>
+                        </span>
+                    </div>
+                    <div id="filter-closes-early" className='filter-item'>
+                        <label>
+                            <input type="checkbox" name="closes_early" checked={filters.closes_early} onChange={handleCheckboxChange}/>
+                            <span className='filter-checkbox'>Doesn't Close Early</span>
+                        </label>
+                        <span className="info-icon">
+                            i
+                            <span className="info-tooltip">Coffee shops that stay open until at least 3PM.</span>
+                        </span>
+                    </div>
+                    <div id="filter-high-prices" className='filter-item'>
+                        <label>
+                            <input type="checkbox" name="high_prices" checked={filters.high_prices} onChange={handleCheckboxChange}/>
+                            <span className='filter-checkbox'>Avoids High Prices</span>
+                        </label>
+                        <span className="info-icon">
+                            i
+                            <span className="info-tooltip">Coffee shops that avoid high prices (for LA standards.)</span>
+                        </span>
+                    </div>
+                    <div id="filter-wifi-issues" className='filter-item'>
+                        <label>
+                            <input type="checkbox" name="wifi_issues" checked={filters.wifi_issues} onChange={handleCheckboxChange}/>
+                            <span className='filter-checkbox'>Avoids Wi-Fi Issues</span>
+                        </label>
+                        <span className="info-icon">
+                            i
+                            <span className="info-tooltip">Coffee shops that have no history of wi-fi issues.</span>
+                        </span>
+                    </div>
+                    <div id="filter-outdoor-area" className='filter-item'>
+                        <label>
+                            <input type="checkbox" name="wifi_issues" checked={filters.outdoor_area} onChange={handleCheckboxChange}/>
+                            <span className='filter-checkbox'>Outdoor Area</span>
+                        </label>
+                        <span className="info-icon">
+                            i
+                            <span className="info-tooltip">Coffee shops that feature a significant amount of curated outdoor space.</span>
+                        </span>
+                    </div>
                 </Modal>
             </div>
         

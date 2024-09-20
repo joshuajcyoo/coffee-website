@@ -22,10 +22,16 @@
 }
 .home-title-container {
   width: 60vw;
-  height: 8vw;
+  height: clamp(6rem, 6vw, 8rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.3vw;
+  margin-bottom: 0.5vw;
+  cursor: default;
 }
 .home-title {
-  font-size: clamp(1.5rem, 3.8vw, 3.0rem); 
+  font-size: clamp(1.7rem, 3.5vw, 3.0rem); 
   text-align: center;
   font-family: Mulish ExtraBold;
   /* -webkit-text-stroke: 1px black;
@@ -54,8 +60,28 @@
 /* FiltersPanel.js */
 #filters-panel {
   text-align: center;
-  padding-top: 1%;
   font-family: Mulish Bold;
+}
+#more-filters-button {
+  border-radius: 3px;
+  border: none;
+  font-family: Mulish Bold;
+  font-size: clamp(0.6rem, 1.0vw, 3.0rem);
+  margin-top: clamp(0.6rem, 0.8vw, 3.0rem);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  color: white;
+  background-color: #AAAAAA;
+}
+#more-filters-button:hover {
+  background-color: #C9C9C9;
+  cursor: pointer;
+}
+#more-filters-title {
+  margin-top: 35px;
+  cursor: default;
 }
 
 /* Modal.js */
@@ -69,19 +95,113 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 5px;
-  width: 300px;
+  width: 425px;
   max-width: 100%;
+  z-index: 1000;
 }
 .close-button {
   float: right;
   background: none;
   border: none;
   font-size: 1.5em;
+  cursor: pointer;
+}
+.close-icon {
+  height: 1.0rem;
+}
+.filter-row {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  width: 75%;
+  margin: 0 auto;
+  margin-bottom: 1rem;
+}
+.filter-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.filter-item.bubble {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: border-color 0.3s ease, transform 0.2s ease; 
+}
+.filter-item.bubble:active {
+  transform: scale(0.9);
+}
+.filter-item.bubble.selected {
+  border-color: black;
+  transform: scale(1.0);
+}
+.filter-icon {
+  margin-right: 0.3vw;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.info-icon {
+  display: inline-block;
+  margin-left: 6px;
+  width: 7px;
+  height: 7px;
+  background-color: #ddd;
+  border-radius: 50%;
+  text-align: center; 
+  line-height: 6px;
+  padding: 4px;
+  font-size: 10px;
+  cursor: pointer;
+  position: relative;
+  margin-top: 2px;
+}
+.info-tooltip {
+  visibility: hidden;
+  width: 150px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%; 
+  left: -15%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  line-height: 1.5;
+}
+.info-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%; 
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+.info-icon:hover .info-tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 
 /* ResultsPanel.js */
@@ -108,20 +228,18 @@
 }
   /* Card in ResultsPanel.js */
   .card-container {
-    padding-top: clamp(0.3rem, 1.7vw, 0.8rem);
-    padding-bottom: clamp(0.3rem, 1.7vw, 0.8rem);
+    padding-top: clamp(0.3rem, 1.8vw, 0.7rem);
     border-top: 1px solid black;
     cursor: pointer;
-    transition: background-color 0.3s ease, max-height 0.5s ease, padding 0.5s ease;
     overflow: hidden;
-    max-height: 5vw;
+    transition: padding 1.0s ease;
   }
   .card-container:hover {
     background-color: #C9C9C9;
   }
   .card-container.expanded {
     /* background-color: #D6DACE; */
-    max-height: 30vw;
+    max-height: 50vw;
     padding-top: 20px;
     padding-bottom: 20px;
   }
@@ -131,13 +249,14 @@
   .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Vertically center content */
+    align-items: center; 
+    padding-bottom: clamp(0.3rem, 1.8vw, 0.7rem);
   }
   .card-name-neighborhood {
     flex-direction: column;
   }
   .card-toggle {
-    margin-left: auto; /* Pushes the score to the far-right */
+    margin-left: auto; 
     font-weight: bold;
     padding-right: 2.0vw;
     font-size: 2.0vw;
@@ -166,21 +285,25 @@
     margin-top: 0.4vw;
     transition: background-color 0.3s ease;
     border-radius: 3px;
-    white-space: nowrap; /* Ensure the text doesn't wrap */
-    width: auto; /* Keep the width according to content */
+    white-space: nowrap;
+    width: auto;
   }
   .card-content {
     font-family: Mulish Regular;
     opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: max-height 0.5s ease, padding 0.75s ease, opacity 0.2s ease;
     transform: translateY(-10px);
-    padding-top: 0.8vw;
+    /* padding-top: 0.8vw; */
     font-size: clamp(0.6rem, 1.1vw, 1rem);
     cursor: default;
+    max-height: 0;
+    overflow: hidden;
   }
   .card-container.expanded .card-content {
     opacity: 1;
     transform: translateY(0);
+    max-height: 500px;
+    transition: max-height 0.75s ease, padding 1.0s ease, opacity 1.0s ease;
   }
   .card-divider {
     background-color: black;
@@ -217,7 +340,7 @@
   .card-google-maps {
     display: flex;
     align-items: center;
-    background-color: white; /* Customize the button color */
+    background-color: white;
     color: black;
     padding-left: 10px;
     padding-right: 10px;
@@ -232,7 +355,7 @@
   .card-yelp {
     display: flex;
     align-items: center;
-    background-color: #EE3739; /* Customize the button color */
+    background-color: #EE3739; 
     color: white;
     padding-left: 10px;
     padding-right: 10px;

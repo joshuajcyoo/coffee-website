@@ -35,6 +35,7 @@ export default function Home() {
           setLatitude(cafe.latitude);
           setLongitude(cafe.longitude);
           setZoom(16);
+          console.log(element)
         }
         else {
           element.is_selected = false;
@@ -341,7 +342,7 @@ export default function Home() {
           selectCafe={handleSelectCafe}
         />
         <div className="home-title-container">
-          <h1 className="home-title">Guide to LA Coffee Shops</h1>
+          <div className="home-title">A Guide to LA Coffee Shops</div>
         </div>
         <FiltersPanel 
           data={data}
