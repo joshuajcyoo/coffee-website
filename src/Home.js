@@ -70,6 +70,7 @@ export default function Home() {
     var result = [];
     var headers=lines[0].split("\t");
     var types=lines[1].split("\t");
+    var lastID = 0;
 
     for(var i=2; i<lines.length; i++){
       var obj = {};
@@ -81,13 +82,16 @@ export default function Home() {
           if (currentline[j].toLowerCase() === "true") val = true;
           else val = false;
         }
-        else if (types[j] === "string") val = currentline[j];
+        else if (types[j] === "string") {
+          val = currentline[j].replace("${PUBLIC_URL}", `${process.env.PUBLIC_URL}`);
+        }
         obj[headers[j]] = val;
       }
+      obj["id"] = lastID++;
       result.push(obj);
     }
 
-    return result; //JavaScript object
+    return result;
   }
   
 
