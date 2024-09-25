@@ -72,6 +72,15 @@ export default function Home() {
         neighborhood: 'Echo Park/Silver Lake/Chinatown', 
         color_code: "#F6C25C",
         address: "970 N Broadway Ste 112",
+        hours: [
+          {open: 800, close: 2300},
+          {open: 800, close: 2300},
+          {open: 800, close: 2300},
+          {open: 800, close: 2300},
+          {open: 800, close: 2300},
+          {open: 800, close: 2300},
+          {open: 800, close: 2300}
+        ],
         latitude: 34.065980698261825,
         longitude: -118.23590397358777,
         image: "https://cdn.vox-cdn.com/thumbor/BTmcOX2vhW8udQ4xevNSTf8IOLI=/0x0:2000x1333/1200x0/filters:focal(0x0:2000x1333):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/24140219/2022_10_21_SteepAfterDark_036.jpg",
@@ -100,6 +109,15 @@ export default function Home() {
         neighborhood: 'Koreatown/Mid-City',
         color_code: "#867BC0",
         address: "621 S Western Ave Ste 101",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 34.05215005585242,
         longitude: -118.28749757582946,
         image: "https://res.cloudinary.com/the-infatuation/image/upload/f_auto/q_auto/v1697052310/images/Coffee%20MCO_Second%20Floor_Andrew%20Chan_LA.jpg",
@@ -129,6 +147,15 @@ export default function Home() {
         neighborhood: 'Koreatown/Mid-City',
         color_code: "#867BC0",
         address: "600 S Harvard Blvd Ste 100",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 34.063171032463835,
         longitude: -118.30380608841607,
         image: `${process.env.PUBLIC_URL}/Images/3thymecoffee.jpg`,
@@ -158,6 +185,15 @@ export default function Home() {
         neighborhood: 'Arts District/Little Tokyo',
         color_code: "#5FC5F9",
         address: "1019 S Santa Fe Ave",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 34.03096990269932,
         longitude: -118.23014421972013,
         image: `${process.env.PUBLIC_URL}/Images/marucoffee.jpg`,
@@ -187,6 +223,15 @@ export default function Home() {
         neighborhood: 'Koreatown/Mid-City',
         color_code: "#867BC0",
         address: "698 S Vermont Ave Ste 103",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 34.06155472235852, 
         longitude: -118.30576172865544,
         image: `${process.env.PUBLIC_URL}/Images/alchemistcoffeeprojectthepearl.jpeg`,
@@ -216,6 +261,15 @@ export default function Home() {
         neighborhood: 'Downtown',
         color_code: "#3683C2",
         address: "300 South Broadway",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 34.05076601382609, 
         longitude: -118.2479196504731,
         image: `${process.env.PUBLIC_URL}/Images/bluebottlecoffeedowntown.jpg`,
@@ -245,6 +299,15 @@ export default function Home() {
         neighborhood: 'WeHo/Melrose/Beverly Hills',
         color_code: "#F2729F",
         address: "7020 Melrose Ave",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 34.083245482521974, 
         longitude: -118.34347519482917,
         image: "https://cdn.vox-cdn.com/thumbor/x0ksWBOi6euOLKmb4IV1MbKgryI=/0x0:2000x1335/1200x0/filters:focal(0x0:2000x1335):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/9131315/2017_08_25_coffe_for_sasquatch_003.jpg",
@@ -274,6 +337,15 @@ export default function Home() {
         neighborhood: 'Culver City/Mar Vista',
         color_code: "#74B78C",
         address: "4574 S Centinela Ave",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 33.991673897492916, 
         longitude: -118.42146945648837,
         image: "https://fastly.4sqi.net/img/general/600x600/12291826_bc0ukUR6IXJJ9wHp0Zb7SvjfACzkjjbdJVsfB4d5EWQ.jpg",
@@ -303,6 +375,15 @@ export default function Home() {
         neighborhood: 'USC/South Central',
         color_code: "#FF6961",
         address: "2025 W Jefferson Blvd",
+        hours: [
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900},
+          {open: 800, close: 1900}
+        ],
         latitude: 34.02569149773806, 
         longitude: -118.31596208574616,
         image: `${process.env.PUBLIC_URL}/Images/cafe5.jpg`,
@@ -354,6 +435,7 @@ export default function Home() {
           data={data}
           selectCafe={handleSelectCafe}
           pickSortingOption={handlePickSortingOption}
+          addFilter={handleAddFilter}
         />
       </div>
     </div>
