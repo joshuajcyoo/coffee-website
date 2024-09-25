@@ -63,9 +63,48 @@ export default function Home() {
     newData.sort(sortingOption);
     setData(newData);
   }
+
+  //var csv is the CSV file with headers and types
+  function csvJSON(csv){
+    var lines=csv.split(/\r?\n/);
+    var result = [];
+    var headers=lines[0].split("\t");
+    var types=lines[1].split("\t");
+    var lastID = 0;
+
+    for(var i=2; i<lines.length; i++){
+      var obj = {};
+      var currentline=lines[i].split("\t");
+      for(var j=0; j<headers.length; j++){
+        var val = null;
+        if (types[j] === "number") val = parseFloat(currentline[j]);
+        else if (types[j] === "boolean") {
+          if (currentline[j].toLowerCase() === "true") val = true;
+          else val = false;
+        }
+        else if (types[j] === "string") {
+          val = currentline[j].replace("${PUBLIC_URL}", `${process.env.PUBLIC_URL}`);
+        }
+        obj[headers[j]] = val;
+      }
+      obj["id"] = lastID++;
+      result.push(obj);
+    }
+
+    return result;
+  }
   
 
   useEffect(() => {
+// <<<<<<< googledrive
+//     fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTyFAihCI4jr2oaWNMI7X4f1_x__G-y-mDqadIYIHecTwejWhRWbmKVApKMP0aqkAs4n6P_Jj4zy-HP/pub?output=tsv')
+//     .then(response => response.text())
+//     .then(data => {
+//       var jsondata = csvJSON(data);
+//       console.log(jsondata);
+//       setData(jsondata);
+//     });
+// =======
     const newData = [
       { id: 0, name: 'Steep',
         subname: '',
@@ -410,6 +449,7 @@ export default function Home() {
       }
     ];
     setData(newData);
+// >>>>>>> main
   }, []);
 
   return (
