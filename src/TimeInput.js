@@ -55,15 +55,19 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
   const addMinutes = () => {
       if (isActive) {
           const newMinute = minute === 45 ? 0 : minute + 15;
-          const newTimeNumber = convertTimeToNumber(hour, newMinute, ampm);
-          changeTime({ hour, minute: newMinute, ampm, day, number: newTimeNumber});
+          const newHour = minute === 45 ? hour + 1 : hour;
+          const newAmPm = minute === 45 && hour === 11 ? (ampm === 'AM' ? 'PM' : 'AM') : ampm;
+          const newTimeNumber = convertTimeToNumber(newHour, newMinute, newAmPm);
+          changeTime({ hour: newHour, minute: newMinute, ampm: newAmPm, day, number: newTimeNumber});
       }
   };
   const subtractMinutes = () => {
       if (isActive) {
           const newMinute = minute === 0 ? 45 : minute - 15;
-          const newTimeNumber = convertTimeToNumber(hour, newMinute, ampm);
-          changeTime({ hour, minute: newMinute, ampm, day, number: newTimeNumber});
+          const newHour = minute === 0 ? (hour === 0 ? 11 : hour - 1) : hour;
+          const newAmPm = minute === 0 && hour === 0 ? (ampm === 'AM' ? 'PM' : 'AM') : ampm;
+          const newTimeNumber = convertTimeToNumber(newHour, newMinute, newAmPm);
+          changeTime({ hour: newHour, minute: newMinute, ampm: newAmPm, day, number: newTimeNumber});
       }
   };
 

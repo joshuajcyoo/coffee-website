@@ -85,18 +85,13 @@ export default function Home() {
         else if (types[j] === "string") {
           val = currentline[j].replace("${PUBLIC_URL}", `${process.env.PUBLIC_URL}`);
         }
+        else if (types[j] === "array") {
+          var cleanArray = currentline[j].replace(/([{,])\s*(\w+)\s*:/g, '$1 "$2":');
+          val = JSON.parse(cleanArray);
+        }
         obj[headers[j]] = val;
       }
       obj["id"] = lastID++;
-      obj["hours"] = [
-        {open: 800, close: 2300},
-        {open: 800, close: 2300},
-        {open: 800, close: 2300},
-        {open: 800, close: 2300},
-        {open: 800, close: 2300},
-        {open: 800, close: 2300},
-        {open: 800, close: 2300}
-      ]
       result.push(obj);
     }
 

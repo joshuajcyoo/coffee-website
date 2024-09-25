@@ -126,7 +126,7 @@
   transform: scale(0.9);
 }
 .filter-item.bubble:hover {
-  background-color: #EAEAEA;
+  background-color: #D2D2D2;
   /* color: white; */
 }
 .filter-item.bubble.selected {
@@ -158,6 +158,8 @@
 }
 #filter-time-icon {
   margin-right: 0.5vw;
+  height: 1.6rem;
+  height: 1.6rem;
 }
 .info-icon {
   display: inline-block;
