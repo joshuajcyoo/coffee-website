@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.css": "/coffee-website/static/css/main.e4205003.css",
-    "main.js": "/coffee-website/static/js/main.1fc7b500.js",
+    "main.css": "/coffee-website/static/css/main.e481a22e.css",
+    "main.js": "/coffee-website/static/js/main.d0be52e9.js",
     "static/js/453.8e4c5fdf.chunk.js": "/coffee-website/static/js/453.8e4c5fdf.chunk.js",
     "static/media/Montserrat-Bold.ttf": "/coffee-website/static/media/Montserrat-Bold.50f0257aa1e905f4bfaf.ttf",
     "static/media/Montserrat-SemiBold.ttf": "/coffee-website/static/media/Montserrat-SemiBold.93b37a465fc4ec0d0415.ttf",
+    "static/media/Nexa-Heavy.ttf": "/coffee-website/static/media/Nexa-Heavy.13e16a1c3c48dd492fa9.ttf",
     "static/media/Lora-Medium.ttf": "/coffee-website/static/media/Lora-Medium.7cf7e60abc1dce6d19ee.ttf",
     "static/media/Lora-Regular.ttf": "/coffee-website/static/media/Lora-Regular.1a662fb4f602b5400e3f.ttf",
     "static/media/Lora-Bold.ttf": "/coffee-website/static/media/Lora-Bold.c27317484b1d2ac06532.ttf",
@@ -12,14 +13,18 @@
     "static/media/Mulish-Bold.ttf": "/coffee-website/static/media/Mulish-Bold.6cb68186a91bb3fcb0b7.ttf",
     "static/media/Mulish-ExtraBold.ttf": "/coffee-website/static/media/Mulish-ExtraBold.06b5157c67b69344b4be.ttf",
     "static/media/Mulish-Regular.ttf": "/coffee-website/static/media/Mulish-Regular.d3d302e1573fb1c8db5b.ttf",
+    "static/media/Elmond.ttf": "/coffee-website/static/media/Elmond.3cee1ee90db07edafe4c.ttf",
     "static/media/googlemapslogo.png": "/coffee-website/static/media/googlemapslogo.afb7d7f9259f705190ea.png",
+    "static/media/filter-food.svg": "/coffee-website/static/media/filter-food.6e7f297c2ac2e0ab4f604b5cd885978e.svg",
+    "static/media/filter-time.svg": "/coffee-website/static/media/filter-time.b940ef41bdf25664b8f03e6d7b44c789.svg",
     "index.html": "/coffee-website/index.html",
-    "main.e4205003.css.map": "/coffee-website/static/css/main.e4205003.css.map",
-    "main.1fc7b500.js.map": "/coffee-website/static/js/main.1fc7b500.js.map",
+    "static/media/filter-outlet.svg": "/coffee-website/static/media/filter-outlet.f4fe8111a5756abbc7d8d99a4a2c7018.svg",
+    "main.e481a22e.css.map": "/coffee-website/static/css/main.e481a22e.css.map",
+    "main.d0be52e9.js.map": "/coffee-website/static/js/main.d0be52e9.js.map",
     "453.8e4c5fdf.chunk.js.map": "/coffee-website/static/js/453.8e4c5fdf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e4205003.css",
-    "static/js/main.1fc7b500.js"
+    "static/css/main.e481a22e.css",
+    "static/js/main.d0be52e9.js"
   ]
 }
