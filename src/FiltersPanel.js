@@ -2,6 +2,10 @@ import './App.css';
 import Modal from './Modal';
 import React, { useRef, useEffect, useState } from 'react';
 import Select from 'react-select';
+import TimeInput from './TimeInput';
+import {ReactComponent as OutletIcon} from './Logos/filter-outlet.svg'
+import {ReactComponent as OutletFood} from './Logos/filter-food.svg'
+import {ReactComponent as OutletTime} from './Logos/filter-time.svg'
 
 export default function FiltersPanel({data, addFilter}) {
     const [showModal, setShowModal] = useState(false);
@@ -9,16 +13,36 @@ export default function FiltersPanel({data, addFilter}) {
         setShowModal(!showModal);
     };
 
+    const convertTimeToNumber = (hour, minute, ampm) => {
+        let adjustedHour = hour;
+        if (ampm === 'PM' && hour !== 12) {adjustedHour += 12;} 
+        else if (ampm === 'AM' && hour === 12) {adjustedHour = 0;}
+
+        const timeAsNumber = adjustedHour * 100 + minute;
+        return timeAsNumber;
+    };
+    
+    const [timeState, setTimeState] = useState(false);
+    const [timeData, setTimeData] = useState({
+        hour: new Date().getHours() > 12 ? new Date().getHours() - 12 : new Date().getHours(),
+        minute: Math.floor(new Date().getMinutes() / 15) * 15,
+        ampm: new Date().getHours() >= 12 ? 'PM' : 'AM',
+        day: new Date().getDay(),
+        number: convertTimeToNumber(new Date().getHours() >= 12 ? new Date().getHours() - 12 : new Date().getHours(), Math.floor(new Date().getMinutes() / 15) * 15, new Date().getHours() >= 12 ? 'PM' : 'AM')
+      });
+
     const [filters, setFilters] = useState({
         neighborhood: "All Neighborhoods",
         has_outlets: false,
-        open_late: false,
-        closes_early: false,
         has_food: false,
         high_prices: false,
-        wifi_issues: false
+        wifi_issues: false,
+        outdoor_area: false
     });
 
+    const inHours = (cafe, time, day) => {
+        return cafe.hours[day].open && cafe.hours[day].open <= time && cafe.hours[day].close > time;
+    }
     const inNeighborhood = (cafe, neighborhood) => {
         return cafe.neighborhood === neighborhood;
     };
@@ -33,6 +57,7 @@ export default function FiltersPanel({data, addFilter}) {
     const finalFilter = (cafe) => {
         let applyFilter = true;
 
+        if (timeState) applyFilter = applyFilter && inHours(cafe, timeData.number, timeData.day);
         if (filters.neighborhood != "All Neighborhoods") applyFilter = applyFilter && inNeighborhood(cafe, filters.neighborhood);
         if (filters.has_outlets) applyFilter = applyFilter && hasOutlets(cafe);
         if (filters.open_late) applyFilter = applyFilter && openLate(cafe);
@@ -54,10 +79,23 @@ export default function FiltersPanel({data, addFilter}) {
         }));
     };
 
+    const toggleTimeState = () => {
+        setTimeState((prevState) => !prevState);
+    };
+
+    const handleTimeChange = (newTimeData) => {
+        if (timeState) {
+            setTimeData((prev) => ({
+                ...prev,
+                ...newTimeData,
+            }));
+        }
+      };    
+
     const toggleFilter = (filter) => {
         setFilters((prevFilters) => ({
-          ...prevFilters,
-          [filter]: !prevFilters[filter],
+            ...prevFilters,
+            [filter]: !prevFilters[filter],
         }));
       };      
     
@@ -69,8 +107,11 @@ export default function FiltersPanel({data, addFilter}) {
         }));
     };
 
+    const [isHovered, setIsHovered] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const neighborhoodOptions = [
-        { value: 'All Neighborhoods', label: 'All Neighborhoods', color: '#5F5F5F' },
+        { value: 'All Neighborhoods', label: 'All Neighborhoods', color: '#000000' },
         { value: 'USC/South Central', label: 'USC/South Central', color: '#FF6961' },
         { value: 'Koreatown/Mid-City', label: 'Koreatown/Mid-City', color: '#867BC0' },
         { value: 'Echo Park/Silver Lake/Chinatown', label: 'Echo Park/Silver Lake/Chinatown', color: '#F6C25C' },
@@ -82,15 +123,15 @@ export default function FiltersPanel({data, addFilter}) {
 
     const [selectedNeighborhood, setSelectedNeighborhood] = useState(neighborhoodOptions[0]);
 
-    const customStyles = {
+    const neighborhoodStyles = {
         control: (styles) => ({
             ...styles,
+            border: '2px solid' + selectedNeighborhood.color,
             boxShadow: 'none',
-            border: 'none',
             fontSize: 'clamp(0.8rem, 1.2vw, 1.5rem)',    // Smaller font size
             cursor: 'pointer',      // Set the cursor to pointer
-            ':hover': { cursor: 'pointer', backgroundColor: '#C9C9C9' },
-            backgroundColor: selectedNeighborhood ? selectedNeighborhood.color : '#555555'
+            ':hover': { cursor: 'pointer', borderColor: selectedNeighborhood.color },
+            backgroundColor: isHovered && !isMenuOpen ? selectedNeighborhood.color : 'transparent',
         }),
         option: (styles, { data, isFocused }) => ({
             ...styles,
@@ -102,39 +143,48 @@ export default function FiltersPanel({data, addFilter}) {
             ...styles,
             marginTop: 0,  // Remove top margin
             marginBottom: 0,  // Remove bottom margin
-            borderRadius: '20px',   // Optional: Rounded corners for the menu
-            boxShadow: '0 2px 4px rgba(0,0,0,0.2)', // Optional shadow for better visibility
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+             // Optional shadow for better visibility
         }),
         menuList: (styles) => ({
             ...styles,
             paddingTop: 0,  // Remove padding at the top
             paddingBottom: 0,  // Remove padding at the bottom
-            fontSize: 'clamp(0.8rem, 1.2vw, 1.5rem)'
         }),
-        singleValue: (styles, { data }) => ({
+        singleValue: (styles, {menuIsOpen}) => ({
             ...styles,
-            color: '#FFFFFF',
             padding: '3px 40px',
+            color: isMenuOpen ? selectedNeighborhood.color : (isHovered ? '#FFFFFF' : selectedNeighborhood.color),
+            transition: 'color 0.2s ease',
         }),
         dropdownIndicator: (styles) => ({
             ...styles,
-            transform: 'rotate(180deg)', // Rotate the dropdown indicator
-            transition: 'transform 0.2s ease', // Smooth transition for rotation
-            color: '#FFFFFF'
+            transform: 'rotate(180deg)', 
+            transition: 'transform 0.2s ease',
+            color: isMenuOpen ? selectedNeighborhood.color : (isHovered ? '#FFFFFF' : selectedNeighborhood.color),
+            ':hover' : isMenuOpen ? {color: selectedNeighborhood.color} : {color: '#FFFFFF'}
+        }),
+        indicatorSeparator: (styles) => ({
+            ...styles,
+            backgroundColor: isMenuOpen ? selectedNeighborhood.color : (isHovered ? '#FFFFFF' : selectedNeighborhood.color),
         }),
         input: (styles) => ({
             ...styles,
             paddingLeft: '40px',
+            color: isHovered ? selectedNeighborhood.color : '#FFFFFF'
         })
     };
 
     useEffect(() => {
         addFilter(finalFilter);
-    }, [filters, selectedNeighborhood]);
+        setIsHovered(false);
+    }, [filters, selectedNeighborhood, timeData, timeState]);
     
     return (
         <div id='filters-panel'>
-            <div id="neighborhood-container">
+            <div id="neighborhood-container" onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}>
+                
                 {/* <select className="neighborhood-dropdown" onChange={handleNeighborhood}>
                     <option value="All Neighborhoods">All Neighborhoods</option>
                     <option value="USC/South Central">USC/South Central</option>
@@ -146,14 +196,17 @@ export default function FiltersPanel({data, addFilter}) {
                     <option value="WeHo/Melrose/Beverly Hills">WeHo/Melrose/Beverly Hills</option>
                 </select> */}
 
-            <Select
-                id="neighborhood-select"
-                options={neighborhoodOptions}
-                onChange={handleNeighborhood}
-                styles={customStyles}
-                defaultValue={neighborhoodOptions[0]}
-                menuPlacement='top'
-            />
+                <Select
+                    id="neighborhood-select"
+                    options={neighborhoodOptions}
+                    onChange={handleNeighborhood}
+                    styles={neighborhoodStyles}
+                    defaultValue={neighborhoodOptions[0]}
+                    menuPlacement='top'
+                    isSearchable={false}
+                    onMenuOpen={() => setIsMenuOpen(true)}  // Set menu open state
+                    onMenuClose={() => setIsMenuOpen(false)}
+                />
             </div>
             
             <div id="more-filters-container">
@@ -165,7 +218,8 @@ export default function FiltersPanel({data, addFilter}) {
                     <div id="more-filters-title"><h2>More Filters</h2></div>
                     <div className="filter-row">
                         <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''}`} onClick={() => toggleFilter('has_outlets')}>
-                            <span><img className="filter-icon" src="https://cdn-icons-png.flaticon.com/128/3159/3159502.png"></img></span>
+                            {/* <span><img className="filter-icon" src="https://cdn-icons-png.flaticon.com/128/3159/3159502.png"></img></span> */}
+                            <OutletIcon id='filter-outlet-icon' className='filter-icon' />
                             <span className='filter-checkbox'>Outlets</span>
                             <span className="info-icon">
                                 i
@@ -173,7 +227,7 @@ export default function FiltersPanel({data, addFilter}) {
                             </span>
                         </div>
                         <div id="filter-has-food" className={`filter-item bubble ${filters.has_food ? 'selected' : ''}`} onClick={() => toggleFilter('has_food')}>
-                            <span><img className="filter-icon" src="https://cdn-icons-png.flaticon.com/128/1689/1689974.png"></img></span>
+                            <OutletFood id='filter-food-icon' className='filter-icon' />
                             <span className='filter-checkbox'>Food Menu</span>
                             <span className="info-icon">
                                 i
@@ -181,7 +235,28 @@ export default function FiltersPanel({data, addFilter}) {
                             </span>
                         </div>
                     </div>
-                    <div id="filter-open-late" className='filter-item'>
+                    <div id="filter-row-time" className="filter-row">
+                        <div className={`filter-item bubble ${timeState ? 'selected' : ''} time`} onClick={toggleTimeState}>
+                            <OutletTime id='filter-time-icon' className='filter-icon' />
+                            <span className='filter-checkbox'>Open From/Until</span>
+                            <span className="info-icon">
+                                i
+                                <span className="info-tooltip">Coffee shops that are open from and until designated times.</span>
+                            </span>
+                        </div>
+                        <div id="time-input-container">
+                            <TimeInput 
+                                hour={timeData.hour >= 12 ? timeData.hour - 12: timeData.hour}
+                                minute={timeData.minute}
+                                ampm={timeData.ampm}
+                                day={timeData.day}
+                                changeTime={handleTimeChange} 
+                                isActive={timeState} 
+                                setIsActive={toggleTimeState}
+                            />
+                        </div>
+                    </div>
+                    {/* <div id="filter-open-late" className='filter-item'>
                         <label>
                             <input type="checkbox" name="open_late" checked={filters.open_late} onChange={handleCheckboxChange}/>
                             <span className='filter-checkbox'>Open Late</span>
@@ -200,8 +275,8 @@ export default function FiltersPanel({data, addFilter}) {
                             i
                             <span className="info-tooltip">Coffee shops that stay open until at least 3PM.</span>
                         </span>
-                    </div>
-                    <div id="filter-high-prices" className='filter-item'>
+                    </div> */}
+                    {/* <div id="filter-high-prices" className='filter-item'>
                         <label>
                             <input type="checkbox" name="high_prices" checked={filters.high_prices} onChange={handleCheckboxChange}/>
                             <span className='filter-checkbox'>Avoids High Prices</span>
@@ -223,14 +298,14 @@ export default function FiltersPanel({data, addFilter}) {
                     </div>
                     <div id="filter-outdoor-area" className='filter-item'>
                         <label>
-                            <input type="checkbox" name="wifi_issues" checked={filters.outdoor_area} onChange={handleCheckboxChange}/>
+                            <input type="checkbox" name="outdoor_area" checked={filters.outdoor_area} onChange={handleCheckboxChange}/>
                             <span className='filter-checkbox'>Outdoor Area</span>
                         </label>
                         <span className="info-icon">
                             i
                             <span className="info-tooltip">Coffee shops that feature a significant amount of curated outdoor space.</span>
                         </span>
-                    </div>
+                    </div> */}
                 </Modal>
             </div>
         

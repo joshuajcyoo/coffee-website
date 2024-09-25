@@ -3,10 +3,11 @@ import './App.css';
 import GoogleMaps from "./Logos/googlemapslogo.png"
 import Yelp from "./Logos/yelplogo.png"
 
-function Card({cardData, isExpanded, handleCardClick}) {
+function Card({cardData, isExpanded, handleCardClick, addFilter}) {
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <div className={`card-container ${isExpanded ? 'expanded' : ''}`}>
+        <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} >
             <div className="card-header" onClick={() => handleCardClick(cardData)}>
                 {/* <div className="card-name">{cardData.name}<span className="card-subname">{cardData.subname}</span></div>
                 <div className="card-neighborhood" style={{ backgroundColor: cardData.color_code }}>{cardData.neighborhood}</div> */}
@@ -15,9 +16,12 @@ function Card({cardData, isExpanded, handleCardClick}) {
                     <div className="card-name">
                         {cardData.name}<span className="card-subname">{cardData.subname}</span>
                     </div>
-                    <div className="card-neighborhood" style={{ backgroundColor: cardData.color_code, maxWidth: cardData.max_width }}>
+                    <div className="card-neighborhood" style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, border: '2px solid #FFFFFF' } : { color: cardData.color_code, border: "2px solid" + cardData.color_code }} >
                         {cardData.neighborhood}
                     </div>
+                    {/* <div className="card-neighborhood" style={{ backgroundColor: cardData.color_code }}>
+                        {cardData.neighborhood}
+                    </div> */}
                 </div>
                 <div className="card-toggle">
                     {isExpanded ? "—" : "+"}
@@ -54,7 +58,7 @@ function Card({cardData, isExpanded, handleCardClick}) {
     );
 }
 
-export default function ResultsPanel({data, selectCafe, pickSortingOption}) {
+export default function ResultsPanel({data, selectCafe, pickSortingOption, addFilter}) {
     
     // define functions for each sorting options
     // to use js sort(), return -1, 0, or 1 based on whatever property u care about
@@ -99,7 +103,7 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption}) {
             <div id="data-cards">
             {data.map(
                 (element) => element.visible && 
-                <Card key={element.id} cardData={element} selectCafe={selectCafe} isExpanded={element.id === expandedCard} handleCardClick={handleCardClick}/>
+                <Card key={element.id} cardData={element} selectCafe={selectCafe} isExpanded={element.id === expandedCard} handleCardClick={handleCardClick} addFilter={addFilter}/>
             )}
             {/* {data.map((element) => {
                     if (expandedCard === null || element.id === expandedCard) {

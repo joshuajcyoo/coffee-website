@@ -6,19 +6,22 @@
 @font-face {font-family: Mulish ExtraBold; src: url(Fonts/Mulish-ExtraBold.ttf)}
 @font-face {font-family: Montserrat SemiBold; src: url(Fonts/Montserrat-SemiBold.ttf)}
 @font-face {font-family: Montserrat Bold; src: url(Fonts/Montserrat-Bold.ttf)}
+@font-face {font-family: Nexa Heavy; src: url(Fonts/Nexa-Heavy.ttf)}
+@font-face {font-family: Elmond; src: url(Fonts/Elmond.ttf)}
 
 /* Home.js */
 .home-content {
   display: flex; 
   height: 100vh;
-  background-color: #EEEEEE;
+  background-color: #FFFFFF;
 }
 .home-left {
   flex: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-right: 1px solid black;
+  border-right: 2px solid black;
+  border-left: 2px solid black;
 }
 .home-title-container {
   width: 60vw;
@@ -27,13 +30,13 @@
   align-items: center;
   justify-content: center;
   margin-top: 0.3vw;
-  margin-bottom: 0.5vw;
+  margin-bottom: 0.3vw;
   cursor: default;
 }
 .home-title {
-  font-size: clamp(1.7rem, 3.5vw, 3.0rem); 
+  font-size: clamp(1.9rem, 3.8vw, 3.0rem); 
   text-align: center;
-  font-family: Mulish ExtraBold;
+  font-family: Elmond;
   /* -webkit-text-stroke: 1px black;
   color: white; */
 }
@@ -53,8 +56,8 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  border-bottom: 1px solid black;
-  border-right: 1px solid black;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
 }
 
 /* FiltersPanel.js */
@@ -62,9 +65,12 @@
   text-align: center;
   font-family: Mulish Bold;
 }
+#neighborhood-container {
+  margin-bottom: 0.1vw;
+}
 #more-filters-button {
   border-radius: 3px;
-  border: none;
+  border: 2px solid #000000;
   font-family: Mulish Bold;
   font-size: clamp(0.6rem, 1.0vw, 3.0rem);
   margin-top: clamp(0.6rem, 0.8vw, 3.0rem);
@@ -72,56 +78,29 @@
   padding-right: 10px;
   padding-top: 3px;
   padding-bottom: 3px;
-  color: white;
-  background-color: #AAAAAA;
+  color: #000000;
+  background-color: #FFFFFF;
 }
 #more-filters-button:hover {
-  background-color: #C9C9C9;
+  background-color: #000000;
+  color: #FFFFFF;
   cursor: pointer;
 }
 #more-filters-title {
   margin-top: 35px;
   cursor: default;
 }
-
-/* Modal.js */
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 425px;
-  max-width: 100%;
-  z-index: 1000;
-}
-.close-button {
-  float: right;
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  cursor: pointer;
-}
-.close-icon {
-  height: 1.0rem;
-}
 .filter-row {
   display: flex;
   justify-content: space-between; 
   align-items: center;
-  width: 75%;
+  width: 78%;
   margin: 0 auto;
-  margin-bottom: 1rem;
+  margin-bottom: 0.3rem;
+}
+#filter-row-time {
+  display: flex;
+  flex-direction: column;
 }
 .filter-item {
   display: flex;
@@ -137,25 +116,48 @@
   padding-bottom: 7px;
   padding-left: 15px;
   padding-right: 15px;
-  border: 2px solid transparent;
+  border: 2px solid black;
   border-radius: 5px;
-  background-color: #f0f0f0;
+  background-color: #FFFFFF;
   cursor: pointer;
-  transition: border-color 0.3s ease, transform 0.2s ease; 
+  transition: border-color 0.3s ease, transform 0.2s ease, background-color 0.3s ease; 
 }
 .filter-item.bubble:active {
   transform: scale(0.9);
 }
+.filter-item.bubble:hover {
+  background-color: #EAEAEA;
+  /* color: white; */
+}
 .filter-item.bubble.selected {
-  border-color: black;
+  border-color: #000000;
+  background-color: #000000;
+  color: white;
   transform: scale(1.0);
 }
+.filter-item.bubble.selected .filter-icon, .filter-item.bubble.selected #filter-food-icon path, .filter-item.bubble.selected #filter-time-icon path {
+  fill: white;
+}
+/* .filter-item.bubble.selected:active {
+  transform: scale(0.9);
+} */
+.filter-item.bubble.time {
+  display: flex; 
+  align-items: center;
+  width: 90%;
+  margin-bottom: 0;
+}
 .filter-icon {
-  margin-right: 0.3vw;
-  height: 1.5rem;
+  margin-right: 0.5vw;
+  height: 1.7rem;
+  width: 1.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  fill: black;
+}
+#filter-time-icon {
+  margin-right: 0.5vw;
 }
 .info-icon {
   display: inline-block;
@@ -171,6 +173,7 @@
   cursor: pointer;
   position: relative;
   margin-top: 2px;
+  color: black;
 }
 .info-tooltip {
   visibility: hidden;
@@ -204,6 +207,147 @@
   opacity: 1;
 }
 
+/* Modal.js */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 425px;
+  max-width: 100%;
+  z-index: 1000;
+}
+.close-button {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+.close-icon {
+  height: 1.0rem;
+}
+
+
+/* TimeInput.js */
+#time-input-container {
+  display: flex; /* Keeps its internal content as flex */
+  flex-direction: row;
+  align-items: center;
+}
+.time-input-inactive {
+  display: none;
+}
+.time-input-active {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin-top: 0.75vw;
+}
+/* .time-input .input-group {
+  display: flex;
+  align-items: center;
+} */
+.input-group input {
+  width: 2.5vw;
+  height: 2.5vw;
+  border: none;
+  font-size: 2.0vw;
+  font-family: Mulish Bold;
+}
+.input-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2px; /* Adds a gap between the buttons */
+  height: 100%;
+}
+.stacked-button {
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #FFFFFF;
+  color: black;
+  border: 0px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-sizing: border-box; /* Ensures the border is included in the height */
+}
+.stacked-button:hover {
+  background-color: #FFFFFF;
+  color: black;
+}
+.input-group {
+  display: flex;
+  align-items: center;
+}
+.time-field {
+  background-color: #FFFFFF;
+  color: black;
+  cursor: pointer;
+}
+.time-field:focus {
+  outline: none;
+}
+.time-field:hover {
+  background-color: #FFFFFF;
+  color: black;
+}
+#time-colon {
+  color: black;
+}
+#time-clock {
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  color: black;
+}
+#time-input-ampm-inactive {
+  font-size: clamp(0.7rem, 1.0vw, 1.2rem);
+  border-radius: 3px;
+  border: 2px solid transparent;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #000000;
+  background-color: #EAEAEA;
+  transition: border 0.3s ease, background-color 0.3s ease;
+  cursor: default;
+  height: 0.8vw;
+}
+#time-input-ampm-active {
+  font-size: clamp(0.7rem, 1.0vw, 1.2rem);
+  border-radius: 3px;
+  border: 2px solid #000000;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 8.5px;
+  padding-bottom: 8.5px;
+  color: #000000;
+  background-color: #FFFFFF;
+  transition: border 0.3s ease, background-color 0.3s ease;
+}
+#time-input-ampm-active:hover {
+  background-color: #000000;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+
 /* ResultsPanel.js */
 #results-panel {
   display: flex;
@@ -213,7 +357,6 @@
 #sorting-options {
   position: sticky;
   top: 0;
-  background-color: #E0E0E0;
   z-index: 10;
   padding: 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -221,6 +364,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #FFFFFF;
 }
 #data-cards {
   overflow-y: auto;
@@ -229,14 +373,14 @@
   /* Card in ResultsPanel.js */
   .card-container {
     padding-top: clamp(0.3rem, 1.8vw, 0.7rem);
-    border-top: 1px solid black;
+    border-top: 2px solid black;
     cursor: pointer;
     overflow: hidden;
     transition: padding 1.0s ease;
   }
-  .card-container:hover {
-    background-color: #C9C9C9;
-  }
+  /* .card-container:hover {
+    background-color: #F2F2F2;
+  } */
   .card-container.expanded {
     /* background-color: #D6DACE; */
     max-height: 50vw;
@@ -244,7 +388,7 @@
     padding-bottom: 20px;
   }
   .card-container:last-child {
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid black;
   }
   .card-header {
     display: flex;
@@ -273,7 +417,7 @@
   }
   .card-neighborhood {
     font-family: Mulish Bold;
-    font-size: 1vw;
+    font-size: 0.9vw;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 2px;
@@ -340,32 +484,42 @@
   .card-google-maps {
     display: flex;
     align-items: center;
-    background-color: white;
-    color: black;
+    background-color: #FFFFFF;
+    color: #3AAB59;
+    border: 2px solid #3AAB59;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 8px;
     padding-bottom: 8px;
-    border-radius: 15px;
+    border-radius: 5px;
     text-decoration: none;
     margin-top: 0.8vw;
     font-weight: bold;
     font-size: 0.9vw;
   }
+  .card-google-maps:hover {
+    background-color: #3AAB59;
+    color: #FFFFFF;
+  }
   .card-yelp {
     display: flex;
     align-items: center;
-    background-color: #EE3739; 
-    color: white;
+    background-color: #FFFFFF; 
+    border: 2px solid #EE3739;
+    color: #EE3739;
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-    border-radius: 15px;
+    border-radius: 5px;
     text-decoration: none;
     margin-top: 0.8vw;
     font-weight: bold;
     font-size: 0.9vw;
+  }
+  .card-yelp:hover {
+    background-color: #EE3739;
+    color: #FFFFFF;
   }
   .card-google-maps-logo {
     width: 1vw; 
