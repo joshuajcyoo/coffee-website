@@ -4,8 +4,12 @@ import React, { useRef, useEffect, useState } from 'react';
 import Select from 'react-select';
 import TimeInput from './TimeInput';
 import {ReactComponent as OutletIcon} from './Logos/filter-outlet.svg'
-import {ReactComponent as OutletFood} from './Logos/filter-food.svg'
-import {ReactComponent as OutletTime} from './Logos/filter-time.svg'
+import {ReactComponent as StudyIcon} from './Logos/filter-study.svg'
+import {ReactComponent as FoodIcon} from './Logos/filter-food.svg'
+import {ReactComponent as GemIcon} from './Logos/filter-gem.svg'
+import {ReactComponent as AestheticIcon} from './Logos/filter-aesthetic.svg'
+import {ReactComponent as OutdoorIcon} from './Logos/filter-outdoor.svg'
+import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 
 export default function FiltersPanel({data, addFilter}) {
     const [showModal, setShowModal] = useState(false);
@@ -34,10 +38,13 @@ export default function FiltersPanel({data, addFilter}) {
     const [filters, setFilters] = useState({
         neighborhood: "All Neighborhoods",
         has_outlets: false,
+        study_work: false,
         has_food: false,
+        hidden_gem: false,
+        is_aesthetic: false,
+        outdoor_area: false,
         high_prices: false,
         wifi_issues: false,
-        outdoor_area: false
     });
 
     const inHours = (cafe, time, day) => {
@@ -47,12 +54,15 @@ export default function FiltersPanel({data, addFilter}) {
         return cafe.neighborhood === neighborhood;
     };
     const hasOutlets = (cafe) => cafe.outlets > 0;
+    const studyWork = (cafe) => cafe.study_work;
+    const hasFood = (cafe) => cafe.has_food;
+    const hiddenGem = (cafe) => cafe.hidden_gem;
+    const isAesthetic = (cafe) => cafe.is_aesthetic;
+    const outdoorArea = (cafe) => cafe.outdoor_area;
     const openLate = (cafe) => cafe.open_late;
     const closesEarly = (cafe) => cafe.closes_early;
-    const hasFood = (cafe) => cafe.has_food;
     const highPrices = (cafe) => cafe.high_prices;
     const wifiIssues = (cafe) => cafe.wifi_issues;
-    const outdoorArea = (cafe) => cafe.outdoor_area;
 
     const finalFilter = (cafe) => {
         let applyFilter = true;
@@ -60,12 +70,15 @@ export default function FiltersPanel({data, addFilter}) {
         if (timeState) applyFilter = applyFilter && inHours(cafe, timeData.number, timeData.day);
         if (filters.neighborhood != "All Neighborhoods") applyFilter = applyFilter && inNeighborhood(cafe, filters.neighborhood);
         if (filters.has_outlets) applyFilter = applyFilter && hasOutlets(cafe);
+        if (filters.study_work) applyFilter = applyFilter && studyWork(cafe);
+        if (filters.has_food) applyFilter = applyFilter && hasFood(cafe);
+        if (filters.hidden_gem) applyFilter = applyFilter && hiddenGem(cafe);
+        if (filters.is_aesthetic) applyFilter = applyFilter && isAesthetic(cafe);
+        if (filters.outdoor_area) applyFilter = applyFilter && outdoorArea(cafe);
         if (filters.open_late) applyFilter = applyFilter && openLate(cafe);
         if (filters.closes_early) applyFilter = applyFilter && closesEarly(cafe);
-        if (filters.has_food) applyFilter = applyFilter && hasFood(cafe);
         if (filters.high_prices) applyFilter = applyFilter && highPrices(cafe);
         if (filters.wifi_issues) applyFilter = applyFilter && wifiIssues(cafe);
-        if (filters.outdoor_area) applyFilter = applyFilter && outdoorArea(cafe);
 
         return applyFilter;
     }
@@ -184,17 +197,6 @@ export default function FiltersPanel({data, addFilter}) {
         <div id='filters-panel'>
             <div id="neighborhood-container" onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
-                
-                {/* <select className="neighborhood-dropdown" onChange={handleNeighborhood}>
-                    <option value="All Neighborhoods">All Neighborhoods</option>
-                    <option value="USC/South Central">USC/South Central</option>
-                    <option value="Koreatown/Mid-City">Koreatown/Mid-City</option>
-                    <option value="Echo Park/Silver Lake/Chinatown">Echo Park/Silver Lake/Chinatown</option>
-                    <option value="Arts District/Little Tokyo">Arts District/Little Tokyo</option>
-                    <option value="Culver City/Mar Vista">Culver City/Mar Vista</option>
-                    <option value="Downtown">Downtown</option>
-                    <option value="WeHo/Melrose/Beverly Hills">WeHo/Melrose/Beverly Hills</option>
-                </select> */}
 
                 <Select
                     id="neighborhood-select"
@@ -204,7 +206,7 @@ export default function FiltersPanel({data, addFilter}) {
                     defaultValue={neighborhoodOptions[0]}
                     menuPlacement='top'
                     isSearchable={false}
-                    onMenuOpen={() => setIsMenuOpen(true)}  // Set menu open state
+                    onMenuOpen={() => setIsMenuOpen(true)} 
                     onMenuClose={() => setIsMenuOpen(false)}
                 />
             </div>
@@ -217,31 +219,66 @@ export default function FiltersPanel({data, addFilter}) {
                 <Modal show={showModal} handleClose={toggleModal}>
                     <div id="more-filters-title"><h2>More Filters</h2></div>
                     <div className="filter-row">
-                        <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''}`} onClick={() => toggleFilter('has_outlets')}>
-                            {/* <span><img className="filter-icon" src="https://cdn-icons-png.flaticon.com/128/3159/3159502.png"></img></span> */}
+                        <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''} outlet`} onClick={() => toggleFilter('has_outlets')}>
                             <OutletIcon id='filter-outlet-icon' className='filter-icon' />
                             <span className='filter-checkbox'>Outlets</span>
                             <span className="info-icon">
                                 i
-                                <span className="info-tooltip">Coffee shops with some accessible outlets for charging.</span>
+                                <span className="info-tooltip">Coffee shops with outlets for charging.</span>
                             </span>
                         </div>
-                        <div id="filter-has-food" className={`filter-item bubble ${filters.has_food ? 'selected' : ''}`} onClick={() => toggleFilter('has_food')}>
-                            <OutletFood id='filter-food-icon' className='filter-icon' />
+                        <div id="filter-study-work" className={`filter-item bubble ${filters.study_work ? 'selected' : ''} study`} onClick={() => toggleFilter('study_work')}>
+                            <StudyIcon id='filter-study-icon' className='filter-icon' />
+                            <span className='filter-checkbox'>Study / Work</span>
+                            <span className="info-icon">
+                                i
+                                <span className="info-tooltip">Coffee shops great for studying or working.</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div className="filter-row">
+                        <div id="filter-outdoor-area" className={`filter-item bubble ${filters.outdoor_area ? 'selected' : ''} outdoor`} onClick={() => toggleFilter('outdoor_area')}>
+                            <OutdoorIcon id='filter-outdoor-icon' className='filter-icon' />
+                            <span className='filter-checkbox'>Outdoor Area</span>
+                            <span className="info-icon">
+                                i
+                                <span className="info-tooltip">Coffee shops with a significant amount of curated outdoor space.</span>
+                            </span>
+                        </div>
+                        <div id="filter-is-aesthetic" className={`filter-item bubble ${filters.is_aesthetic ? 'selected' : ''} aesthetic`} onClick={() => toggleFilter('is_aesthetic')}>
+                            <AestheticIcon id='filter-aesthetic-icon' className='filter-icon' />
+                            <span className='filter-checkbox'>Aesthetic</span>
+                            <span className="info-icon">
+                                i
+                                <span className="info-tooltip">Coffee shops that are visually and aesthetically pleasing.</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div className="filter-row">
+                        <div id="filter-has-food" className={`filter-item bubble ${filters.has_food ? 'selected' : ''} food`} onClick={() => toggleFilter('has_food')}>
+                            <FoodIcon id='filter-food-icon' className='filter-icon' />
                             <span className='filter-checkbox'>Food Menu</span>
                             <span className="info-icon">
                                 i
                                 <span className="info-tooltip">Coffee shops that offer sufficient food menus (more than traditional pastries).</span>
                             </span>
                         </div>
-                    </div>
-                    <div id="filter-row-time" className="filter-row">
-                        <div className={`filter-item bubble ${timeState ? 'selected' : ''} time`} onClick={toggleTimeState}>
-                            <OutletTime id='filter-time-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Open From/Until</span>
+                        <div id="filter-hidden_gem" className={`filter-item bubble ${filters.hidden_gem ? 'selected' : ''}`} onClick={() => toggleFilter('hidden_gem')}>
+                            <GemIcon id='filter-gem-icon' className='filter-icon' />
+                            <span className='filter-checkbox'>Hidden Gem</span>
                             <span className="info-icon">
                                 i
-                                <span className="info-tooltip">Coffee shops that are open from and until designated times.</span>
+                                <span className="info-tooltip">Coffee shops that aren't well-known and less likely to be busy.</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div id={`filter-row-time${timeState ? '-active' : ''}`} className="filter-row">
+                        <div className={`filter-item bubble ${timeState ? 'selected' : ''} time`} onClick={toggleTimeState}>
+                            <TimeIcon id='filter-time-icon' className='filter-icon' />
+                            <span className='filter-checkbox'>Open At</span>
+                            <span className="info-icon">
+                                i
+                                <span className="info-tooltip">Coffee shops that are open at this time.</span>
                             </span>
                         </div>
                         <div id="time-input-container">
@@ -256,6 +293,7 @@ export default function FiltersPanel({data, addFilter}) {
                             />
                         </div>
                     </div>
+                    
                     {/* <div id="filter-open-late" className='filter-item'>
                         <label>
                             <input type="checkbox" name="open_late" checked={filters.open_late} onChange={handleCheckboxChange}/>

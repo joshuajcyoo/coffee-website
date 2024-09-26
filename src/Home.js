@@ -7,7 +7,6 @@ import ResultsPanel from './ResultsPanel';
 
 export default function Home() {
 
-  // all the states that need to be updated by daughter components
   const [data, setData] = useState([]);
   const [latitude, setLatitude] = useState(34.070295856986654);
   const [longitude, setLongitude] = useState(-118.32681636751984);

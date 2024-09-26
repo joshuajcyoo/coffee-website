@@ -3,20 +3,8 @@ import Select from 'react-select';
 import './App.css';
 
 const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime }) => {
-//   const currentDate = new Date();
-//   let currentHour = currentDate.getHours();
-//   currentHour = currentHour % 12 || 12;
-//   const currentMinute = Math.floor(currentDate.getMinutes() / 15) * 15;
-//   const isPM = currentHour >= 12;
-//   const currentDay = currentDate.getDay();
-
-//   const [hour, setHour] = useState(currentHour);
-//   const [minute, setMinute] = useState(currentMinute);
-//   const [ampm, setAmpm] = useState(isPM ? 'AM' : 'PM');
-//   const [day, setDay] = useState(currentDay);
-
   const [isHovered, setIsHovered] = useState(false);
-  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const options = [
     { value: 0, label: 'Sunday' },
@@ -39,16 +27,18 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
 
   const addHour = () => {
       if (isActive) {
-          const newHour = hour === 12 ? 1 : hour + 1;
-          const newTimeNumber = convertTimeToNumber(newHour, minute, ampm);
-          changeTime({ hour: newHour, minute, ampm, day, number: newTimeNumber});
+          const newHour = hour === 11 ? 0 : hour + 1;
+          const newAmPm = hour === 11 ? (ampm === 'AM' ? 'PM' : 'AM') : ampm;
+          const newTimeNumber = convertTimeToNumber(newHour, minute, newAmPm);
+          changeTime({ hour: newHour, minute, ampm: newAmPm, day, number: newTimeNumber});
       }
   };
   const subtractHour = () => {
       if (isActive) {
           const newHour = hour === 0 ? 11 : hour - 1;
-          const newTimeNumber = convertTimeToNumber(newHour, minute, ampm);
-          changeTime({ hour: newHour, minute, ampm, day, number: newTimeNumber});
+          const newAmPm = hour === 0 ? (ampm === 'AM' ? 'PM' : 'AM') : ampm;
+          const newTimeNumber = convertTimeToNumber(newHour, minute, newAmPm);
+          changeTime({ hour: newHour, minute, ampm: newAmPm, day, number: newTimeNumber});
       }
   };
 
@@ -95,21 +85,21 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
       borderRadius: '3px',
       fontSize: 'clamp(0.7rem, 1.0vw, 1.2rem)',
       cursor: 'pointer',
-      ':hover': { backgroundColor: '#000000', borderColor: '#000000'},
-      backgroundColor: isHovered ? '#000000' : '#FFFFFF',
+      ':hover': isMenuOpen ? {backgroundColor: '#000000', borderColor: '#000000'} : { backgroundColor: '#D2D2D2', borderColor: '#000000'},
+      backgroundColor: isMenuOpen ? '#000000' : '#FFFFFF',
       transition: 'border 0.3s ease, background-color 0.3s ease',
       width: '10vw',
       height: '0.8vw'
     }),
     valueContainer: (styles) => ({
       ...styles,
-      padding: '8.5px 8px',
-      height: '100%', // Ensures the value container takes the full height
+      padding: '8.5px 10px',
+      height: '100%', 
     }),
-    option: (styles, { isFocused, isSelected }) => ({
+    option: (styles, { isFocused }) => ({
       ...styles,
-      backgroundColor: isFocused || isSelected ? '#000000' : '#FFFFFF',
-      color: isFocused || isSelected ? '#FFFFFF' : '#000000',
+      backgroundColor: isFocused ? '#000000' : '#FFFFFF',
+      color: isFocused ? '#FFFFFF' : '#000000',
       cursor: 'pointer'
     }),
     menu: (styles) => ({
@@ -117,6 +107,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
       marginTop: 0,  
       marginBottom: 0,   
       boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+      border: '2px solid black'
     }),
     menuList: (styles) => ({
       ...styles,
@@ -128,7 +119,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
     singleValue: (styles) => ({
       ...styles,
       height: '100%', 
-      color: isHovered && isActive ? '#FFFFFF' : '#000000'
+      color: isMenuOpen ? '#FFFFFF' : '#000000'
     }),
     indicatorsContainer: (styles) => ({
       ...styles,
@@ -136,13 +127,14 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
     }),
     dropdownIndicator: (styles) => ({
       ...styles,
-      color: isHovered && isActive ? '#FFFFFF' : '#000000',
+      color: isMenuOpen ? '#FFFFFF' : '#000000',
       marginLeft: '0',
-      paddingLeft: '0'
+      paddingRight: '0',
+      transform: 'rotate(180deg)', 
     }),
     indicatorSeparator: (styles) => ({
       ...styles,
-      display: 'none' // Change the color of the separator line here
+      display: 'none'
     }),
     input: (styles) => ({
       ...styles,
@@ -153,7 +145,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
   return (
     <div className={`time-input${isActive ? "-active" : "-inactive"}`}>
       <div id="time-clock" className="input-group">
-        <div className="input-control">
+        <div className="input-control left">
           <button className="stacked-button" onClick={addHour}>+</button>
           <button className="stacked-button" onClick={subtractHour}>-</button>
         </div>
@@ -170,7 +162,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
           value={minute.toString().padStart(2, '0')} 
           readOnly 
         />
-        <div className="input-control">
+        <div className="input-control right">
           <button className="stacked-button" onClick={addMinutes}>+</button>
           <button className="stacked-button" onClick={subtractMinutes}>-</button>
         </div>
@@ -185,9 +177,11 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
           defaultValue={options[day]}
           onChange={handleDayChange}
           options={options}
+          menuPlacement='top'
           styles={dayStyles}
-          isDisabled={isActive ? false : true}
           isSearchable={false}
+          onMenuOpen={() => setIsMenuOpen(true)}
+          onMenuClose={() => setIsMenuOpen(false)}
         />
       </div>
     </div>
