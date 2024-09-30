@@ -3,8 +3,9 @@ import Marker from './Marker';
 import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './App.css';
+import { hover } from '@testing-library/user-event/dist/hover';
 
-export default function Map({lng, lat, zoom, data, selectCafe}) {
+export default function Map({lng, lat, zoom, data, selectCafe, hoverCafe}) {
     const mapContainer = useRef(null);
     maptilersdk.config.apiKey = 'bFXUsq2lCBRLxW1UauI0';
 
@@ -38,6 +39,7 @@ export default function Map({lng, lat, zoom, data, selectCafe}) {
               map={theMap}
               markerData={cafe} 
               selectCafe={selectCafe}
+              hoverCafe={hoverCafe}
             />
           ))}
       </div>

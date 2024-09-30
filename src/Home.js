@@ -6,11 +6,13 @@ import FiltersPanel from './FiltersPanel';
 import ResultsPanel from './ResultsPanel';
 
 export default function Home() {
-
   const [data, setData] = useState([]);
-  const [latitude, setLatitude] = useState(34.070295856986654);
-  const [longitude, setLongitude] = useState(-118.32681636751984);
+  const [latitude, setLatitude] = useState(34.060801322167165);
+  const [longitude, setLongitude] = useState(-118.35414700384389);
   const [zoom, setZoom] = useState(11);
+  const [neighorhood, setNeighborhood] = useState(null);
+
+  const rightRef = useRef();
 
   const changeZoom = (data) => {
     const visibleCafes = data.filter(cafe => cafe.visible);
@@ -19,8 +21,8 @@ export default function Home() {
       setLongitude(visibleCafes[0].n_longitude);
       setZoom(visibleCafes[0].n_zoom);
     } else {
-        setLatitude(34.070295856986654);
-        setLongitude(-118.32681636751984);
+        setLatitude(34.06248189100365);
+        setLongitude(-118.34569321430635);
         setZoom(11);
     }
   }
@@ -34,7 +36,7 @@ export default function Home() {
           setLatitude(cafe.latitude);
           setLongitude(cafe.longitude);
           setZoom(16);
-          console.log(element)
+          // console.log(element)
         }
         else {
           element.is_selected = false;
@@ -97,7 +99,6 @@ export default function Home() {
     return result;
   }
   
-
   useEffect(() => {
     fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTyFAihCI4jr2oaWNMI7X4f1_x__G-y-mDqadIYIHecTwejWhRWbmKVApKMP0aqkAs4n6P_Jj4zy-HP/pub?output=tsv')
     .then(response => response.text())
@@ -126,12 +127,13 @@ export default function Home() {
           addFilter={handleAddFilter}
         />
       </div>
-      <div className="home-right"> 
+      <div className="home-right" ref={rightRef}> 
         <ResultsPanel 
           data={data}
           selectCafe={handleSelectCafe}
           pickSortingOption={handlePickSortingOption}
           addFilter={handleAddFilter}
+          rightRef={rightRef}
         />
       </div>
     </div>

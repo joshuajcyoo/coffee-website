@@ -126,11 +126,14 @@ export default function FiltersPanel({data, addFilter}) {
     const neighborhoodOptions = [
         { value: 'All Neighborhoods', label: 'All Neighborhoods', color: '#000000' },
         { value: 'USC/South Central', label: 'USC/South Central', color: '#FF6961' },
-        { value: 'Koreatown/Mid-City', label: 'Koreatown/Mid-City', color: '#867BC0' },
+        { value: 'Los Feliz/Hollywood', label: 'Los Feliz/Hollywood', color: '#F3A054' },
         { value: 'Echo Park/Silver Lake/Chinatown', label: 'Echo Park/Silver Lake/Chinatown', color: '#F6C25C' },
-        { value: 'Arts District/Little Tokyo', label: 'Arts District/Little Tokyo', color: '#5FC5F9' },
+        { value: 'Highland Park/Eagle Rock', label: 'Highland Park/Eagle Rock', color: '#AEC986' },
         { value: 'Culver City/Mar Vista', label: 'Culver City/Mar Vista', color: '#74B78C' },
+        { value: 'Venice/Santa Monica', label: 'Venice/Santa Monica', color: '#5BC6CC' },
+        { value: 'Arts District/Little Tokyo', label: 'Arts District/Little Tokyo', color: '#5FC5F9' },
         { value: 'Downtown', label: 'Downtown', color: '#3683C2' },
+        { value: 'Koreatown/Mid-City', label: 'Koreatown/Mid-City', color: '#867BC0' },
         { value: 'WeHo/Melrose/Beverly Hills', label: 'WeHo/Melrose/Beverly Hills', color: '#F2729F' },
     ];
 
@@ -157,12 +160,13 @@ export default function FiltersPanel({data, addFilter}) {
             marginTop: 0,  // Remove top margin
             marginBottom: 0,  // Remove bottom margin
             boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-             // Optional shadow for better visibility
         }),
         menuList: (styles) => ({
             ...styles,
             paddingTop: 0,  // Remove padding at the top
             paddingBottom: 0,  // Remove padding at the bottom
+            minHeight: '30.45vw'
+
         }),
         singleValue: (styles, {menuIsOpen}) => ({
             ...styles,

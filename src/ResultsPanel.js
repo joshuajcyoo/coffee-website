@@ -4,10 +4,10 @@ import GoogleMaps from "./Logos/googlemapslogo.png"
 import Yelp from "./Logos/yelplogo.png"
 
 function Card({cardData, isExpanded, handleCardClick, addFilter}) {
-    const [isHovered, setIsHovered] = useState(false);
+    const [isHovered, setIsHovered] = useState(false); 
 
     return (
-        <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} >
+        <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <div className="card-header" onClick={() => handleCardClick(cardData)}>
                 {/* <div className="card-name">{cardData.name}<span className="card-subname">{cardData.subname}</span></div>
                 <div className="card-neighborhood" style={{ backgroundColor: cardData.color_code }}>{cardData.neighborhood}</div> */}
@@ -24,7 +24,13 @@ function Card({cardData, isExpanded, handleCardClick, addFilter}) {
                     </div> */}
                 </div>
                 <div className="card-toggle">
-                    {isExpanded ? "—" : "+"}
+                    {/* {isExpanded ? "—" : "+"} */}
+                    <div className="card-header-score" style={isExpanded ? { display: 'none' } : {} }>
+                        {cardData.score}
+                    </div>
+                    <div style={isExpanded ? {} : { display: 'none' } }>
+                        —
+                    </div>
                 </div>  
             </div>
 
@@ -58,8 +64,111 @@ function Card({cardData, isExpanded, handleCardClick, addFilter}) {
     );
 }
 
-export default function ResultsPanel({data, selectCafe, pickSortingOption, addFilter}) {
+export default function ResultsPanel({data, selectCafe, pickSortingOption, addFilter, rightRef}) {
     
+    // const [expandedCard, setExpandedCard] = useState(null);
+    // const [clickedCards, setClickedCards] = useState([]); // Track clicked card IDs
+    // const containerRef = useRef(null); // Create a ref for the scrollable container
+
+    // useEffect(() => {
+    //     const selectedCard = data.find((element) => element.is_selected);
+    //     if (selectedCard) {
+    //         setExpandedCard(selectedCard.id);
+    //         setClickedCards((prevClickedCards) => {
+    //             if (!prevClickedCards.includes(selectedCard.id)) {
+    //                 return [selectedCard.id, ...prevClickedCards];
+    //             }
+    //             else {
+    //                 let tempClickedCards = prevClickedCards.filter(id => id !== selectedCard.id);
+    //                 return [selectedCard.id, ...tempClickedCards]
+    //             }
+    //         });
+    //     }
+    //     else {
+    //         setExpandedCard(null);
+    //     }
+
+    //     if (rightRef.current) {
+    //         rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    //     }
+    // }, [data]);
+
+    // const handleCardClick = (cardData) => {
+    //     setExpandedCard((id) => (id === cardData.id ? null : cardData.id));
+    //     selectCafe(cardData);
+
+    //     setClickedCards((prevClickedCards) => {
+    //         if (!prevClickedCards.includes(cardData.id)) {
+    //             return [cardData.id, ...prevClickedCards];
+    //         }
+    //         else {
+    //             let tempClickedCards = prevClickedCards.filter(id => id !== cardData.id);
+    //             return [cardData.id, ...tempClickedCards]
+    //         }
+    //     });
+
+    //     if (containerRef.current) {
+    //         console.log(containerRef.current)
+    //         containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    //     }
+    // };
+
+    // const renderCards = () => {
+    //     // Map through the clicked cards first, then the rest of the data
+    //     const orderedData = clickedCards.map(id => data.find(element => element.id === id))
+    //         .concat(data.filter(element => !clickedCards.includes(element.id)));
+
+    //     return orderedData.map((element) => (
+    //         element.visible && 
+    //         <Card 
+    //             key={element.id} 
+    //             cardData={element} 
+    //             selectCafe={selectCafe} 
+    //             isExpanded={element.id === expandedCard} 
+    //             handleCardClick={handleCardClick} 
+    //             addFilter={addFilter}
+    //         />
+    //     ));
+    // };
+
+    // return (
+    //     <div>
+    //         <div id="sorting-options">
+    //             <button onClick={() => pickSortingOption(
+    //                 (cafe1, cafe2) => latLessThan(cafe1, cafe2)
+    //             )}>sort by ascending latitude</button>
+    //             <button onClick={() => pickSortingOption(
+    //                 (cafe1, cafe2) => latGreaterThan(cafe1, cafe2)
+    //             )}>sort by descending latitude</button>
+    //         </div>
+
+    //         <div id="data-cards">
+    //         {renderCards()}
+    //             {/* {[
+    //                 // Render the clicked cards at the top (most recent first)
+    //                 ...data.filter(element => clickedCards.includes(element.id)),
+    //                 // Then render the remaining unclicked cards
+    //                 ...data.filter(element => !clickedCards.includes(element.id))
+    //             ]
+    //             .map(element => (
+    //                 element.visible && 
+    //                 <Card 
+    //                     key={element.id} 
+    //                     cardData={element} 
+    //                     selectCafe={selectCafe} 
+    //                     isExpanded={element.id === expandedCard} 
+    //                     handleCardClick={handleCardClick} 
+    //                     addFilter={addFilter}
+    //                 />
+    //             ))} */}
+    //         {/* {data.map(
+    //             (element) => element.visible && 
+    //             <Card key={element.id} cardData={element} selectCafe={selectCafe} isExpanded={element.id === expandedCard} handleCardClick={handleCardClick} addFilter={addFilter}/>
+    //         )} */}
+    //         </div>
+    //     </div>
+    // )
+
     // define functions for each sorting options
     // to use js sort(), return -1, 0, or 1 based on whatever property u care about
     const latLessThan = (cafe1, cafe2) => {
@@ -101,10 +210,27 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption, addFi
             </div>
 
             <div id="data-cards">
-            {data.map(
-                (element) => element.visible && 
-                <Card key={element.id} cardData={element} selectCafe={selectCafe} isExpanded={element.id === expandedCard} handleCardClick={handleCardClick} addFilter={addFilter}/>
-            )}
+            {data
+                .filter(element => {
+                    // If expandedCard exists, only show the expanded card
+                    if (expandedCard) {
+                        return element.id === expandedCard;
+                    }
+                    // If expandedCard doesn't exist, show all cards
+                    return true;
+                })
+                .map((element, index) => (
+                    element.visible && 
+                    <Card 
+                        key={element.id} 
+                        cardData={element} 
+                        selectCafe={selectCafe} 
+                        isExpanded={element.id === expandedCard} 
+                        handleCardClick={handleCardClick} 
+                        addFilter={addFilter}
+                    />
+                ))
+            }
             {/* {data.map((element) => {
                     if (expandedCard === null || element.id === expandedCard) {
                         return element.visible && (

@@ -98,8 +98,8 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
     }),
     option: (styles, { isFocused }) => ({
       ...styles,
-      backgroundColor: isFocused ? '#000000' : '#FFFFFF',
-      color: isFocused ? '#FFFFFF' : '#000000',
+      backgroundColor: isFocused ? '#D2D2D2' : '#FFFFFF',
+      color: '#000000',
       cursor: 'pointer'
     }),
     menu: (styles) => ({

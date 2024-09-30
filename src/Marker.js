@@ -3,7 +3,7 @@ import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './App.css';
 
-export default function Marker({map, markerData, selectCafe}) {
+export default function Marker({map, markerData, selectCafe, hoverCafe}) {
     const theMarker = useRef(null);
 
     useEffect(() => {
@@ -11,7 +11,7 @@ export default function Marker({map, markerData, selectCafe}) {
         if (theMarker.current) theMarker.current.remove();
         if (!markerData.visible) return;
         var color = markerData.color_code;
-        if (markerData.is_selected) color = "#e6353d";
+        // if (markerData.is_selected) color = "#e6353d";
         const marker = new maptilersdk.Marker({color: color})
         .setLngLat([markerData.longitude, markerData.latitude])
         .addTo(map);
