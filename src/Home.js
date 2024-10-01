@@ -51,7 +51,7 @@ export default function Home() {
   };
 
   const handleAddFilter = (filter) => {
-    var newData = [...data].map(cafe => ({ ...cafe, visible: true }));
+    var newData = [...data].map(cafe => ({ ...cafe, visible: true, is_selected: false }));
     newData.forEach(element => {
       if (!filter(element)) element.visible = false;
     });

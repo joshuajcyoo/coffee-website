@@ -3,15 +3,12 @@ import './App.css';
 import GoogleMaps from "./Logos/googlemapslogo.png"
 import Yelp from "./Logos/yelplogo.png"
 
-function Card({cardData, isExpanded, handleCardClick, addFilter}) {
+function Card({cardData, isExpanded, handleCardClick}) {
     const [isHovered, setIsHovered] = useState(false); 
 
     return (
         <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <div className="card-header" onClick={() => handleCardClick(cardData)}>
-                {/* <div className="card-name">{cardData.name}<span className="card-subname">{cardData.subname}</span></div>
-                <div className="card-neighborhood" style={{ backgroundColor: cardData.color_code }}>{cardData.neighborhood}</div> */}
-
                 <div className="card-name-neighborhood">
                     <div className="card-name">
                         {cardData.name}<span className="card-subname">{cardData.subname}</span>
@@ -19,12 +16,8 @@ function Card({cardData, isExpanded, handleCardClick, addFilter}) {
                     <div className="card-neighborhood" style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, border: '2px solid #FFFFFF' } : { color: cardData.color_code, border: "2px solid" + cardData.color_code }} >
                         {cardData.neighborhood}
                     </div>
-                    {/* <div className="card-neighborhood" style={{ backgroundColor: cardData.color_code }}>
-                        {cardData.neighborhood}
-                    </div> */}
                 </div>
                 <div className="card-toggle">
-                    {/* {isExpanded ? "—" : "+"} */}
                     <div className="card-header-score" style={isExpanded ? { display: 'none' } : {} }>
                         {cardData.score}
                     </div>
@@ -66,6 +59,16 @@ function Card({cardData, isExpanded, handleCardClick, addFilter}) {
 
 export default function ResultsPanel({data, selectCafe, pickSortingOption, addFilter, rightRef}) {
     
+    // const latLessThan = (cafe1, cafe2) => {
+    //     if (cafe1.latitude < cafe2.latitude) return 1;
+    //     if (cafe1.latitude > cafe2.latitude) return -1;
+    //     return 0;
+    // };
+
+    // const latGreaterThan = (cafe1, cafe2) => {
+    //     return -latLessThan(cafe1, cafe2);
+    // };
+
     // const [expandedCard, setExpandedCard] = useState(null);
     // const [clickedCards, setClickedCards] = useState([]); // Track clicked card IDs
     // const containerRef = useRef(null); // Create a ref for the scrollable container
@@ -74,6 +77,7 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption, addFi
     //     const selectedCard = data.find((element) => element.is_selected);
     //     if (selectedCard) {
     //         setExpandedCard(selectedCard.id);
+
     //         setClickedCards((prevClickedCards) => {
     //             if (!prevClickedCards.includes(selectedCard.id)) {
     //                 return [selectedCard.id, ...prevClickedCards];
@@ -97,24 +101,19 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption, addFi
     //     setExpandedCard((id) => (id === cardData.id ? null : cardData.id));
     //     selectCafe(cardData);
 
-    //     setClickedCards((prevClickedCards) => {
-    //         if (!prevClickedCards.includes(cardData.id)) {
-    //             return [cardData.id, ...prevClickedCards];
-    //         }
-    //         else {
-    //             let tempClickedCards = prevClickedCards.filter(id => id !== cardData.id);
-    //             return [cardData.id, ...tempClickedCards]
-    //         }
-    //     });
+    //     // setClickedCards((prevClickedCards) => {
+    //     //     if (!prevClickedCards.includes(cardData.id)) {
+    //     //         return [cardData.id, ...prevClickedCards];
+    //     //     }
+    //     //     else {
+    //     //         let tempClickedCards = prevClickedCards.filter(id => id !== cardData.id);
+    //     //         return [cardData.id, ...tempClickedCards]
+    //     //     }
+    //     // });
 
-    //     if (containerRef.current) {
-    //         console.log(containerRef.current)
-    //         containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-    //     }
     // };
 
     // const renderCards = () => {
-    //     // Map through the clicked cards first, then the rest of the data
     //     const orderedData = clickedCards.map(id => data.find(element => element.id === id))
     //         .concat(data.filter(element => !clickedCards.includes(element.id)));
 
@@ -185,12 +184,22 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption, addFi
 
     useEffect(() => {
         const selectedCard = data.find((element) => element.is_selected);
+        console.log("selected", selectedCard);
         if (selectedCard) {
             setExpandedCard(selectedCard.id);
+            const allCards = data.filter((element) => element.visible);
+            console.log(allCards);
+            for (let i = 0; i < allCards.length; i++) {
+                if (allCards[i].is_selected) {
+                    if (rightRef.current) {
+                        rightRef.current.scrollTo({ top: (i * 79.5), behavior: 'smooth' });
+                    }
+                }
+            }
         }
         else {
             setExpandedCard(null);
-        }
+        }        
     }, [data]);
 
     const handleCardClick = (cardData) => {
@@ -199,7 +208,7 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption, addFi
     };
 
     return (
-        <div>
+        <div id="results-panel">
             <div id="sorting-options">
                 <button onClick={() => pickSortingOption(
                     (cafe1, cafe2) => latLessThan(cafe1, cafe2)
@@ -209,42 +218,26 @@ export default function ResultsPanel({data, selectCafe, pickSortingOption, addFi
                 )}>sort by descending latitude</button>
             </div>
 
-            <div id="data-cards">
-            {data
-                .filter(element => {
-                    // If expandedCard exists, only show the expanded card
-                    if (expandedCard) {
-                        return element.id === expandedCard;
-                    }
-                    // If expandedCard doesn't exist, show all cards
-                    return true;
-                })
-                .map((element, index) => (
-                    element.visible && 
-                    <Card 
-                        key={element.id} 
-                        cardData={element} 
-                        selectCafe={selectCafe} 
-                        isExpanded={element.id === expandedCard} 
-                        handleCardClick={handleCardClick} 
-                        addFilter={addFilter}
-                    />
-                ))
-            }
-            {/* {data.map((element) => {
-                    if (expandedCard === null || element.id === expandedCard) {
-                        return element.visible && (
-                            <Card
-                                key={element.id}
-                                cardData={element}
-                                selectCafe={selectCafe}
-                                isExpanded={element.id === expandedCard}
-                                handleCardClick={handleCardClick}
-                            />
-                        );
-                    }
-                    return null;
-                })} */}
+            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 79.5 + 450) + "px")}}>
+                {data.filter(element => {
+                        if (element.visible) {
+                            return element;
+                        }
+                    })
+                    .map((element) => (
+                        <Card 
+                            key={element.id} 
+                            cardData={element} 
+                            selectCafe={selectCafe} 
+                            isExpanded={element.id === expandedCard} 
+                            handleCardClick={handleCardClick}
+                            addFilter={addFilter}
+                        />
+                    ))
+                }
+                {/* <div id="about">
+                    About
+                </div> */}
             </div>
         </div>
     )

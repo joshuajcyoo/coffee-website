@@ -411,10 +411,12 @@
 
 
 /* ResultsPanel.js */
+#about {
+  border-top: 2px solid black;
+}
 #results-panel {
   display: flex;
   flex-direction: column;
-  height: 100vh;
 }
 #sorting-options {
   position: sticky;
@@ -427,10 +429,12 @@
   align-items: center;
   justify-content: space-between;
   background-color: #FFFFFF;
+  border-bottom: 2px solid black;
 }
 #data-cards {
   overflow-y: auto;
   flex-grow: 1;
+  transition: opacity 3.0s ease;
 }
   /* Card in ResultsPanel.js */
   .card-container {
@@ -445,9 +449,12 @@
   } */
   .card-container.expanded {
     /* background-color: #D6DACE; */
-    max-height: 50vw;
+    /* max-height: 50vw; */
     padding-top: 20px;
     padding-bottom: 20px;
+  }
+  .card-container:first-child {
+    border-top: none;
   }
   .card-container:last-child {
     border-bottom: 2px solid black;
