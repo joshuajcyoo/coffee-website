@@ -22,6 +22,7 @@
   align-items: center;
   border-right: 2px solid black;
   border-left: 2px solid black;
+  z-index: 1;
 }
 .home-title-container {
   width: 60vw;
@@ -43,14 +44,16 @@
 .home-right {
   flex: 1;
   overflow-y: auto;
+  z-index: 2;
 }
 
 /* Map.js */
 .map-wrap {
   position: relative;
   width: 100%;
-  height: calc(100vh - 200px); /* calculate height of the screen minus the heading */
-  }
+  height: calc(100vh - 180px);
+  z-index: 0; /* calculate height of the screen minus the heading */
+}
 
 .map {
   position: absolute;
@@ -62,6 +65,7 @@
 
 /* Modal.js */
 .modal-backdrop {
+  font-family: Mulish Bold;
   position: fixed;
   top: 0;
   left: 0;
@@ -93,37 +97,6 @@
 .close-icon {
   height: 1.0rem;
 }
-
-/* FiltersPanel.js */
-#filters-panel {
-  text-align: center;
-  font-family: Mulish Bold;
-}
-#neighborhood-container {
-  margin-bottom: 0.1vw;
-}
-#more-filters-button {
-  border-radius: 3px;
-  border: 2px solid #000000;
-  font-family: Mulish Bold;
-  font-size: clamp(0.6rem, 1.0vw, 3.0rem);
-  margin-top: clamp(0.6rem, 0.8vw, 3.0rem);
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  color: #000000;
-  background-color: #FFFFFF;
-}
-#more-filters-button:hover {
-  background-color: #000000;
-  color: #FFFFFF;
-  cursor: pointer;
-}
-#more-filters-title {
-  margin-top: 35px;
-  cursor: default;
-}
 .filter-row {
   display: flex;
   justify-content: space-between; 
@@ -138,14 +111,14 @@
   /* border: 2px solid black;
   border-radius: 4px; */
   padding-bottom: 1.0vw;
-  margin-top: 0.7rem;
+  margin-top: 0.8rem;
   width: 79.5%;
 }
 #filter-row-time-active {
   display: flex;
   flex-direction: column;
   border: 2px solid black;
-  border-radius: 4px;
+  border-radius: 5px;
   padding-bottom: 1.0vw;
   margin-top: 0.7rem;
   width: 79.5%;
@@ -181,7 +154,6 @@
 }
 .filter-item.bubble:hover {
   background-color: #D2D2D2;
-  /* color: white; */
 }
 .filter-item.bubble.selected {
   border-color: #000000;
@@ -189,12 +161,9 @@
   color: white;
   transform: scale(1.0);
 }
-.filter-item.bubble.selected .filter-icon, .filter-item.bubble.selected #filter-food-icon path, .filter-item.bubble.selected #filter-time-icon path, .filter-item.bubble.selected #filter-outdoor-icon path, .filter-item.bubble.selected #filter-outdoor-icon, .filter-item.bubble.selected #filter-gem-icon path, .filter-item.bubble.selected #filter-study-icon .filter-item.bubble.selected #filter-study-icon path{
+.filter-item.bubble.selected .filter-icon, .filter-item.bubble.selected #filter-food-icon path, .filter-item.bubble.selected #filter-time-icon path, .filter-item.bubble.selected #filter-outdoor-icon path, .filter-item.bubble.selected #filter-outdoor-icon, .filter-item.bubble.selected #filter-gem-icon path, .filter-item.bubble.selected #filter-study-icon .filter-item.bubble.selected #filter-study-icon path {
   fill: white;
 }
-/* .filter-item.bubble.selected:active {
-  transform: scale(0.9);
-} */
 .filter-item.bubble.time {
   display: flex; 
   align-items: center;
@@ -290,6 +259,15 @@
   opacity: 1;
 }
 
+/* FiltersPanel.js */
+#filters-panel {
+  text-align: center;
+  font-family: Mulish Bold;
+}
+#neighborhood-container {
+  margin-bottom: 0.1vw;
+}
+
 /* TimeInput.js */
 #time-input-container {
   display: flex; /* Keeps its internal content as flex */
@@ -375,7 +353,6 @@
 }
 #time-clock {
   background-color: #FFFFFF;
-  border-radius: 3px;
   color: black;
 }
 #time-input-ampm-inactive {
@@ -421,15 +398,121 @@
 #sorting-options {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
   padding: 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   height: 7.5vh;
   display: flex;
+  justify-content: center;  /* Horizontally centers the child div */
+  align-items: center;
+  background-color: #FFFFFF;
+}
+#sorting-buttons {
+  display: flex;
   align-items: center;
   justify-content: space-between;
+  width: clamp(5rem, 26vw, 30rem);
+  gap: 0%;
+}
+#filters-button:hover, #sort-button:hover {
+  background-color: #000000;
+  color: #FFFFFF;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+#filters-button:hover #filter-filter-icon path, #sort-button:hover #sort-icon path, #filters-button-applied #filter-filter-icon path {
+  stroke: white;
+}
+#filters-button, #sort-button, #filters-button-applied {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border-radius: 3px;
+  border: 2px solid #000000;
+  font-family: Mulish Bold;
+  font-size: clamp(0.5rem, 1.1vw, 1.4rem);
+  color: #000000;
   background-color: #FFFFFF;
-  border-bottom: 2px solid black;
+}
+#filters-button-applied {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+.sort-filters-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(0.5rem, 13vw, 15rem);
+  margin-top: 0.3vw;
+  margin-bottom: 0.3vw;
+  transition: transform 0.1s ease;
+}
+#filters-button-container {
+  width: clamp(0.5rem, 10vw, 12rem);
+}
+.sort-icon {
+  margin-right: 0.3rem;
+  height: clamp(0.5rem, 2vw, 3rem);
+  width: clamp(0.5rem, 2vw, 3rem);
+}
+#sort-button-title {
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#filters-title {
+  margin-top: 35px;
+  cursor: default;
+  text-align: center;
+}
+.sort-info-icon {
+  display: flex;
+  justify-content: center;
+  margin-left: 7px;
+  width: 3px;
+  height: 3px;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 50%;
+  text-align: center; 
+  line-height: 3px;
+  padding: 5px;
+  font-size: 8px;
+  cursor: pointer;
+  position: relative;
+  margin-top: 2px;
+}
+.sort-info-tooltip {
+  visibility: hidden;
+  width: clamp(7rem, 10vw, 12rem);
+  background-color: #FFFFFF;
+  color: #000000;
+  text-align: center;
+  border-radius: 3px;
+  border: 2px solid black;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  top: 18px; 
+  left: -105.5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  line-height: 1.5;
+  font-size: 10px;
+}
+.sort-info-tooltip::after {
+  content: "";
+  position: absolute;
+  top: -10px; 
+  left: 105px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #FFFFFF transparent;
+}
+.sort-info-icon:hover .sort-info-tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 #data-cards {
   overflow-y: auto;
@@ -453,9 +536,6 @@
     padding-top: 20px;
     padding-bottom: 20px;
   }
-  .card-container:first-child {
-    border-top: none;
-  }
   .card-container:last-child {
     border-bottom: 2px solid black;
   }
@@ -464,6 +544,37 @@
     justify-content: space-between;
     align-items: center; 
     padding-bottom: clamp(0.3rem, 1.8vw, 0.7rem);
+  }
+  .card-header-score, .card-header-score-hovered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.8rem, 1.5vw, 1.7rem);
+    border: 2px solid black;
+    border-radius: 3px;
+    padding: 2px;
+    width: clamp(1.5rem, 3vw, 3.5rem);
+    height: clamp(1.0rem, 2vw, 3rem);
+    text-align: center;
+  }
+  .card-header-score-expanded, .card-header-score-expanded-hovered {
+    display: none;
+  }
+  .card-header-score-hovered {
+    /* background-color: white; */
+    border: 2px solid white;
+  }
+  .card-header-score-hovered:hover {
+    border: 2px solid white;
+    background-color: white;
+  }
+  .card-header-minimize-expanded {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    width: clamp(1.5rem, 3vw, 3.5rem);
+    height: clamp(1.0rem, 2vw, 3rem);
   }
   .card-name-neighborhood {
     flex-direction: column;
@@ -558,9 +669,9 @@
     border: 2px solid #3AAB59;
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    border-radius: 5px;
+    padding-top: 8.5px;
+    padding-bottom: 8.5px;
+    border-radius: 3px;
     text-decoration: none;
     margin-top: 0.8vw;
     font-weight: bold;
@@ -580,7 +691,7 @@
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-    border-radius: 5px;
+    border-radius: 3px;
     text-decoration: none;
     margin-top: 0.8vw;
     font-weight: bold;

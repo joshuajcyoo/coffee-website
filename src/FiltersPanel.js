@@ -1,117 +1,25 @@
 import './App.css';
-import Modal from './Modal';
 import React, { useRef, useEffect, useState } from 'react';
 import Select from 'react-select';
-import TimeInput from './TimeInput';
-import {ReactComponent as OutletIcon} from './Logos/filter-outlet.svg'
-import {ReactComponent as StudyIcon} from './Logos/filter-study.svg'
-import {ReactComponent as FoodIcon} from './Logos/filter-food.svg'
-import {ReactComponent as GemIcon} from './Logos/filter-gem.svg'
-import {ReactComponent as AestheticIcon} from './Logos/filter-aesthetic.svg'
-import {ReactComponent as OutdoorIcon} from './Logos/filter-outdoor.svg'
-import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 
-export default function FiltersPanel({data, addFilter}) {
-    const [showModal, setShowModal] = useState(false);
-    const toggleModal = () => {
-        setShowModal(!showModal);
-    };
-
-    const convertTimeToNumber = (hour, minute, ampm) => {
-        let adjustedHour = hour;
-        if (ampm === 'PM' && hour !== 12) {adjustedHour += 12;} 
-        else if (ampm === 'AM' && hour === 12) {adjustedHour = 0;}
-
-        const timeAsNumber = adjustedHour * 100 + minute;
-        return timeAsNumber;
-    };
-    
-    const [timeState, setTimeState] = useState(false);
-    const [timeData, setTimeData] = useState({
-        hour: new Date().getHours() > 12 ? new Date().getHours() - 12 : new Date().getHours(),
-        minute: Math.floor(new Date().getMinutes() / 15) * 15,
-        ampm: new Date().getHours() >= 12 ? 'PM' : 'AM',
-        day: new Date().getDay(),
-        number: convertTimeToNumber(new Date().getHours() >= 12 ? new Date().getHours() - 12 : new Date().getHours(), Math.floor(new Date().getMinutes() / 15) * 15, new Date().getHours() >= 12 ? 'PM' : 'AM')
-      });
+export default function FiltersPanel({setNeighborhoodFunction}) {
 
     const [filters, setFilters] = useState({
-        neighborhood: "All Neighborhoods",
-        has_outlets: false,
-        study_work: false,
-        has_food: false,
-        hidden_gem: false,
-        is_aesthetic: false,
-        outdoor_area: false,
-        high_prices: false,
-        wifi_issues: false,
+        neighborhood: "All Neighborhoods"
     });
 
-    const inHours = (cafe, time, day) => {
-        return cafe.hours[day].open && cafe.hours[day].open <= time && cafe.hours[day].close > time;
-    }
     const inNeighborhood = (cafe, neighborhood) => {
         return cafe.neighborhood === neighborhood;
     };
-    const hasOutlets = (cafe) => cafe.outlets > 0;
-    const studyWork = (cafe) => cafe.study_work;
-    const hasFood = (cafe) => cafe.has_food;
-    const hiddenGem = (cafe) => cafe.hidden_gem;
-    const isAesthetic = (cafe) => cafe.is_aesthetic;
-    const outdoorArea = (cafe) => cafe.outdoor_area;
-    const openLate = (cafe) => cafe.open_late;
-    const closesEarly = (cafe) => cafe.closes_early;
-    const highPrices = (cafe) => cafe.high_prices;
-    const wifiIssues = (cafe) => cafe.wifi_issues;
 
     const finalFilter = (cafe) => {
         let applyFilter = true;
 
-        if (timeState) applyFilter = applyFilter && inHours(cafe, timeData.number, timeData.day);
         if (filters.neighborhood != "All Neighborhoods") applyFilter = applyFilter && inNeighborhood(cafe, filters.neighborhood);
-        if (filters.has_outlets) applyFilter = applyFilter && hasOutlets(cafe);
-        if (filters.study_work) applyFilter = applyFilter && studyWork(cafe);
-        if (filters.has_food) applyFilter = applyFilter && hasFood(cafe);
-        if (filters.hidden_gem) applyFilter = applyFilter && hiddenGem(cafe);
-        if (filters.is_aesthetic) applyFilter = applyFilter && isAesthetic(cafe);
-        if (filters.outdoor_area) applyFilter = applyFilter && outdoorArea(cafe);
-        if (filters.open_late) applyFilter = applyFilter && openLate(cafe);
-        if (filters.closes_early) applyFilter = applyFilter && closesEarly(cafe);
-        if (filters.high_prices) applyFilter = applyFilter && highPrices(cafe);
-        if (filters.wifi_issues) applyFilter = applyFilter && wifiIssues(cafe);
 
         return applyFilter;
-    }
-
-    const handleCheckboxChange = (event) => {
-        const {name, checked} = event.target;
-        
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: checked
-        }));
     };
 
-    const toggleTimeState = () => {
-        setTimeState((prevState) => !prevState);
-    };
-
-    const handleTimeChange = (newTimeData) => {
-        if (timeState) {
-            setTimeData((prev) => ({
-                ...prev,
-                ...newTimeData,
-            }));
-        }
-      };    
-
-    const toggleFilter = (filter) => {
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [filter]: !prevFilters[filter],
-        }));
-      };      
-    
     const handleNeighborhood = (neighborhood) => {
         setSelectedNeighborhood(neighborhood);
         setFilters((prevFilters) => ({
@@ -125,7 +33,7 @@ export default function FiltersPanel({data, addFilter}) {
 
     const neighborhoodOptions = [
         { value: 'All Neighborhoods', label: 'All Neighborhoods', color: '#000000' },
-        { value: 'USC/South Central', label: 'USC/South Central', color: '#FF6961' },
+        { value: 'USC/Expo Park', label: 'USC/Expo Park', color: '#FF6961' },
         { value: 'Los Feliz/Hollywood', label: 'Los Feliz/Hollywood', color: '#F3A054' },
         { value: 'Echo Park/Silver Lake/Chinatown', label: 'Echo Park/Silver Lake/Chinatown', color: '#F6C25C' },
         { value: 'Highland Park/Eagle Rock', label: 'Highland Park/Eagle Rock', color: '#AEC986' },
@@ -144,8 +52,8 @@ export default function FiltersPanel({data, addFilter}) {
             ...styles,
             border: '2px solid' + selectedNeighborhood.color,
             boxShadow: 'none',
-            fontSize: 'clamp(0.8rem, 1.2vw, 1.5rem)',    // Smaller font size
-            cursor: 'pointer',      // Set the cursor to pointer
+            fontSize: 'clamp(0.8rem, 1.2vw, 1.5rem)',
+            cursor: 'pointer',
             ':hover': { cursor: 'pointer', borderColor: selectedNeighborhood.color },
             backgroundColor: isHovered && !isMenuOpen ? selectedNeighborhood.color : 'transparent',
         }),
@@ -157,18 +65,19 @@ export default function FiltersPanel({data, addFilter}) {
         }),
         menu: (styles) => ({
             ...styles,
-            marginTop: 0,  // Remove top margin
-            marginBottom: 0,  // Remove bottom margin
-            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+            marginTop: 0,
+            marginBottom: 0,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
         }),
         menuList: (styles) => ({
             ...styles,
-            paddingTop: 0,  // Remove padding at the top
-            paddingBottom: 0,  // Remove padding at the bottom
-            minHeight: '30.45vw'
-
+            paddingTop: 0,
+            paddingBottom: 0,
+            minHeight: '29.85vw',
+            fontSize: 'clamp(0.8rem, 1.2vw, 1.5rem)',
+            borderRadius: '3px'
         }),
-        singleValue: (styles, {menuIsOpen}) => ({
+        singleValue: (styles) => ({
             ...styles,
             padding: '3px 40px',
             color: isMenuOpen ? selectedNeighborhood.color : (isHovered ? '#FFFFFF' : selectedNeighborhood.color),
@@ -193,9 +102,15 @@ export default function FiltersPanel({data, addFilter}) {
     };
 
     useEffect(() => {
-        addFilter(finalFilter);
+        console.log(filters);
+        if (filters.neighborhood === "All Neighborhoods") {
+            setNeighborhoodFunction(null);
+        }
+        else {
+            setNeighborhoodFunction(() => finalFilter);
+        }
         setIsHovered(false);
-    }, [filters, selectedNeighborhood, timeData, timeState]);
+    }, [filters, selectedNeighborhood]);
     
     return (
         <div id='filters-panel'>
@@ -214,143 +129,6 @@ export default function FiltersPanel({data, addFilter}) {
                     onMenuClose={() => setIsMenuOpen(false)}
                 />
             </div>
-            
-            <div id="more-filters-container">
-                <button id="more-filters-button" onClick={toggleModal}>
-                    More Filters +
-                </button>
-
-                <Modal show={showModal} handleClose={toggleModal}>
-                    <div id="more-filters-title"><h2>More Filters</h2></div>
-                    <div className="filter-row">
-                        <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''} outlet`} onClick={() => toggleFilter('has_outlets')}>
-                            <OutletIcon id='filter-outlet-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Outlets</span>
-                            <span className="info-icon">
-                                i
-                                <span className="info-tooltip">Coffee shops with outlets for charging.</span>
-                            </span>
-                        </div>
-                        <div id="filter-study-work" className={`filter-item bubble ${filters.study_work ? 'selected' : ''} study`} onClick={() => toggleFilter('study_work')}>
-                            <StudyIcon id='filter-study-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Study / Work</span>
-                            <span className="info-icon">
-                                i
-                                <span className="info-tooltip">Coffee shops great for studying or working.</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="filter-row">
-                        <div id="filter-outdoor-area" className={`filter-item bubble ${filters.outdoor_area ? 'selected' : ''} outdoor`} onClick={() => toggleFilter('outdoor_area')}>
-                            <OutdoorIcon id='filter-outdoor-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Outdoor Area</span>
-                            <span className="info-icon">
-                                i
-                                <span className="info-tooltip">Coffee shops with a significant amount of curated outdoor space.</span>
-                            </span>
-                        </div>
-                        <div id="filter-is-aesthetic" className={`filter-item bubble ${filters.is_aesthetic ? 'selected' : ''} aesthetic`} onClick={() => toggleFilter('is_aesthetic')}>
-                            <AestheticIcon id='filter-aesthetic-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Aesthetic</span>
-                            <span className="info-icon">
-                                i
-                                <span className="info-tooltip">Coffee shops that are visually and aesthetically pleasing.</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div className="filter-row">
-                        <div id="filter-has-food" className={`filter-item bubble ${filters.has_food ? 'selected' : ''} food`} onClick={() => toggleFilter('has_food')}>
-                            <FoodIcon id='filter-food-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Food Menu</span>
-                            <span className="info-icon">
-                                i
-                                <span className="info-tooltip">Coffee shops that offer sufficient food menus (more than traditional pastries).</span>
-                            </span>
-                        </div>
-                        <div id="filter-hidden_gem" className={`filter-item bubble ${filters.hidden_gem ? 'selected' : ''}`} onClick={() => toggleFilter('hidden_gem')}>
-                            <GemIcon id='filter-gem-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Hidden Gem</span>
-                            <span className="info-icon">
-                                i
-                                <span className="info-tooltip">Coffee shops that aren't well-known and less likely to be busy.</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div id={`filter-row-time${timeState ? '-active' : ''}`} className="filter-row">
-                        <div className={`filter-item bubble ${timeState ? 'selected' : ''} time`} onClick={toggleTimeState}>
-                            <TimeIcon id='filter-time-icon' className='filter-icon' />
-                            <span className='filter-checkbox'>Open At</span>
-                            <span className="info-icon">
-                                i
-                                <span className="info-tooltip">Coffee shops that are open at this time.</span>
-                            </span>
-                        </div>
-                        <div id="time-input-container">
-                            <TimeInput 
-                                hour={timeData.hour >= 12 ? timeData.hour - 12: timeData.hour}
-                                minute={timeData.minute}
-                                ampm={timeData.ampm}
-                                day={timeData.day}
-                                changeTime={handleTimeChange} 
-                                isActive={timeState} 
-                                setIsActive={toggleTimeState}
-                            />
-                        </div>
-                    </div>
-                    
-                    {/* <div id="filter-open-late" className='filter-item'>
-                        <label>
-                            <input type="checkbox" name="open_late" checked={filters.open_late} onChange={handleCheckboxChange}/>
-                            <span className='filter-checkbox'>Open Late</span>
-                        </label>
-                        <span className="info-icon">
-                            i
-                            <span className="info-tooltip">Coffee shops that stay open until 6PM or later.</span>
-                        </span>
-                    </div>
-                    <div id="filter-closes-early" className='filter-item'>
-                        <label>
-                            <input type="checkbox" name="closes_early" checked={filters.closes_early} onChange={handleCheckboxChange}/>
-                            <span className='filter-checkbox'>Doesn't Close Early</span>
-                        </label>
-                        <span className="info-icon">
-                            i
-                            <span className="info-tooltip">Coffee shops that stay open until at least 3PM.</span>
-                        </span>
-                    </div> */}
-                    {/* <div id="filter-high-prices" className='filter-item'>
-                        <label>
-                            <input type="checkbox" name="high_prices" checked={filters.high_prices} onChange={handleCheckboxChange}/>
-                            <span className='filter-checkbox'>Avoids High Prices</span>
-                        </label>
-                        <span className="info-icon">
-                            i
-                            <span className="info-tooltip">Coffee shops that avoid high prices (for LA standards.)</span>
-                        </span>
-                    </div>
-                    <div id="filter-wifi-issues" className='filter-item'>
-                        <label>
-                            <input type="checkbox" name="wifi_issues" checked={filters.wifi_issues} onChange={handleCheckboxChange}/>
-                            <span className='filter-checkbox'>Avoids Wi-Fi Issues</span>
-                        </label>
-                        <span className="info-icon">
-                            i
-                            <span className="info-tooltip">Coffee shops that have no history of wi-fi issues.</span>
-                        </span>
-                    </div>
-                    <div id="filter-outdoor-area" className='filter-item'>
-                        <label>
-                            <input type="checkbox" name="outdoor_area" checked={filters.outdoor_area} onChange={handleCheckboxChange}/>
-                            <span className='filter-checkbox'>Outdoor Area</span>
-                        </label>
-                        <span className="info-icon">
-                            i
-                            <span className="info-tooltip">Coffee shops that feature a significant amount of curated outdoor space.</span>
-                        </span>
-                    </div> */}
-                </Modal>
-            </div>
-        
         </div>
     );
 }

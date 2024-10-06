@@ -10,7 +10,8 @@ export default function Home() {
   const [latitude, setLatitude] = useState(34.060801322167165);
   const [longitude, setLongitude] = useState(-118.35414700384389);
   const [zoom, setZoom] = useState(11);
-  const [neighorhood, setNeighborhood] = useState(null);
+  const [filterFunction, setFilterFunction] = useState(null);
+  const [neighborhoodFunction, setNeighborhoodFunction] = useState(true);
 
   const rightRef = useRef();
 
@@ -36,7 +37,6 @@ export default function Home() {
           setLatitude(cafe.latitude);
           setLongitude(cafe.longitude);
           setZoom(16);
-          // console.log(element)
         }
         else {
           element.is_selected = false;
@@ -50,11 +50,22 @@ export default function Home() {
     setData(newData);
   };
 
-  const handleAddFilter = (filter) => {
+  const handleAddFilter = () => {
     var newData = [...data].map(cafe => ({ ...cafe, visible: true, is_selected: false }));
-    newData.forEach(element => {
-      if (!filter(element)) element.visible = false;
-    });
+    if (filterFunction) {
+      newData.forEach(element => {
+        if (!filterFunction(element)) {
+          element.visible = false;
+        }
+      });
+    }
+    if (neighborhoodFunction) {
+      newData.forEach(element => {
+        if (!neighborhoodFunction(element)) {
+          element.visible = false;
+        }
+      });
+    }
     setData(newData);
     changeZoom(newData);
   }
@@ -104,10 +115,18 @@ export default function Home() {
     .then(response => response.text())
     .then(data => {
       var jsondata = csvJSON(data);
-      console.log(jsondata);
+      jsondata.sort((cafe1, cafe2) => {
+        if (cafe1.score < cafe2.score) return 1;
+        if (cafe1.score > cafe1.score) return -1;
+        return 0;
+      });
       setData(jsondata);
     });
   }, []);
+
+  useEffect(() => {
+    handleAddFilter();
+  }, [filterFunction, neighborhoodFunction])
 
   return (
     <div className="home-content">
@@ -119,13 +138,15 @@ export default function Home() {
           zoom={zoom}
           selectCafe={handleSelectCafe}
         />
-        <div className="home-title-container">
-          <div className="home-title">A Guide to LA Coffee Shops</div>
-        </div>
-        <FiltersPanel 
-          data={data}
-          addFilter={handleAddFilter}
-        />
+          <div className="home-title-container">
+            <div className="home-title">A Guide to LA Coffee Shops</div>
+          </div>
+          <FiltersPanel 
+            data={data}
+            addFilter={handleAddFilter}
+            neighborhoodFunction={neighborhoodFunction}
+            setNeighborhoodFunction={setNeighborhoodFunction}
+          />
       </div>
       <div className="home-right" ref={rightRef}> 
         <ResultsPanel 
@@ -134,6 +155,8 @@ export default function Home() {
           pickSortingOption={handlePickSortingOption}
           addFilter={handleAddFilter}
           rightRef={rightRef}
+          filterFunction={filterFunction}
+          setFilterFunction={setFilterFunction}
         />
       </div>
     </div>
