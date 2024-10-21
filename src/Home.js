@@ -2,7 +2,7 @@ import './App.css';
 import * as React from 'react';
 import { useRef, useEffect, useState } from 'react';
 import Map from './Map';
-import FiltersPanel from './FiltersPanel';
+import NeighborhoodPanel from './NeighborhoodPanel';
 import ResultsPanel from './ResultsPanel';
 
 export default function Home() {
@@ -11,24 +11,36 @@ export default function Home() {
   const [longitude, setLongitude] = useState(-118.35414700384389);
   const [zoom, setZoom] = useState(11);
   const [filterFunction, setFilterFunction] = useState(null);
-  const [neighborhoodFunction, setNeighborhoodFunction] = useState(true);
+  const [neighborhoodFunction, setNeighborhoodFunction] = useState(null);
+  const [scrollToTop, setScrollToTop] = useState(false);
+  const [hoveredCafe, setHoveredCafe] = useState(null);
+  const [selectedCafe, setSelectedCafe] = useState(null);
 
   const rightRef = useRef();
 
-  const changeZoom = (data) => {
+  const [displayRight, setDisplayRight] = useState(false);
+
+  const changeZoom = (data, neighborhoodCheck) => {
     const visibleCafes = data.filter(cafe => cafe.visible);
     if (visibleCafes.length > 0 && visibleCafes.every(cafe => cafe.neighborhood === visibleCafes[0].neighborhood)) {
       setLatitude(visibleCafes[0].n_latitude);
       setLongitude(visibleCafes[0].n_longitude);
       setZoom(visibleCafes[0].n_zoom);
-    } else {
-        setLatitude(34.06248189100365);
-        setLongitude(-118.34569321430635);
-        setZoom(11);
+    } 
+    else if (neighborhoodCheck) {
+      setLatitude(34.06248189100365);
+      setLongitude(-118.34569321430635);
+      setZoom(11);
+    }
+    else {
+      if (zoom != 11 && zoom != 13) {
+        setZoom(12.5);
+      }
     }
   }
 
   const handleSelectCafe = (cafe) => {
+    setDisplayRight(true);
     var newData = [...data];
     newData.forEach(element => {
       if (element === cafe) {
@@ -36,11 +48,13 @@ export default function Home() {
           element.is_selected = true;
           setLatitude(cafe.latitude);
           setLongitude(cafe.longitude);
-          setZoom(16);
+          setZoom(14);
+          setSelectedCafe(cafe);
         }
         else {
           element.is_selected = false;
-          changeZoom(newData);
+          changeZoom(newData, false);
+          setSelectedCafe(null);
         } 
       }
       else {
@@ -67,7 +81,7 @@ export default function Home() {
       });
     }
     setData(newData);
-    changeZoom(newData);
+    changeZoom(newData, true);
   }
 
   const handlePickSortingOption = (sortingOption) => {
@@ -130,25 +144,33 @@ export default function Home() {
 
   return (
     <div className="home-content">
-      <div className="home-left">      
+      <div className="home-left" style={{ width: displayRight ? '67%' : '100%' }}>      
         <Map
           data={data}
-          lat={latitude}
-          lng={longitude}
+          setData={setData}
+          displayRight={displayRight}
+          setDisplayRight={setDisplayRight}
+          latitude={latitude}
+          setLatitude={setLatitude}
+          longitude={longitude}
+          setLongitude={setLongitude}
           zoom={zoom}
+          setZoom={setZoom}
+          changeZoom={changeZoom}
           selectCafe={handleSelectCafe}
+          hoveredCafe={hoveredCafe}
+          selectedCafe={selectedCafe}
+          neighborhoodFunction={neighborhoodFunction}
         />
           <div className="home-title-container">
             <div className="home-title">A Guide to LA Coffee Shops</div>
           </div>
-          <FiltersPanel 
-            data={data}
-            addFilter={handleAddFilter}
-            neighborhoodFunction={neighborhoodFunction}
+          <NeighborhoodPanel
             setNeighborhoodFunction={setNeighborhoodFunction}
+            setScrollToTop={setScrollToTop}
           />
       </div>
-      <div className="home-right" ref={rightRef}> 
+      <div className={`home-right ${displayRight ? '' : 'hidden'}`} ref={rightRef}> 
         <ResultsPanel 
           data={data}
           selectCafe={handleSelectCafe}
@@ -157,6 +179,10 @@ export default function Home() {
           rightRef={rightRef}
           filterFunction={filterFunction}
           setFilterFunction={setFilterFunction}
+          scrollToTop={scrollToTop}
+          setScrollToTop={setScrollToTop}
+          hoveredCafe={hoveredCafe}
+          setHoveredCafe={setHoveredCafe}
         />
       </div>
     </div>

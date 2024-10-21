@@ -14,13 +14,13 @@
   display: flex; 
   height: 100vh;
   background-color: #FFFFFF;
+  transition: all 0.3s ease;
 }
 .home-left {
-  flex: 2;
+  transition: all 0.3s ease;  
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-right: 2px solid black;
   border-left: 2px solid black;
   z-index: 1;
 }
@@ -42,9 +42,22 @@
   color: white; */
 }
 .home-right {
+  width: 33%;
   flex: 1;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
   overflow-y: auto;
   z-index: 2;
+  transition: all 0.3s ease;  
+  background-color: white;
+  border-left: 2px solid black;
+}
+.home-right.hidden {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
 }
 
 /* Map.js */
@@ -60,7 +73,80 @@
   width: 100%;
   height: 100%;
   border-bottom: 2px solid black;
-  border-right: 2px solid black;
+}
+.map-button {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  padding: 0.5vw 1.25vw;
+  background-color: #FFFFFF;
+  color: black;
+  border: 2px solid black;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: Mulish Bold;
+  font-size: clamp(0.7rem, 1.1vw, 1.2rem);
+  transition: color 0.2s ease;
+}
+#map-toggle-list {
+  right: 20px;
+  bottom: 40px; 
+}
+#map-reset-view {
+  left: 20px;
+  bottom: 40px;
+}
+.map-button:hover {
+  background-color: #000000;
+  color: white;
+}
+.map-button .map-icon path {
+  fill: black;
+  stroke: black;
+}
+.map-button:hover .map-icon path {
+  stroke: white;
+  fill: white;
+}
+.map-icon {
+  width: 1.25vw;
+  height: 1.25vw;
+  margin-top: 0.1vw;
+  margin-left: 0.4vw;
+}
+#map-close-icon {
+  width: 1.2vw;
+  height: 1.1vw;
+  margin-left: 0.2vw;
+}
+.marker-hover {
+  position: absolute;
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 2px solid black;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 10;
+  transform: translate(-50%, -100%);
+  min-width: 7vw;
+}
+.marker-hover:after {
+  content: "";
+  position: absolute;
+  top: 100%; 
+  left: 48.75%;
+  margin-left: -5px;
+  border-width: 7px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+.marker-hover-content {
+  text-align: center;
+  font-weight: bold;
+}
+.marker-hover-content div {
+  margin: 2px 0;
 }
 
 /* Modal.js */
@@ -119,14 +205,18 @@
   flex-direction: column;
   border: 2px solid black;
   border-radius: 5px;
-  padding-bottom: 1.0vw;
+  /* padding-bottom: 1.0vw; */
   margin-top: 0.7rem;
   width: 79.5%;
 }
 #filter-row-time-active #time-input-container {
   max-height: 200px; 
+  align-items: center;
+  justify-content: center;
   opacity: 1;
   transition: max-height 0.7s ease, opacity 0.7s ease;
+  display: flex;
+  width: 100%;
 }
 
 .filter-item {
@@ -230,7 +320,7 @@
 .info-tooltip {
   visibility: hidden;
   width: 150px;
-  background-color: #333;
+  background-color: #000000;
   color: #fff;
   text-align: center;
   border-radius: 5px;
@@ -305,7 +395,7 @@
   justify-content: space-between;
   gap: 2px; /* Adds a gap between the buttons */
   height: 100%;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   border-radius: 3px;
 }
 .input-control.left {
@@ -315,10 +405,8 @@
   margin-left: 3px;
 }
 .stacked-button {
-  width: 15px;
-  height: 16px;
-  font-size: 10px;
-  font-weight: bold;
+  width: 17px;
+  height: 18px;
   background-color: #FFFFFF;
   color: black;
   border: 0px solid transparent;
@@ -326,10 +414,17 @@
   cursor: pointer;
   transition: background-color 0.2s;
   box-sizing: border-box; /* Ensures the border is included in the height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#time-plus-icon, #time-minus-icon {
+  width: 17px;
+  height: 18px;
 }
 .stacked-button:hover {
   background-color: #D2D2D2;
-  border-radius: 0;
+  border-radius: 3px;
   color: black;
 }
 .input-group {
@@ -350,6 +445,7 @@
 }
 #time-colon {
   color: black;
+  font-size: clamp(0.7rem, 1.5vw, 2rem);
 }
 #time-clock {
   background-color: #FFFFFF;
@@ -379,13 +475,31 @@
   padding-bottom: 8.5px;
   color: #000000;
   background-color: #FFFFFF;
-  transition: border 0.3s ease, background-color 0.3s ease;
+  transition: border 0.3s ease, background-color 0.3s ease, transform 0.1s ease;
+  height: 16px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
 }
 #time-input-ampm-active:hover {
   background-color: #D2D2D2;
   cursor: pointer;
 }
-
+#time-input-up {
+  margin-top: 1vw;
+  border-top: 2px solid #000000;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  cursor: pointer;
+  height: 1.25vw;
+}
+#time-input-up-icon {
+  height: 1vw;
+  width: 5vw;
+}
 
 /* ResultsPanel.js */
 #about {
@@ -433,6 +547,7 @@
   font-size: clamp(0.5rem, 1.1vw, 1.4rem);
   color: #000000;
   background-color: #FFFFFF;
+  cursor: pointer;
 }
 #filters-button-applied {
   background-color: #000000;
@@ -455,11 +570,17 @@
   height: clamp(0.5rem, 2vw, 3rem);
   width: clamp(0.5rem, 2vw, 3rem);
 }
+#sort-icon-score {
+  margin-right: 0.2rem;
+}
 #sort-button-title {
   transition: color 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#filters-button-title {
+  margin-left: 0.1vw;
 }
 #filters-title {
   margin-top: 35px;
@@ -482,6 +603,18 @@
   cursor: pointer;
   position: relative;
   margin-top: 2px;
+}
+#sort-info-icon-hidden {
+  display: flex;
+  justify-content: center;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  line-height: 3px;
+  padding: 5px;
+  font-size: 8px;
+  margin-top: 2px;
+  visibility: hidden;
 }
 .sort-info-tooltip {
   visibility: hidden;
@@ -553,7 +686,7 @@
     border: 2px solid black;
     border-radius: 3px;
     padding: 2px;
-    width: clamp(1.5rem, 3vw, 3.5rem);
+    width: clamp(1.5rem, 2.7vw, 3.5rem);
     height: clamp(1.0rem, 2vw, 3rem);
     text-align: center;
   }
@@ -564,10 +697,10 @@
     /* background-color: white; */
     border: 2px solid white;
   }
-  .card-header-score-hovered:hover {
+  /* .card-header-score-hovered:hover {
     border: 2px solid white;
     background-color: white;
-  }
+  } */
   .card-header-minimize-expanded {
     display: flex;
     align-items: center;
@@ -587,12 +720,12 @@
   }
   .card-name {
     font-family: Mulish ExtraBold;
-    font-size: clamp(0.5rem, 1.8vw, 1.2rem);
+    font-size: clamp(0.5rem, 1.6vw, 1.15rem);
     padding-left: 1.5vw;
     margin-bottom: 0.15vw;
   }
   .card-subname {
-    font-size: clamp(0.3rem, 1vw, 1rem);
+    font-size: clamp(0.3rem, 0.9vw, 1rem);
     padding-left: 0.2vw;
   }
   .card-neighborhood {
@@ -636,13 +769,19 @@
   }
   .card-image-container {
     margin-top: 1.5vw;
-    margin-bottom: 1vw;
+    margin-bottom: 0.5vw;
     text-align: center;
   }
   .card-image {
     width: 30vw;  /* Set your desired width */
     height: 15vw; /* Set your desired height */
     object-fit: cover;
+    align-items: center;
+  }
+  .card-tags {
+    margin-left: 1.5vw;
+    display: flex;
+    padding-top: 0.4vw;
     align-items: center;
   }
   .card-address {
@@ -656,14 +795,18 @@
     align-items: center; /* Vertically align items */
     gap: 10px;
     margin-left: 1.5vw;
+    margin-right: 1.5vw;
+    /* justify-content: space-between; */
   }
   .card-google-maps-container, .card-yelp-container {
     display: flex;
     align-items: center;
+    /* width: 48%; */
   }
   .card-google-maps {
     display: flex;
     align-items: center;
+    justify-content: center;
     background-color: #FFFFFF;
     color: #3AAB59;
     border: 2px solid #3AAB59;
@@ -674,8 +817,9 @@
     border-radius: 3px;
     text-decoration: none;
     margin-top: 0.8vw;
-    font-weight: bold;
     font-size: 0.9vw;
+    font-family: Mulish Bold;
+    /* width: 100%; */
   }
   .card-google-maps:hover {
     background-color: #3AAB59;
@@ -684,6 +828,7 @@
   .card-yelp {
     display: flex;
     align-items: center;
+    justify-content: center;
     background-color: #FFFFFF; 
     border: 2px solid #EE3739;
     color: #EE3739;
@@ -694,8 +839,9 @@
     border-radius: 3px;
     text-decoration: none;
     margin-top: 0.8vw;
-    font-weight: bold;
     font-size: 0.9vw;
+    font-family: Mulish Bold;
+    /* width: 100%; */
   }
   .card-yelp:hover {
     background-color: #EE3739;
@@ -712,4 +858,99 @@
     margin-right: 1px;
   }
 
+/* CardTags.js */
+#card-tags-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5vw;
+  width: 95%;
+}
+.card-tag {
+  border-radius: 3px;
+  padding: 0.15vw 0.7vw;
+  font-size: 0.9vw;
+  font-family: Mulish Bold;
+  align-items: center;
+  display: flex;
+}
 
+/* ScoreBar.js */
+/* #progress-block-container {
+  display: flex;
+  align-items: center;
+} */
+.progress-bar-container {
+  position: relative;
+  width: 30%;
+  /* width: 10%; */
+  height: 10px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vw;
+  /* margin-right: 5vw; */
+}
+.progress-bar-container:last-child {
+  margin-bottom: 1.5vw;
+}
+#score-bar-container {
+  width: 90%;
+  margin-top: 1.5vw;
+  margin-bottom: 1.75vw;
+}
+#outlets-bar-container {
+  width: 9%;
+  /* width: 3%; */
+}
+
+.progress-bar {
+  border-radius: 3px;
+  height: 0.6vw;
+  min-width: 100%;
+  position: relative;
+  margin-left: 0.75vw;
+}
+#score-progress-bar {
+  height: 1.2vw;
+  margin-left: 0vw;
+  min-width: 85%;
+}
+#outlets-progress-bar {
+  margin-left: 0.9vw;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+#overall-score-text {
+  font-size: 1.25vw;
+  margin-left: 0.75vw;
+}
+.progress-score-text {
+  font-size: 0.9vw;
+  line-height: 1vw;
+  font-family: Mulish Bold;
+  font-weight: bold;
+  margin-left: 0.5vw;
+}
+
+#score-score-icon {
+  height: 3vw;
+  width: 3vw;
+}
+.progress-bar-icon {
+  height: 1.5vw;
+  width: 1.5vw;
+  margin-left: 0.75vw;
+}
+#outlets-score-icon {
+  height: 1.2vw;
+  width: 1.2vw;
+  margin-left: 0.9vw;
+}

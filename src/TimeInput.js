@@ -1,10 +1,13 @@
+import './App.css';
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
-import './App.css';
+import {ReactComponent as PlusIcon} from './Logos/filter-plus.svg'
+import {ReactComponent as MinusIcon} from './Logos/filter-minus.svg'
 
 const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAmPmPressed, setIsAmPmPressed] = useState(false);
 
   const options = [
     { value: 0, label: 'Sunday' },
@@ -88,8 +91,8 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
       ':hover': isMenuOpen ? {backgroundColor: '#000000', borderColor: '#000000'} : { backgroundColor: '#D2D2D2', borderColor: '#000000'},
       backgroundColor: isMenuOpen ? '#000000' : '#FFFFFF',
       transition: 'border 0.3s ease, background-color 0.3s ease',
-      width: '10vw',
-      height: '0.8vw'
+      height: '0.8vw',
+      width: 'clamp(8rem, 10vw, 12rem)'
     }),
     valueContainer: (styles) => ({
       ...styles,
@@ -146,8 +149,8 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
     <div className={`time-input${isActive ? "-active" : "-inactive"}`}>
       <div id="time-clock" className="input-group">
         <div className="input-control left">
-          <button className="stacked-button" onClick={addHour}>+</button>
-          <button className="stacked-button" onClick={subtractHour}>-</button>
+          <button className="stacked-button" onClick={addHour}><PlusIcon id="time-plus-icon"/></button>
+          <button className="stacked-button" onClick={subtractHour}><MinusIcon id="time-minus-icon"/></button>
         </div>
         <input 
           type="text" 
@@ -163,12 +166,12 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
           readOnly 
         />
         <div className="input-control right">
-          <button className="stacked-button" onClick={addMinutes}>+</button>
-          <button className="stacked-button" onClick={subtractMinutes}>-</button>
+          <button className="stacked-button" onClick={addMinutes}><PlusIcon id="time-plus-icon"/></button>
+          <button className="stacked-button" onClick={subtractMinutes}><MinusIcon id="time-minus-icon"/></button>
         </div>
       </div>
 
-      <div id={`time-input-ampm${isActive ? "-active" : "-inactive"}`} className="input-group ampm-group" onClick={toggleAmPm}>
+      <div id={`time-input-ampm${isActive ? "-active" : "-inactive"}`} className="input-group ampm-group" onClick={toggleAmPm} onMouseDown={() => setIsAmPmPressed(true)} onMouseUp={() => setIsAmPmPressed(false)} style={{transform: isAmPmPressed ? 'scale(0.9)' : 'scale(1)'}}>
         {ampm}
       </div>
 
@@ -184,6 +187,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
           onMenuClose={() => setIsMenuOpen(false)}
         />
       </div>
+
     </div>
   );
 };

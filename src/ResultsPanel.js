@@ -1,14 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './App.css';
-import GoogleMaps from "./Logos/googlemapslogo.png";
-import Yelp from "./Logos/yelplogo.png";
-import Modal from './Modal';
-import Select from 'react-select';
+import FiltersModal from './FiltersModal';
+import Card from './Card';
 import TimeInput from './TimeInput';
 import {ReactComponent as SortIcon} from './Logos/sort-sort.svg'
 import {ReactComponent as ScoreIcon} from './Logos/sort-score.svg'
 import {ReactComponent as AmbianceIcon} from './Logos/sort-ambiance.svg'
-import {ReactComponent as WorkabilityIcon} from './Logos/sort-ergonomics.svg'
+import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability.svg'
 import {ReactComponent as DrinksIcon} from './Logos/sort-drinks.svg'
 import {ReactComponent as FilterIcon} from './Logos/filter-filter.svg'
 import {ReactComponent as OutletIcon} from './Logos/filter-outlet.svg'
@@ -18,63 +16,9 @@ import {ReactComponent as GemIcon} from './Logos/filter-gem.svg'
 import {ReactComponent as AestheticIcon} from './Logos/filter-aesthetic.svg'
 import {ReactComponent as OutdoorIcon} from './Logos/filter-outdoor.svg'
 import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
+import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
 
-function Card({cardData, isExpanded, handleCardClick}) {
-    const [isHovered, setIsHovered] = useState(false); 
-    const [isScoreHovered, setIsScoreHovered] = useState(false);
-
-    return (
-        <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-            <div className="card-header" onClick={() => handleCardClick(cardData)}>
-                <div className="card-name-neighborhood">
-                    <div className="card-name">
-                        {cardData.name}<span className="card-subname">{cardData.subname}</span>
-                    </div>
-                    <div className="card-neighborhood" style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, border: '2px solid #FFFFFF' } : { color: cardData.color_code, border: "2px solid" + cardData.color_code }} >
-                        {cardData.neighborhood}
-                    </div>
-                </div>
-                <div className="card-toggle">
-                    <div className={`card-header-score${isExpanded ? '-expanded' : (isHovered ? '-hovered' : '')}`} onMouseEnter={() => setIsScoreHovered(true)} onMouseLeave={() => setIsScoreHovered(false)} style={isScoreHovered ? {color: cardData.color_code} : {}} onClick={console.log("hi")}>
-                        {cardData.score}
-                    </div>
-                    <div className={`card-header-minimize${isExpanded ? '-expanded' : ''}`} style={isExpanded ? {} : { display: 'none' } }>
-                        —
-                    </div>
-                </div>  
-            </div>
-
-            <div className="card-content">
-                <hr className="card-divider" />
-                <div className='card-image-container'>
-                    <img src={cardData.image} alt={cardData.name} className="card-image" />
-                </div>
-                
-                <div className='card-address'>Address: {cardData.address}</div>
-
-                <div className='card-score'>Score: {cardData.score}</div>
-
-                <div className="card-external-links">
-                    <div className="card-google-maps-container">
-                        <a href={cardData.google_maps} target="_blank" rel="noopener noreferrer" className="card-google-maps">
-                            <img src={GoogleMaps} alt="Google Maps Logo" className="card-google-maps-logo" />
-                            Get Directions
-                        </a>
-                    </div>
-
-                    <div className="card-yelp-container">
-                        <a href={cardData.yelp} target="_blank" rel="noopener noreferrer" className="card-yelp">
-                            <img src={Yelp} alt="Yelp Logo" className="card-yelp-logo" />
-                            Open on Yelp
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunction, pickSortingOption, rightRef}) {
+export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [calculatedHeight, setCalculatedHeight] = useState(82)
 
@@ -91,14 +35,12 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
     }, []);
 
     useEffect(() => {
-        console.log(windowWidth);
-        console.log(82 * (windowWidth / 1440))
-        setCalculatedHeight(82 * (windowWidth / 1440));
+        setCalculatedHeight(84 * (windowWidth / 1440));
     }, [windowWidth])
     
-    const [showModal, setShowModal] = useState(false);
-    const toggleModal = () => {
-        setShowModal(!showModal);
+    const [showFiltersModal, setShowFiltersModal] = useState(false);
+    const toggleFiltersModal = () => {
+        setShowFiltersModal(!showFiltersModal);
     };
 
     const convertTimeToNumber = (hour, minute, ampm) => {
@@ -117,9 +59,9 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
         ampm: new Date().getHours() >= 12 ? 'PM' : 'AM',
         day: new Date().getDay(),
         number: convertTimeToNumber(new Date().getHours() >= 12 ? new Date().getHours() - 12 : new Date().getHours(), Math.floor(new Date().getMinutes() / 15) * 15, new Date().getHours() >= 12 ? 'PM' : 'AM')
-     });
+    });
 
-     const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState({
         has_outlets: false,
         study_work: false,
         has_food: false,
@@ -200,7 +142,7 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
     const [isPressed, setIsPressed] = useState(false);
 
     const sortOptions = ["overall", "ambiance", "workability", "drinks"];
-    const sortIcons = [<ScoreIcon className='sort-icon' />, <AmbianceIcon className='sort-icon' />, <WorkabilityIcon className='sort-icon'/>, <DrinksIcon className='sort-icon'/>];
+    const sortIcons = [<ScoreIcon className='sort-icon' id='sort-icon-score'/>, <AmbianceIcon className='sort-icon' />, <WorkabilityIcon className='sort-icon'/>, <DrinksIcon className='sort-icon'/>];
     const [currentSort, setCurrentSort] = useState(0);
     const sortDescriptions = [
         <span className="sort-info-icon">
@@ -265,11 +207,15 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
 
     useEffect(() => {
         const selectedCard = data.find((element) => element.is_selected);
-        console.log("selected", selectedCard);
+        if (scrollToTop) {
+            if (rightRef.current) {
+                rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            setScrollToTop(false);
+        }
         if (selectedCard) {
             setExpandedCard(selectedCard.id);
             const allCards = data.filter((element) => element.visible);
-            console.log(allCards);
             for (let i = 0; i < allCards.length; i++) {
                 if (allCards[i].is_selected) {
                     if (rightRef.current) {
@@ -292,7 +238,7 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
         <div id="results-panel">
             <div id="sorting-options">
                 <div id="sorting-buttons">
-                    <button id={`filters-button${filtersApplied ? "-applied" : ""}`} onClick={toggleModal}>
+                    <button id={`filters-button${filtersApplied ? "-applied" : ""}`} onClick={toggleFiltersModal}>
                         <div className='sort-filters-button-container' id="filters-button-container">
                             <FilterIcon id="filter-filter-icon" className='sort-icon' />
                             <span id="filters-button-title">Filters</span>
@@ -303,21 +249,12 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
                         <div className='sort-filters-button-container' style={{transform: isPressed ? 'scale(0.9)' : 'scale(1)'}}>
                             {isHovered ? sortIcons[currentSort] : <SortIcon className='sort-icon' id='sort-standard-icon'/>}
                             <span id="sort-button-title">{isHovered ? capitalize(sortOptions[currentSort]) : "Sort By"}</span>
-                            {isHovered ? sortDescriptions[currentSort] : <></>}
+                            {isHovered ? sortDescriptions[currentSort] : <span id="sort-info-icon-hidden">i</span>}
                         </div>
                     </button>
-                    {/* <Select
-                        value={selectedOption}
-                        onChange={handleChange}
-                        options={options}
-                        defaultValue={options[0]}
-                        styles={dayStyles}
-                        components={{ SingleValue: CustomSingleValue }} // Use custom SingleValue
-                        isSearchable={false} // Optional, to disable search
-                    /> */}
                 </div>
             
-                <Modal show={showModal} handleClose={toggleModal}>
+                <FiltersModal show={showFiltersModal} handleClose={toggleFiltersModal}>
                     <div id="filters-title"><h2>All Filters</h2></div>
                     <div className="filter-row">
                         <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''} outlet`} onClick={() => toggleFilter('has_outlets')}>
@@ -333,7 +270,7 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
                             <span className='filter-checkbox'>Study / Work</span>
                             <span className="info-icon">
                                 i
-                                <span className="info-tooltip">Coffee shops great for studying or working.</span>
+                                <span className="info-tooltip">Coffee shops great for focused productivity.</span>
                             </span>
                         </div>
                     </div>
@@ -393,14 +330,16 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
                                 setIsActive={toggleTimeState}
                             />
                         </div>
+                        {timeState ? 
+                        <div onClick={toggleTimeState} id="time-input-up">
+                            <TimeUpIcon id="time-input-up-icon"/>
+                        </div> 
+                        : <></>}
                     </div>
-                </Modal>
-                {/* <button onClick={() => pickSortingOption(
-                    (cafe1, cafe2) => latGreaterThan(cafe1, cafe2)
-                )}>sort by descending latitude</button> */}
+                </FiltersModal>
             </div>
 
-            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 79.5 + 450) + "px")}}>
+            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 79.5 + 475) + "px")}}>
                 {data.filter(element => {
                         if (element.visible) {
                             return element;
@@ -414,6 +353,8 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
                             isExpanded={element.id === expandedCard} 
                             handleCardClick={handleCardClick}
                             addFilter={addFilter}
+                            hoveredCafe={hoveredCafe}
+                            setHoveredCafe={setHoveredCafe}
                         />
                     ))
                 }
