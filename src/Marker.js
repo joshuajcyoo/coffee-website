@@ -3,7 +3,7 @@ import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './App.css';
 
-export default function Marker({map, markerData, selectCafe, hoveredCafe, selectedCafe}) {
+export default function Marker({map, markerData, selectCafe, hoveredCafe, selectedCafe, neighborhoodFunction}) {
     const theMarker = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -34,7 +34,7 @@ export default function Marker({map, markerData, selectCafe, hoveredCafe, select
         if (theMarker.current) theMarker.current.remove();
         if (!markerData.visible) return;
         var color = markerData.color_code;
-        if (markerData.is_selected) color = "#E6353D";
+        if (markerData.is_selected) color = "#000000";
         const marker = new maptilersdk.Marker({color: color})
         .setLngLat([markerData.longitude, markerData.latitude])
         .addTo(map);
@@ -85,15 +85,21 @@ export default function Marker({map, markerData, selectCafe, hoveredCafe, select
             setIsHovered(false);
         }
     }, [hoveredCafe, selectedCafe])
+
+    useEffect(() => {
+        setIsHovered(false);
+    }, [neighborhoodFunction]);
     
     return (
         <>
             {isHovered && (
-                <div className="marker-hover" style={{ top: position.y, left: position.x }}>
-                    <div className="marker-hover-content">
-                        <div>{markerData.name}</div>
-                        <div>Score: {markerData.score}</div>
+                <div className="marker-hover" style={selectedCafe && selectedCafe.id === markerData.id ? {top: position.y, left: position.x, border: '2px solid black'} : { top: position.y, left: position.x, backgroundColor: markerData.color_code, border: '2px solid ' + markerData.color_code }}>
+                    <div className="marker-hover-content" style={selectedCafe && selectedCafe.id === markerData.id ? {color: 'black'} : {backgroundColor: markerData.color_code, color: 'white'}}>
+                        <div className='marker-content-title'>{markerData.name}</div>
+                        <div className='marker-content-neighborhood'><span className='marker-content-neighborhood-title'>[{markerData.neighborhood}]</span></div>
+                        <div className='marker-content-score'>Score: {markerData.score}</div>
                     </div>
+                    <div className="marker-hover-triangle" style={selectedCafe && selectedCafe.id === markerData.id ? {borderTopColor: 'black'} : { borderTopColor: markerData.color_code }}></div>
                 </div>
             )}
         </>

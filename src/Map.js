@@ -5,7 +5,7 @@ import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './App.css';
 import {ReactComponent as ListOpen} from './Logos/toggle-open.svg'
 import {ReactComponent as ListClose} from './Logos/toggle-close.svg'
-import {ReactComponent as ResetView} from './Logos/reset-view.svg'
+import {ReactComponent as ResetView} from './Logos/reset-view2.svg'
 
 export default function Map({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, hoveredCafe, selectedCafe, changeZoom, neighborhoodFunction}) {
   const mapContainer = useRef(null);
@@ -65,7 +65,6 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
           setShowResetView(true);
           const newZoom = theMap.getZoom();
           setZoom(newZoom);
-          console.log(newZoom);
         });
     }
   }, [longitude, latitude, zoom, neighborhoodFunction]);
@@ -95,6 +94,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
             selectCafe={selectCafe}
             hoveredCafe={hoveredCafe}
             selectedCafe={selectedCafe}
+            neighborhoodFunction={neighborhoodFunction}
           />
         ))}
         <button className="map-button" id="map-toggle-list" onClick={handleMapToggle}>

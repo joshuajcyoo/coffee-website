@@ -15,6 +15,7 @@ export default function Home() {
   const [scrollToTop, setScrollToTop] = useState(false);
   const [hoveredCafe, setHoveredCafe] = useState(null);
   const [selectedCafe, setSelectedCafe] = useState(null);
+  const [searchValue, setSearchValue] = useState('Search By Name');
 
   const rightRef = useRef();
 
@@ -34,7 +35,7 @@ export default function Home() {
     }
     else {
       if (zoom != 11 && zoom != 13) {
-        setZoom(12.5);
+        setZoom(12);
       }
     }
   }
@@ -79,6 +80,14 @@ export default function Home() {
           element.visible = false;
         }
       });
+    }
+    if (searchValue != 'Search By Name' && searchValue != '') {
+      setHoveredCafe(null);
+      newData.forEach(element => {
+        if (!element.name.toLowerCase().includes(searchValue.toLowerCase())) {
+          element.visible = false;
+        }
+      })
     }
     setData(newData);
     changeZoom(newData, true);
@@ -140,7 +149,7 @@ export default function Home() {
 
   useEffect(() => {
     handleAddFilter();
-  }, [filterFunction, neighborhoodFunction])
+  }, [filterFunction, neighborhoodFunction, searchValue])
 
   return (
     <div className="home-content">
@@ -183,6 +192,8 @@ export default function Home() {
           setScrollToTop={setScrollToTop}
           hoveredCafe={hoveredCafe}
           setHoveredCafe={setHoveredCafe}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
         />
       </div>
     </div>

@@ -43,6 +43,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
           const newTimeNumber = convertTimeToNumber(newHour, minute, newAmPm);
           changeTime({ hour: newHour, minute, ampm: newAmPm, day, number: newTimeNumber});
       }
+      console.log(hour);
   };
 
   const addMinutes = () => {
@@ -91,7 +92,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
       ':hover': isMenuOpen ? {backgroundColor: '#000000', borderColor: '#000000'} : { backgroundColor: '#D2D2D2', borderColor: '#000000'},
       backgroundColor: isMenuOpen ? '#000000' : '#FFFFFF',
       transition: 'border 0.3s ease, background-color 0.3s ease',
-      height: '0.8vw',
+      height: 'clamp(0.1rem, 1.5vw, 1.5rem)',
       width: 'clamp(8rem, 10vw, 12rem)'
     }),
     valueContainer: (styles) => ({

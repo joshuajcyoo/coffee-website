@@ -16,6 +16,7 @@ export default function CardTags({cardData}) {
         if (cardData.wifi_issues) newFilterList.set("Wifi Issues", "#CBCBCB");
         if (cardData.often_crowded) newFilterList.set("Often Crowded", "#CBCBCB");
         if (cardData.closes_early) newFilterList.set("Closes Early", "#CBCBCB");
+        if (cardData.high_prices) newFilterList.set("High Prices", "#CBCBCB");
 
         setFilterList(newFilterList);
     }, [cardData]);

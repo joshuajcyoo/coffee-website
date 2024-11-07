@@ -25,6 +25,7 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
             ...prevFilters,
             neighborhood: neighborhood.value
         }));
+        setScrollToTop(true);
     };
 
     const [isHovered, setIsHovered] = useState(false);
@@ -105,11 +106,9 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
         console.log(filters);
         if (filters.neighborhood === "All Neighborhoods") {
             setNeighborhoodFunction(null);
-            setScrollToTop(true);
         }
         else {
             setNeighborhoodFunction(() => finalFilter);
-            setScrollToTop(true);
         }
         setIsHovered(false);
     }, [filters, selectedNeighborhood]);
