@@ -28,25 +28,25 @@ const ScoreBar = ({ cardData, cafeModal }) => {
         if (subscore === 0) {
             addedWidth = `${((cardData.ambiance / cardData.score / 2) * 100) - 0.005}%`;
             subscoreTitle = 'Ambiance';
-            if (value != 1 && value != 3) position = -0.02;
+            if (value !== 1 && value !== 3) position = -0.02;
         }
         else if (subscore === 1) {
             if (cafeModal) modalPosition = 0.002;
             addedWidth = `${((cardData.ambiance / cardData.score) + (cardData.workability / cardData.score / 2) - 0.004 + modalPosition) * 100}%`;
             subscoreTitle = 'Workability';
-            if (value != 1 && value != 3) position = -0.02;
+            if (value !== 1 && value !== 3) position = -0.02;
         }
         else if (subscore === 2) {
             if (cafeModal) modalPosition = 0.005;
             addedWidth = `${((cardData.ambiance / cardData.score) + (cardData.workability / cardData.score) + (cardData.drinks / cardData.score / 2) - 0.009 + modalPosition) * 100}%`;
             subscoreTitle = 'Drinks';
-            if (value != 1 && value != 3) position = -0.02;
+            if (value !== 1 && value !== 3) position = -0.02;
         }
         else if (subscore === 3) {
             if (cafeModal) modalPosition = 0.003;
             addedWidth = `${((cardData.ambiance / cardData.score) + (cardData.workability / cardData.score) + (cardData.drinks / cardData.score) + (cardData.outlets / cardData.score / 2) - 0.004 + modalPosition) * 100}%`;
             subscoreTitle = 'Outlets';
-            if (value ==- 0.5) position = -0.02;
+            if (value === -0.5) position = -0.02;
         }
 
         return (
@@ -61,7 +61,7 @@ const ScoreBar = ({ cardData, cafeModal }) => {
                     <div className="scale-line">
                         <div
                             className="scale-tick"
-                            style={subscore != 3 ? {
+                            style={subscore !== 3 ? {
                                 left: `${((value - 1) / 2 + position + modalPosition) * 100}%`,
                                 backgroundColor: cardData.color_code
                             } : {
@@ -100,7 +100,7 @@ const ScoreBar = ({ cardData, cafeModal }) => {
                 <div className="subscore outlets" onMouseEnter={() => setHoveredSubscore('outlets')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: outletsWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'outlets' && renderHoverPopup(cardData.outlets, 3)}
                     {/* {hoveredSubscore === 'outlets' ? (cardData.outlets > 0 ? cardData.outlets : "") : <OutletIcon className='score-block-icon' id='score-block-icon-outlets' style={{fill: 'white'}} />} */}
-                    {cardData.outlets != 0 ? <OutletIcon className='score-block-icon' id={`score-block-icon-outlets${cafeModal ? '-cafe-modal' : ''}`} style={{fill: 'white'}} /> : <></>}
+                    {cardData.outlets !== 0 ? <OutletIcon className='score-block-icon' id={`score-block-icon-outlets${cafeModal ? '-cafe-modal' : ''}`} style={{fill: 'white'}} /> : <></>}
                 </div></> : <></>}
             </div>
         </div>

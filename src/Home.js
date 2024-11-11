@@ -10,6 +10,7 @@ export default function Home() {
   const [latitude, setLatitude] = useState(34.060801322167165);
   const [longitude, setLongitude] = useState(-118.35414700384389);
   const [zoom, setZoom] = useState(11);
+  const [allFilters, setAllFilters] = useState([]);
   const [filterFunction, setFilterFunction] = useState(null);
   const [neighborhoodFunction, setNeighborhoodFunction] = useState(null);
   const [scrollToTop, setScrollToTop] = useState(false);
@@ -22,8 +23,14 @@ export default function Home() {
   const [displayRight, setDisplayRight] = useState(false);
 
   const changeZoom = (data, neighborhoodCheck) => {
+    const selectedCafes = data.filter(cafe => cafe.is_selected);
     const visibleCafes = data.filter(cafe => cafe.visible);
-    if (visibleCafes.length > 0 && visibleCafes.every(cafe => cafe.neighborhood === visibleCafes[0].neighborhood)) {
+    if (visibleCafes.length === 1) {
+      setLatitude(visibleCafes[0].latitude);
+      setLongitude(visibleCafes[0].longitude);
+      setZoom(14);
+    }
+    else if (visibleCafes.length > 0 && visibleCafes.every(cafe => cafe.neighborhood === visibleCafes[0].neighborhood)) {
       setLatitude(visibleCafes[0].n_latitude);
       setLongitude(visibleCafes[0].n_longitude);
       setZoom(visibleCafes[0].n_zoom);
@@ -32,6 +39,11 @@ export default function Home() {
       setLatitude(34.06248189100365);
       setLongitude(-118.34569321430635);
       setZoom(11);
+    }
+    else if (selectedCafes.length === 1) {
+      setLatitude(selectedCafes[0].latitude);
+      setLongitude(selectedCafes[0].longitude);
+      setZoom(14);
     }
     else {
       if (zoom != 11 && zoom != 13) {
@@ -170,6 +182,8 @@ export default function Home() {
           hoveredCafe={hoveredCafe}
           selectedCafe={selectedCafe}
           neighborhoodFunction={neighborhoodFunction}
+          filterFunction={filterFunction}
+          allFilters={allFilters}
         />
           <div className="home-title-container">
             <div className="home-title">A Guide to LA Coffee Shops</div>
@@ -177,15 +191,21 @@ export default function Home() {
           <NeighborhoodPanel
             setNeighborhoodFunction={setNeighborhoodFunction}
             setScrollToTop={setScrollToTop}
+            setSelectedCafe={setSelectedCafe}
+            data={data}
+            setData={setData}
           />
       </div>
       <div className={`home-right ${displayRight ? '' : 'hidden'}`} ref={rightRef}> 
         <ResultsPanel 
           data={data}
+          setData={setData}
           selectCafe={handleSelectCafe}
           pickSortingOption={handlePickSortingOption}
           addFilter={handleAddFilter}
           rightRef={rightRef}
+          allFilters={allFilters}
+          setAllFilters={setAllFilters}
           filterFunction={filterFunction}
           setFilterFunction={setFilterFunction}
           scrollToTop={scrollToTop}

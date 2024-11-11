@@ -40,7 +40,6 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
                 closeAmPm = 'PM';
             }
             else {
-                console.log((cardData.hours[i].close - 1200).toString().slice(0, 1))
                 closeHour = (cardData.hours[i].close - 1200).toString().slice(0, 1);
                 closeMinutes = (cardData.hours[i].close - 1200).toString().slice(1, 3);
                 closeAmPm = 'PM';
@@ -70,9 +69,10 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
         else {
             setIsHovered(false);
             setHoveredCafe(null);
-
         }
     };
+
+    const [hoveredImage, setHoveredImage] = useState(null);
 
     return (
         <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}>
@@ -86,7 +86,7 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
                     </div>
                 </div>
                 <div className="card-toggle">
-                    <div className={`card-header-score${isExpanded ? '-expanded' : (isHovered ? '-hovered' : '')}`} onMouseEnter={() => setIsScoreHovered(true)} onMouseLeave={() => setIsScoreHovered(false)}>
+                    <div className={`card-header-score${isExpanded ? '-expanded' : (isHovered ? '-hovered' : '')}`} onMouseEnter={() => setIsScoreHovered(true)} onMouseLeave={() => setIsScoreHovered(false)} style={isHovered ? {border: '2px solid white'} : {border: '2px solid ' + cardData.color_code}}>
                         {cardData.score}
                     </div>
                     <div className={`card-header-minimize${isExpanded ? '-expanded' : ''}`} style={isExpanded ? {} : { display: 'none' } }>
@@ -109,11 +109,22 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
                 <CafeModal show={showCafeModal} handleClose={toggleCafeModal}>
                     <div className='cafe-modal-title'>{cardData.name}<span className='cafe-modal-subname'>{cardData.subname}</span></div>
                     <div><span className='cafe-modal-neighborhood' style={{border: '2px solid ' + cardData.color_code, color: cardData.color_code}}>{cardData.neighborhood}</span></div>
-                    <div className='cafe-modal-images'>
-                        <img className='cafe-modal-image' src={cardData.c_image1}></img>
-                        <img className='cafe-modal-image' src={cardData.c_image2}></img>
-                        <img className='cafe-modal-image' src={cardData.c_image3}></img>
+
+                    <div className={`cafe-modal-images${hoveredImage !== null ? '-hovered' : ''}`}>
+                        <div className={`cafe-modal-image-container ${hoveredImage === 1 ? 'hovered' : ''}`} onMouseEnter={() => setHoveredImage(1)} onMouseLeave={() => setHoveredImage(null)}>
+                            <img className="cafe-modal-image" src={cardData.c_image1} />
+                        </div>
+                        <div className={`cafe-modal-image-container ${hoveredImage === 2 ? 'hovered' : ''}`} onMouseEnter={() => setHoveredImage(2)} onMouseLeave={() => setHoveredImage(null)}>
+                            <img className="cafe-modal-image" src={cardData.c_image2} />
+                        </div>
+                        <div className={`cafe-modal-image-container ${hoveredImage === 3 ? 'hovered' : ''}`} onMouseEnter={() => setHoveredImage(3)} onMouseLeave={() => setHoveredImage(null)}>
+                            <img className="cafe-modal-image" src={cardData.c_image3} />
+                        </div>
                     </div>
+
+                    <div className='cafe-modal-about-title'>About</div>
+                    <div className='cafe-modal-description'>This is a placeholder for the short description about the cafe. The description will only apply for coffee shops not towards the bottom of the list.</div>
+
                     <div className='cafe-modal-score-title'>Score</div>
                     <div className='cafe-modal-score-bar'>
                         <ScoreBar cardData={cardData} cafeModal={true}/>
@@ -156,7 +167,7 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
                             </table>
                         </div>
                     </div>
-                    <div className='cafe-modal-tags-title'>Tags</div>
+                    <div className='cafe-modal-tags-title'>Filters</div>
                     <CardTags cardData={cardData} />
                 </CafeModal>
 

@@ -3,7 +3,7 @@ import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './App.css';
 
-export default function Marker({map, markerData, selectCafe, hoveredCafe, selectedCafe, neighborhoodFunction}) {
+export default function Marker({map, markerData, selectCafe, hoveredCafe, selectedCafe, neighborhoodFunction, selectedCafes}) {
     const theMarker = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -24,7 +24,6 @@ export default function Marker({map, markerData, selectCafe, hoveredCafe, select
     }, []);
 
     useEffect(() => {
-        console.log(windowWidth);
         setWindowWidth(windowWidth);
         setWindowHeight(windowHeight);
     }, [windowHeight, windowWidth])
@@ -63,9 +62,6 @@ export default function Marker({map, markerData, selectCafe, hoveredCafe, select
     }, [map, markerData, selectCafe]);
 
     useEffect(() => {
-        console.log("Window Height: ", windowHeight)
-        console.log("selected", selectedCafe);
-        console.log("hovered", hoveredCafe);
         if (selectedCafe === null || selectedCafe.id != markerData.id) {
             setIsHovered(false);
             if (hoveredCafe && hoveredCafe.id === markerData.id) {
@@ -93,13 +89,13 @@ export default function Marker({map, markerData, selectCafe, hoveredCafe, select
     return (
         <>
             {isHovered && (
-                <div className="marker-hover" style={selectedCafe && selectedCafe.id === markerData.id ? {top: position.y, left: position.x, border: '2px solid black'} : { top: position.y, left: position.x, backgroundColor: markerData.color_code, border: '2px solid ' + markerData.color_code }}>
-                    <div className="marker-hover-content" style={selectedCafe && selectedCafe.id === markerData.id ? {color: 'black'} : {backgroundColor: markerData.color_code, color: 'white'}}>
+                <div className="marker-hover" style={selectedCafes.length === 1 && selectedCafes[0].id === markerData.id ? {top: position.y, left: position.x, border: '2px solid black'} : { top: position.y, left: position.x, backgroundColor: markerData.color_code, border: '2px solid ' + markerData.color_code }}>
+                    <div className="marker-hover-content" style={selectedCafes.length === 1 &&  selectedCafes[0].id === markerData.id ? {color: 'black'} : {backgroundColor: markerData.color_code, color: 'white'}}>
                         <div className='marker-content-title'>{markerData.name}</div>
                         <div className='marker-content-neighborhood'><span className='marker-content-neighborhood-title'>[{markerData.neighborhood}]</span></div>
                         <div className='marker-content-score'>Score: {markerData.score}</div>
                     </div>
-                    <div className="marker-hover-triangle" style={selectedCafe && selectedCafe.id === markerData.id ? {borderTopColor: 'black'} : { borderTopColor: markerData.color_code }}></div>
+                    <div className="marker-hover-triangle" style={selectedCafes.length === 1 && selectedCafes[0].id === markerData.id ? {borderTopColor: 'black'} : { borderTopColor: markerData.color_code }}></div>
                 </div>
             )}
         </>

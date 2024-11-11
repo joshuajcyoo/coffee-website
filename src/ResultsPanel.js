@@ -20,7 +20,7 @@ import {ReactComponent as OutdoorIcon} from './Logos/filter-outdoor.svg'
 import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
 
-export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue}) {
+export default function ResultsPanel({data, setData, selectCafe, addFilter, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [calculatedHeight, setCalculatedHeight] = useState(82)
 
@@ -37,7 +37,7 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
     }, []);
 
     useEffect(() => {
-        setCalculatedHeight(84.8 * (windowWidth / 1440));
+        setCalculatedHeight(83.8 * (windowWidth / 1440));
     }, [windowWidth])
     
     const [showFiltersModal, setShowFiltersModal] = useState(false);
@@ -122,7 +122,7 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
 
         if (timeState) applyFilter = applyFilter && inHours(cafe, timeData.number, timeData.day);
         if (filters.has_outlets) applyFilter = applyFilter && hasOutlets(cafe);
-        if (filters.study_work)applyFilter = applyFilter && studyWork(cafe);
+        if (filters.study_work) applyFilter = applyFilter && studyWork(cafe);
         if (filters.outdoor_area) applyFilter = applyFilter && outdoorArea(cafe);
         if (filters.is_aesthetic) applyFilter = applyFilter && isAesthetic(cafe);
         if (filters.has_food) applyFilter = applyFilter && hasFood(cafe);
@@ -160,11 +160,91 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
         if (!timeState && !filters.has_outlets && !filters.study_work && !filters.has_food && !filters.hidden_gem && !filters.is_aesthetic && !filters.outdoor_area && !filters.open_late && !filters.closes_early && !filters.high_prices && !filters.wifi_issues) {
             setFilterFunction(null);
             setFiltersApplied(false);
+            setAllFilters([]);
         }
         else {
             setFilterFunction(() => finalFilter);
             setFiltersApplied(true);
+
+            if (timeState) {
+                setAllFilters((filters) => 
+                    {if (!filters.includes("Open at " + timeData.hour + ":" + timeData.minute + " " + timeData.ampm)) {
+                        return [...filters, "Open at " + timeData.hour + ":" + timeData.minute + " " + timeData.ampm]
+                    } return filters
+                })
+            }
+            else {
+                setAllFilters((filters) => filters.filter((item) => item !== "Open at " + timeData.hour + ":" + timeData.minute + " " + timeData.ampm));
+            }
+
+            if (filters.has_outlets) {
+                setAllFilters((filters) => 
+                    {if (!filters.includes("Outlets")) {
+                        return [...filters, "Outlets"]
+                    } return filters
+                })
+            }
+            else {
+                setAllFilters((filters) => filters.filter((item) => item !== 'Outlets'));
+            }
+
+            if (filters.study_work) {
+                setAllFilters((filters) => 
+                    {if (!filters.includes("Study / Work")) {
+                        return [...filters, "Study / Work"]
+                    } return filters
+                })
+            }
+            else {
+                setAllFilters((filters) => filters.filter((item) => item !== 'Study / Work'));
+            }
+
+            if (filters.outdoor_area) {
+                setAllFilters((filters) => 
+                    {if (!filters.includes("Outdoor Area")) {
+                        return [...filters, "Outdoor Area"]
+                    } return filters
+                })
+            }
+            else {
+                setAllFilters((filters) => filters.filter((item) => item !== 'Outdoor Area'));
+            }
+
+            if (filters.is_aesthetic) {
+                setAllFilters((filters) => 
+                    {if (!filters.includes("Aesthetic")) {
+                        return [...filters, "Aesthetic"]
+                    } return filters
+                })
+            }
+            else {
+                setAllFilters((filters) => filters.filter((item) => item !== 'Aesthetic'));
+            }
+
+            if (filters.has_food) {
+                setAllFilters((filters) => 
+                    {if (!filters.includes("Food Menu")) {
+                        return [...filters, "Food Menu"]
+                    } return filters
+                })
+            }
+            else {
+                setAllFilters((filters) => filters.filter((item) => item !== 'Food Menu'));
+            }
+
+            if (filters.hidden_gem) {
+                setAllFilters((filters) => 
+                    {if (!filters.includes("Hidden Gem")) {
+                        return [...filters, "Hidden Gem"]
+                    } return filters
+                })
+            }
+            else {
+                setAllFilters((filters) => filters.filter((item) => item !== 'Hidden Gem'));
+            }
         }
+        var newData = [...data].map(cafe => ({ ...cafe, visible: true, is_selected: false }));
+        setData(newData);
     }, [filters, timeData, timeState]);
 
     const [isHovered, setIsHovered] = useState(false);
@@ -368,6 +448,12 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
         }        
     }, [data]);
 
+    useEffect(() => {
+        if (rightRef.current) {
+            rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [allFilters])
+
     const handleCardClick = (cardData) => {
         setExpandedCard((id) => (id === cardData.id ? null : cardData.id));
         selectCafe(cardData);
@@ -498,7 +584,7 @@ export default function ResultsPanel({data, selectCafe, addFilter, setFilterFunc
                 </div>
             </div>
 
-            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 78.5 + 475) + "px")}}>
+            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 79.3 + 475) + "px")}}>
                 {data.filter(element => {
                         if (element.visible) {
                             return element;

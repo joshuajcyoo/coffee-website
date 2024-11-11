@@ -2,7 +2,7 @@ import './App.css';
 import React, { useRef, useEffect, useState } from 'react';
 import Select from 'react-select';
 
-export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToTop}) {
+export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToTop, setSelectedCafe, data, setData}) {
     const [filters, setFilters] = useState({
         neighborhood: "All Neighborhoods"
     });
@@ -26,6 +26,11 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
             neighborhood: neighborhood.value
         }));
         setScrollToTop(true);
+        setSelectedCafe(null);
+        
+        var newData = [...data];
+        newData.forEach(element => element.is_selected = false);
+        setData(newData);
     };
 
     const [isHovered, setIsHovered] = useState(false);
@@ -103,7 +108,6 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
     };
 
     useEffect(() => {
-        console.log(filters);
         if (filters.neighborhood === "All Neighborhoods") {
             setNeighborhoodFunction(null);
         }

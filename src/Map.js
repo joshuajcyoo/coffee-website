@@ -6,13 +6,15 @@ import './App.css';
 import {ReactComponent as ListOpen} from './Logos/toggle-open.svg'
 import {ReactComponent as ListClose} from './Logos/toggle-close.svg'
 import {ReactComponent as ResetView} from './Logos/reset-view2.svg'
+import {ReactComponent as CafeView} from './Logos/reset-cafe.svg'
 
-export default function Map({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, hoveredCafe, selectedCafe, changeZoom, neighborhoodFunction}) {
+export default function Map({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, hoveredCafe, selectedCafe, changeZoom, neighborhoodFunction, filterFunction, allFilters}) {
   const mapContainer = useRef(null);
   maptilersdk.config.apiKey = 'bFXUsq2lCBRLxW1UauI0';
   const [theMap, setTheMap] = useState(null);
 
   const [showResetView, setShowResetView] = useState(false);
+  const [showCafeView, setShowCafeView] = useState(false);
 
   useEffect(() => {
     if (theMap) theMap.remove();
@@ -50,14 +52,29 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
 
             if (newCenter.lat === newLatitude && newCenter.lng === newLongitude) {
               setShowResetView(false);
+              const selectedCafes = data.filter(cafe => cafe.is_selected);
+              if (selectedCafes.length === 1) {
+                setShowCafeView(true);
+              }
             }
-            else setShowResetView(true);
+            else {
+              setShowResetView(true);
+              setShowCafeView(false);
+            }
           }
           else {
             if (newCenter.lat === 34.06248189100365 && newCenter.lng === -118.34569321430635) {
               setShowResetView(false);
+              const selectedCafes = data.filter(cafe => cafe.is_selected);
+              console.log("why", selectedCafes)
+              if (selectedCafes.length === 1) {
+                setShowCafeView(true);
+              }
             }
-            else setShowResetView(true);
+            else {
+              setShowResetView(true);
+              setShowCafeView(false);
+            }
           }
         });
   
@@ -67,7 +84,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
           setZoom(newZoom);
         });
     }
-  }, [longitude, latitude, zoom, neighborhoodFunction]);
+  }, [longitude, latitude, zoom, neighborhoodFunction, selectedCafe]);
 
   const handleMapToggle = () => {
     if (displayRight) {
@@ -83,6 +100,29 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
     setShowResetView(false);
   }
 
+  const handleCafeView = () => {
+    setShowCafeView(false);
+
+    const selectedCafes = data.filter(cafe => cafe.is_selected);
+    if (selectedCafes.length === 1) {
+      setLatitude(selectedCafes[0].latitude);
+      setLongitude(selectedCafes[0].longitude);
+      setZoom(14);
+    }
+  }
+
+  useEffect(() => {
+    console.log(allFilters);
+    const selectedCafes = data.filter(cafe => cafe.is_selected);
+    if (selectedCafes.length === 0) {
+      setShowCafeView(false);
+    }
+    const visibleCafes = data.filter(cafe => cafe.visible);
+    if (visibleCafes.length === 1) {
+      setShowResetView(false);
+    }
+  }, [data, displayRight]);
+
   return (
     <div className="map-wrap">
         <div ref={mapContainer} className="map"></div>
@@ -95,6 +135,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
             hoveredCafe={hoveredCafe}
             selectedCafe={selectedCafe}
             neighborhoodFunction={neighborhoodFunction}
+            selectedCafes={data.filter(cafe => cafe.is_selected)}
           />
         ))}
         <button className="map-button" id="map-toggle-list" onClick={handleMapToggle}>
@@ -106,6 +147,23 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
             Reset View
             <ResetView className='map-icon' />
           </button>
+        }
+        {showCafeView && 
+          <button className="map-button" id="map-cafe-view" onClick={handleCafeView}>
+            View Cafe
+            <CafeView className='map-icon' id='map-icon-cafe-view'/>
+          </button>
+        }
+        {!displayRight && allFilters.length !== 0 && 
+          <div className="map-display" id="map-filters-list">
+            <div>Filters / Sort</div>
+            <hr />
+            <ul>
+            {allFilters.map((filter) => (
+              <li>{filter}</li>
+            ))}
+            </ul>
+          </div>
         }
     </div>
   );
