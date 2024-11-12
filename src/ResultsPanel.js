@@ -19,6 +19,7 @@ import {ReactComponent as AestheticIcon} from './Logos/filter-aesthetic.svg'
 import {ReactComponent as OutdoorIcon} from './Logos/filter-outdoor.svg'
 import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
+import {ReactComponent as ScrollUpIcon} from './Logos/scroll-top.svg'
 
 export default function ResultsPanel({data, setData, selectCafe, addFilter, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -452,12 +453,18 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
         if (rightRef.current) {
             rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    }, [allFilters])
+    }, [allFilters, searchValue])
 
     const handleCardClick = (cardData) => {
         setExpandedCard((id) => (id === cardData.id ? null : cardData.id));
         selectCafe(cardData);
     };
+
+    useEffect(() => {
+        if (rightRef.current.scrollTop === 0) {
+            console.log("scrolltop")
+        }
+    }, [rightRef.current.scrollTop])
 
     return (
         <div id="results-panel">
@@ -607,6 +614,15 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
                     About
                 </div> */}
             </div>
+
+            {!expandedCard && rightRef.current.scrollTop >= 5 &&
+                <div id='data-cards-scroll-button-container'>
+                    <button id='data-cards-scroll' onClick={() => rightRef.current.scrollTo({ top: 0, behavior: 'smooth' })}>
+                        <ScrollUpIcon id='data-cards-scroll-icon'/>
+                    </button>
+                </div>
+            }
+            
         </div>
     )
 }

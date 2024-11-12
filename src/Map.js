@@ -16,6 +16,8 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
   const [showResetView, setShowResetView] = useState(false);
   const [showCafeView, setShowCafeView] = useState(false);
 
+  const [selectedCafes, setSelectedCafes] = useState(data.filter(cafe => cafe.is_selected))
+
   useEffect(() => {
     if (theMap) theMap.remove();
     setTheMap(new maptilersdk.Map({
@@ -52,10 +54,6 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
 
             if (newCenter.lat === newLatitude && newCenter.lng === newLongitude) {
               setShowResetView(false);
-              const selectedCafes = data.filter(cafe => cafe.is_selected);
-              if (selectedCafes.length === 1) {
-                setShowCafeView(true);
-              }
             }
             else {
               setShowResetView(true);
@@ -65,11 +63,6 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
           else {
             if (newCenter.lat === 34.06248189100365 && newCenter.lng === -118.34569321430635) {
               setShowResetView(false);
-              const selectedCafes = data.filter(cafe => cafe.is_selected);
-              console.log("why", selectedCafes)
-              if (selectedCafes.length === 1) {
-                setShowCafeView(true);
-              }
             }
             else {
               setShowResetView(true);
@@ -112,16 +105,19 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
   }
 
   useEffect(() => {
-    console.log(allFilters);
     const selectedCafes = data.filter(cafe => cafe.is_selected);
     if (selectedCafes.length === 0) {
       setShowCafeView(false);
     }
+    else if (selectedCafes.length === 1) {
+      if (latitude !== selectedCafes[0].latitude && longitude !== selectedCafes[0].longitude && zoom != 14 && showResetView === false) setShowCafeView(true);
+    }
+
     const visibleCafes = data.filter(cafe => cafe.visible);
     if (visibleCafes.length === 1) {
       setShowResetView(false);
     }
-  }, [data, displayRight]);
+  }, [data, displayRight, allFilters, latitude, longitude, zoom]);
 
   return (
     <div className="map-wrap">
@@ -157,7 +153,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
         {!displayRight && allFilters.length !== 0 && 
           <div className="map-display" id="map-filters-list">
             <div>Filters / Sort</div>
-            <hr />
+            <hr id='map-filters-divider'/>
             <ul>
             {allFilters.map((filter) => (
               <li>{filter}</li>
