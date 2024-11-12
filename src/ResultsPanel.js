@@ -449,22 +449,36 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
         }        
     }, [data]);
 
-    useEffect(() => {
-        if (rightRef.current) {
-            rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }, [allFilters, searchValue])
-
     const handleCardClick = (cardData) => {
         setExpandedCard((id) => (id === cardData.id ? null : cardData.id));
         selectCafe(cardData);
     };
 
     useEffect(() => {
-        if (rightRef.current.scrollTop === 0) {
-            console.log("scrolltop")
+        if (rightRef.current) {
+            rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    }, [rightRef.current.scrollTop])
+    }, [allFilters, searchValue])
+
+    const [scrollTop, setScrollTop] = useState(0);
+    useEffect(() => {
+        const handleScroll = () => {
+            if (rightRef.current) {
+                setScrollTop(rightRef.current.scrollTop);
+            }
+        };
+
+        const refCurrent = rightRef.current;
+        if (refCurrent) {
+            refCurrent.addEventListener('scroll', handleScroll);
+        }
+
+        return () => {
+            if (refCurrent) {
+                refCurrent.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
 
     return (
         <div id="results-panel">
@@ -615,7 +629,7 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
                 </div> */}
             </div>
 
-            {!expandedCard && rightRef.current.scrollTop >= 5 &&
+            {!expandedCard && scrollTop >= 5 &&
                 <div id='data-cards-scroll-button-container'>
                     <button id='data-cards-scroll' onClick={() => rightRef.current.scrollTo({ top: 0, behavior: 'smooth' })}>
                         <ScrollUpIcon id='data-cards-scroll-icon'/>
