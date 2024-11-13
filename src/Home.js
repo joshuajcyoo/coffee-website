@@ -121,10 +121,10 @@ export default function Home() {
     var types=lines[1].split("\t");
     var lastID = 0;
 
-    for(var i=2; i<lines.length; i++){
+    for (var i=2; i<lines.length; i++) {
       var obj = {};
       var currentline=lines[i].split("\t");
-      for(var j=0; j<headers.length; j++){
+      for (var j=0; j<headers.length; j++) {
         var val = null;
         if (types[j] === "number") val = parseFloat(currentline[j]);
         else if (types[j] === "boolean") {

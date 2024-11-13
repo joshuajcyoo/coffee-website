@@ -102,7 +102,7 @@ html, body {
 .map-display {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   position: absolute;
   padding: 0.5vw 1.25vw;
   background-color: black;
@@ -116,10 +116,19 @@ html, body {
   padding-bottom: 0.4vw;
   padding-top: 0.9vw;
   padding-right: 1.3vw;
+  min-width: 7vw;
 }
 #map-filters-list, #map-sort-list {
-  right: 20px;
-  bottom: clamp(4.5rem, 6.5vw, 8rem);
+  /* right: 20px;
+  bottom: clamp(4.5rem, 6.5vw, 8rem); */
+  left: 20px;
+  top: 30px;
+}
+#map-filters-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding-left: 0.2vw;
 }
 #map-display-title {
   text-align: center;
@@ -151,6 +160,7 @@ html, body {
   margin-bottom: 0.5vw;
   display: flex;
   align-items: center;
+  justify-content: start;
   padding-right: 0.1vw;
   margin-left: 0.2vw;
 }
