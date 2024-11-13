@@ -10,6 +10,8 @@ export default function Home() {
   const [latitude, setLatitude] = useState(34.060801322167165);
   const [longitude, setLongitude] = useState(-118.35414700384389);
   const [zoom, setZoom] = useState(11);
+  const [sort, setSort] = useState(null);
+  const [showSortPanel, setShowSortPanel] = useState(false);
   const [allFilters, setAllFilters] = useState([]);
   const [filterFunction, setFilterFunction] = useState(null);
   const [neighborhoodFunction, setNeighborhoodFunction] = useState(null);
@@ -184,6 +186,10 @@ export default function Home() {
           neighborhoodFunction={neighborhoodFunction}
           filterFunction={filterFunction}
           allFilters={allFilters}
+          sort={sort}
+          setSort={setSort}
+          showSortPanel={showSortPanel}
+          setShowSortPanel={setShowSortPanel}
         />
           <div className="home-title-container">
             <div className="home-title">A Guide to LA Coffee Shops</div>
@@ -201,6 +207,8 @@ export default function Home() {
           data={data}
           setData={setData}
           selectCafe={handleSelectCafe}
+          setSort={setSort}
+          setShowSortPanel={setShowSortPanel}
           pickSortingOption={handlePickSortingOption}
           addFilter={handleAddFilter}
           rightRef={rightRef}

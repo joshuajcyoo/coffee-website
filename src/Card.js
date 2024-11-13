@@ -112,7 +112,7 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
 
                     <div className={`cafe-modal-images${hoveredImage !== null ? '-hovered' : ''}`}>
                         <div className={`cafe-modal-image-container ${hoveredImage === 1 ? 'hovered' : ''}`} onMouseEnter={() => setHoveredImage(1)} onMouseLeave={() => setHoveredImage(null)}>
-                            <img className="cafe-modal-image" src={cardData.c_image1} />
+                            <img className="cafe-modal-image" src={cardData.image} />
                         </div>
                         <div className={`cafe-modal-image-container ${hoveredImage === 2 ? 'hovered' : ''}`} onMouseEnter={() => setHoveredImage(2)} onMouseLeave={() => setHoveredImage(null)}>
                             <img className="cafe-modal-image" src={cardData.c_image2} />

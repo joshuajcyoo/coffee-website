@@ -21,7 +21,7 @@ import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
 import {ReactComponent as ScrollUpIcon} from './Logos/scroll-top.svg'
 
-export default function ResultsPanel({data, setData, selectCafe, addFilter, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue}) {
+export default function ResultsPanel({data, setData, selectCafe, addFilter, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [calculatedHeight, setCalculatedHeight] = useState(82)
 
@@ -38,7 +38,7 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
     }, []);
 
     useEffect(() => {
-        setCalculatedHeight(83.8 * (windowWidth / 1440));
+        setCalculatedHeight(82.8 * (windowWidth / 1440));
     }, [windowWidth])
     
     const [showFiltersModal, setShowFiltersModal] = useState(false);
@@ -169,13 +169,13 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
 
             if (timeState) {
                 setAllFilters((filters) => 
-                    {if (!filters.includes("Open at " + timeData.hour + ":" + timeData.minute + " " + timeData.ampm)) {
-                        return [...filters, "Open at " + timeData.hour + ":" + timeData.minute + " " + timeData.ampm]
+                    {if (!filters.includes("Open At")) {
+                        return [...filters, "Open At"]
                     } return filters
                 })
             }
             else {
-                setAllFilters((filters) => filters.filter((item) => item !== "Open at " + timeData.hour + ":" + timeData.minute + " " + timeData.ampm));
+                setAllFilters((filters) => filters.filter((item) => item !== "Open At"));
             }
 
             if (filters.has_outlets) {
@@ -353,6 +353,7 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
 
     const handleSortClick = () => {
         setCurrentSort((prevSort) => (prevSort + 1) % sortOptions.length);
+        setShowSortPanel(true);
     };
 
     const capitalize = (string) => {
@@ -394,8 +395,8 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
 
     useEffect(() => {
         handleSort(currentSort);
+        setSort(currentSort);
     }, [currentSort]);
-
 
     const [isSearchFocused, setIsSearchFocused] = useState(false);
     const [isSearchSet, setIsSearchSet] = useState(false);
@@ -421,7 +422,6 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
             }
         }
     }
-
 
     const [expandedCard, setExpandedCard] = useState(null);
 
@@ -605,7 +605,7 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, allF
                 </div>
             </div>
 
-            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 79.3 + 475) + "px")}}>
+            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 80 + 475) + "px")}}>
                 {data.filter(element => {
                         if (element.visible) {
                             return element;

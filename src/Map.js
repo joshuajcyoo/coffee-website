@@ -7,8 +7,20 @@ import {ReactComponent as ListOpen} from './Logos/toggle-open.svg'
 import {ReactComponent as ListClose} from './Logos/toggle-close.svg'
 import {ReactComponent as ResetView} from './Logos/reset-view2.svg'
 import {ReactComponent as CafeView} from './Logos/reset-cafe.svg'
+import {ReactComponent as CloseFilters} from './Logos/close-filters.svg'
+import {ReactComponent as OutletIcon} from './Logos/filter-outlet.svg'
+import {ReactComponent as StudyIcon} from './Logos/filter-study.svg'
+import {ReactComponent as FoodIcon} from './Logos/filter-food.svg'
+import {ReactComponent as GemIcon} from './Logos/filter-gem.svg'
+import {ReactComponent as AestheticIcon} from './Logos/filter-aesthetic.svg'
+import {ReactComponent as OutdoorIcon} from './Logos/filter-outdoor.svg'
+import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
+import {ReactComponent as ScoreIcon} from './Logos/sort-score.svg'
+import {ReactComponent as AmbianceIcon} from './Logos/sort-ambiance.svg'
+import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability.svg'
+import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
 
-export default function Map({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, hoveredCafe, selectedCafe, changeZoom, neighborhoodFunction, filterFunction, allFilters}) {
+export default function Map({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, hoveredCafe, selectedCafe, changeZoom, neighborhoodFunction, allFilters, sort, setSort, showSortPanel, setShowSortPanel}) {
   const mapContainer = useRef(null);
   maptilersdk.config.apiKey = 'bFXUsq2lCBRLxW1UauI0';
   const [theMap, setTheMap] = useState(null);
@@ -16,7 +28,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
   const [showResetView, setShowResetView] = useState(false);
   const [showCafeView, setShowCafeView] = useState(false);
 
-  const [selectedCafes, setSelectedCafes] = useState(data.filter(cafe => cafe.is_selected))
+  const [showFiltersPanel, setShowFiltersPanel] = useState(false);
 
   useEffect(() => {
     if (theMap) theMap.remove();
@@ -104,6 +116,55 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
     }
   }
 
+  const handleClose = () => {
+    setShowFiltersPanel(false);
+    setShowSortPanel(false);
+  }
+
+  const handleSortPanelClose = () => {
+    setShowSortPanel(false);
+  }
+
+  const getFilterIcon = (filter) => {
+    switch (filter) {
+      case "Outlets":
+        return <OutletIcon className='map-panel-icon'/>;
+      case "Study / Work":
+        return <StudyIcon className='map-panel-icon'/>;
+      case "Outdoor Area":
+        return <OutdoorIcon className='map-panel-icon'/>;
+      case "Aesthetic":
+        return <AestheticIcon className='map-panel-icon'/>;
+      case "Food Menu":
+        return <FoodIcon className='map-panel-icon'/>;
+      case "Hidden Gem":
+        return <GemIcon className='map-panel-icon'/>;
+      case "Open At":
+        return <TimeIcon className='map-panel-icon'/>
+    }
+  };
+
+  const getSortName = (sort) => {
+    switch (sort) {
+      case 0: return "Overall"
+      case 1: return "Ambiance"
+      case 2: return "Workability"
+      case 3: return "Drinks"
+    }
+  }
+  const getSortIcon = (sort) => {
+    switch (sort) {
+      case 0:
+        return <ScoreIcon className='map-panel-icon' id='map-panel-score-icon'/>
+      case 1:
+        return <AmbianceIcon className='map-panel-icon'/>
+      case 2:
+        return <WorkabilityIcon className='map-panel-icon'/>
+      case 3:
+        return <DrinksIcon className='map-panel-icon'/>
+    }
+  }
+
   useEffect(() => {
     const selectedCafes = data.filter(cafe => cafe.is_selected);
     if (selectedCafes.length === 0) {
@@ -118,6 +179,11 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
       setShowResetView(false);
     }
   }, [data, displayRight, allFilters, latitude, longitude, zoom]);
+
+  useEffect(() => {
+    if (allFilters.length === 0) setShowFiltersPanel(false);
+    else setShowFiltersPanel(true);
+  }, [allFilters])
 
   return (
     <div className="map-wrap">
@@ -150,15 +216,41 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
             <CafeView className='map-icon' id='map-icon-cafe-view'/>
           </button>
         }
-        {!displayRight && allFilters.length !== 0 && 
+        {allFilters.length !== 0 && showFiltersPanel &&
           <div className="map-display" id="map-filters-list">
-            <div>Filters / Sort</div>
+            <button id="map-panel-close-button" onClick={handleClose}><CloseFilters className='map-icon' id='map-icon-close-filters'/></button>
+            {showSortPanel && showFiltersPanel && displayRight &&
+              <>
+                <div id='map-display-title'>Current Sort</div>
+                <hr id='map-filters-divider'/>
+                <div id='map-sort-panel-item-filter'>
+                  {getSortIcon(sort)}
+                  {getSortName(sort)}
+                </div>
+              </>
+            }
+
+            <div id='map-display-title'>Active Filters</div>
             <hr id='map-filters-divider'/>
-            <ul>
-            {allFilters.map((filter) => (
-              <li>{filter}</li>
-            ))}
-            </ul>
+            <div id='map-filters-container'>
+              {allFilters.map((filter) => (
+                <div className='map-filters-panel-item'>
+                  {getFilterIcon(filter)}
+                  {filter}
+                </div>
+              ))}
+            </div>
+          </div>
+        }
+        {showSortPanel && !showFiltersPanel && displayRight &&
+          <div className="map-display" id="map-sort-list">
+            <button id="map-panel-close-button-sort" onClick={handleSortPanelClose}><CloseFilters className='map-icon' id='map-icon-close-filters'/></button>
+            <div id='map-display-title'>Current Sort</div>
+            <hr id='map-filters-divider'/>
+            <div id='map-sort-panel-item'>
+              {getSortIcon(sort)}
+              {getSortName(sort)}
+            </div>
           </div>
         }
     </div>
