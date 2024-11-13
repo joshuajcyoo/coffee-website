@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/coffee-website/static/css/main.7cae013b.css",
-    "main.js": "/coffee-website/static/js/main.dd816c9a.js",
+    "main.css": "/coffee-website/static/css/main.df2edb44.css",
+    "main.js": "/coffee-website/static/js/main.8798a6f1.js",
     "static/js/453.8e4c5fdf.chunk.js": "/coffee-website/static/js/453.8e4c5fdf.chunk.js",
     "static/media/Montserrat-Bold.ttf": "/coffee-website/static/media/Montserrat-Bold.50f0257aa1e905f4bfaf.ttf",
     "static/media/Montserrat-SemiBold.ttf": "/coffee-website/static/media/Montserrat-SemiBold.93b37a465fc4ec0d0415.ttf",
@@ -35,6 +35,7 @@
     "static/media/filter-outdoor.svg": "/coffee-website/static/media/filter-outdoor.a25d98f5e56aa4369d2d075fabafe7a4.svg",
     "static/media/sort-ambiance.svg": "/coffee-website/static/media/sort-ambiance.f5a55d3994c66220102c384043222354.svg",
     "index.html": "/coffee-website/index.html",
+    "static/media/close-filters.svg": "/coffee-website/static/media/close-filters.4c0f049f18a719957f51775633793173.svg",
     "static/media/sort-search.svg": "/coffee-website/static/media/sort-search.d13d7849d0222dc5eadaa7344d0a328a.svg",
     "static/media/filter-filter.svg": "/coffee-website/static/media/filter-filter.3006784b3db77b55c51e00672ddf5d6a.svg",
     "static/media/filter-outlet.svg": "/coffee-website/static/media/filter-outlet.f4fe8111a5756abbc7d8d99a4a2c7018.svg",
@@ -42,12 +43,12 @@
     "static/media/close-card.svg": "/coffee-website/static/media/close-card.e4f61979553f457392f370a907177bc9.svg",
     "static/media/filter-plus.svg": "/coffee-website/static/media/filter-plus.e29461eb2a0c3e0a53981f7f84fa69f9.svg",
     "static/media/filter-minus.svg": "/coffee-website/static/media/filter-minus.0827164ff41e570ab5d46006cba1c6fc.svg",
-    "main.7cae013b.css.map": "/coffee-website/static/css/main.7cae013b.css.map",
-    "main.dd816c9a.js.map": "/coffee-website/static/js/main.dd816c9a.js.map",
+    "main.df2edb44.css.map": "/coffee-website/static/css/main.df2edb44.css.map",
+    "main.8798a6f1.js.map": "/coffee-website/static/js/main.8798a6f1.js.map",
     "453.8e4c5fdf.chunk.js.map": "/coffee-website/static/js/453.8e4c5fdf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7cae013b.css",
-    "static/js/main.dd816c9a.js"
+    "static/css/main.df2edb44.css",
+    "static/js/main.8798a6f1.js"
   ]
 }
