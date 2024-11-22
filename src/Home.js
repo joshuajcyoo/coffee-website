@@ -56,6 +56,7 @@ export default function Home() {
 
   const handleSelectCafe = (cafe) => {
     setDisplayRight(true);
+    var tempSelectCafe = null;
     var newData = [...data];
     newData.forEach(element => {
       if (element === cafe) {
@@ -65,17 +66,27 @@ export default function Home() {
           setLongitude(cafe.longitude);
           setZoom(14);
           setSelectedCafe(cafe);
+          tempSelectCafe = cafe;
         }
         else {
           element.is_selected = false;
           changeZoom(newData, false);
           setSelectedCafe(null);
+          tempSelectCafe = null;
         } 
       }
       else {
         element.is_selected = false;
       }
     });
+    // newData.forEach(element => {
+    //   if (tempSelectCafe) {
+    //     if (tempSelectCafe.id != element.id) element.visible = false;
+    //   }
+    //   else {
+    //     element.visible = true;
+    //   }
+    // });
     setData(newData);
   };
 
@@ -222,6 +233,7 @@ export default function Home() {
           setHoveredCafe={setHoveredCafe}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
+          selectedCafe={selectedCafe}
         />
       </div>
     </div>

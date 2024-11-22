@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, forwardRef } from 'react';
 import './App.css';
 import CafeModal from './CafeModal';
 import GoogleMaps from "./Logos/googlemapslogo.png";
@@ -13,7 +13,7 @@ import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability2.svg'
 import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
 import { format } from 'maplibre-gl';
 
-export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe}) {
+const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe}, ref) => {
     let formattedHours = [];
     for (let i = 0; i < 7; i++) {
         let openHour, openMinutes, openAmPm, closeHour, closeMinutes, closeAmPm;
@@ -75,7 +75,7 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
     const [hoveredImage, setHoveredImage] = useState(null);
 
     return (
-        <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)}>
+        <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)} ref={ref}>
             <div className="card-header" onClick={() => handleCardClick(cardData)}>
                 <div className="card-name-neighborhood">
                     <div className="card-name">
@@ -198,4 +198,6 @@ export default function Card({cardData, isExpanded, handleCardClick, hoveredCafe
             </div>
         </div>
     );
-}
+});
+
+export default Card;

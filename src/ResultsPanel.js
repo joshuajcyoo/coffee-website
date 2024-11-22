@@ -21,9 +21,11 @@ import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
 import {ReactComponent as ScrollUpIcon} from './Logos/scroll-top.svg'
 
-export default function ResultsPanel({data, setData, selectCafe, addFilter, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue}) {
+export default function ResultsPanel({data, setData, selectCafe, addFilter, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue, selectedCafe}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    const [calculatedHeight, setCalculatedHeight] = useState(82)
+    const [calculatedHeight, setCalculatedHeight] = useState(82);
+
+    const cardRefs = useRef({});
 
     useEffect(() => {
         const handleResize = () => {
@@ -244,8 +246,6 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
                 setAllFilters((filters) => filters.filter((item) => item !== 'Hidden Gem'));
             }
         }
-        var newData = [...data].map(cafe => ({ ...cafe, visible: true, is_selected: false }));
-        setData(newData);
     }, [filters, timeData, timeState]);
 
     const [isHovered, setIsHovered] = useState(false);
@@ -433,16 +433,50 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
             }
             setScrollToTop(false);
         }
-        if (selectedCard) {
+        // if (selectedCard) {
+        //     setExpandedCard(selectedCard.id);
+        //     const allCards = data.filter((element) => element.visible);
+        //     for (let i = 0; i < allCards.length; i++) {
+        //         if (allCards[i].is_selected) {
+        //             if (rightRef.current) {
+        //                 rightRef.current.scrollTo({ top: (i * calculatedHeight), behavior: 'smooth' });
+        //             }
+        //         }
+        //     }
+        // }
+        if (selectedCard && cardRefs.current[selectedCard.id]) {
+            // Scroll to the selected card using its ref
+            // cardRefs.current[selectedCard.id].current.scrollIntoView({
+            //     behavior: 'smooth',
+            //     block: 'start'
+            // });
+            const cardElement = cardRefs.current[selectedCard.id].current;
+            const handleTransitionEnd = () => {
+                setTimeout(() => {
+                    cardElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    });
+                }, 150);
+                cardElement.removeEventListener('transitionend', handleTransitionEnd);
+            };
+            
+            cardElement.addEventListener('transitionend', handleTransitionEnd);
             setExpandedCard(selectedCard.id);
-            const allCards = data.filter((element) => element.visible);
-            for (let i = 0; i < allCards.length; i++) {
-                if (allCards[i].is_selected) {
-                    if (rightRef.current) {
-                        rightRef.current.scrollTo({ top: (i * calculatedHeight), behavior: 'smooth' });
-                    }
-                }
-            }
+
+            console.log(document.querySelector('#data-cards'))
+
+            // const cardElement = cardRefs.current[selectedCard.id].current;
+            // const container = document.querySelector('#data-cards');
+            // const cardPosition = cardElement.offsetTop - container.offsetTop; // Position relative to container
+            // const headerHeight = 60; // Adjust for fixed headers
+            // console.log(container);
+
+            // container.scrollTo({
+            //     top: cardPosition - headerHeight,
+            //     behavior: 'smooth'
+            // });
+            // setExpandedCard(selectedCard.id);
         }
         else {
             setExpandedCard(null);
@@ -605,24 +639,33 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
                 </div>
             </div>
 
-            <div id="data-cards" style={{ height: parseInt(((data.filter((element) => element.visible).length) * 80 + 475) + "px")}}>
+            <div id="data-cards" >
                 {data.filter(element => {
                         if (element.visible) {
                             return element;
+                            // if (selectedCafe) {
+                            //     if (selectedCafe.id === element.id) return element;
+                            // }
+                            // else return element;
                         }
                     })
-                    .map((element) => (
-                        <Card 
-                            key={element.id} 
-                            cardData={element} 
-                            selectCafe={selectCafe} 
-                            isExpanded={element.id === expandedCard} 
-                            handleCardClick={handleCardClick}
-                            addFilter={addFilter}
-                            hoveredCafe={hoveredCafe}
-                            setHoveredCafe={setHoveredCafe}
-                        />
-                    ))
+                    .map((element) => {
+                        cardRefs.current[element.id] = React.createRef();
+
+                        return (
+                            <Card 
+                                key={element.id}
+                                ref={cardRefs.current[element.id]}
+                                cardData={element} 
+                                selectCafe={selectCafe} 
+                                isExpanded={element.id === expandedCard} 
+                                handleCardClick={handleCardClick}
+                                addFilter={addFilter}
+                                hoveredCafe={hoveredCafe}
+                                setHoveredCafe={setHoveredCafe}
+                            />
+                        )
+                    })
                 }
                 {/* <div id="about">
                     About

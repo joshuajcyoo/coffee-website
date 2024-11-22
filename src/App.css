@@ -128,7 +128,6 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: start;
-  padding-left: 0.2vw;
 }
 #map-display-title {
   text-align: center;
@@ -295,9 +294,9 @@ html, body {
 }
 .modal-content {
   background: white;
-  padding: 20px;
+  padding: clamp(0.5rem, 1vw, 2rem);
   border-radius: 5px;
-  width: 505px;
+  width: clamp(20rem, 40vw, 50rem);
   /* height: 350px; */
   max-width: 100%;
   z-index: 1000;
@@ -315,20 +314,18 @@ html, body {
 }
 .filter-row {
   display: flex;
-  justify-content: space-between; 
-  align-items: center;
-  width: 80%;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
   margin: 0 auto;
-  margin-bottom: 0.1rem;
+  width: clamp(15rem, 30vw, 30rem);
 }
 #filter-row-time {
   display: flex;
   flex-direction: column;
-  /* border: 2px solid black;
-  border-radius: 4px; */
   padding-bottom: 1.0vw;
   margin-top: 0.8rem;
-  width: 79.5%;
+  width: clamp(15rem, 30vw, 30rem);
 }
 #filter-row-time-active {
   display: flex;
@@ -337,10 +334,10 @@ html, body {
   border-radius: 5px;
   /* padding-bottom: 1.0vw; */
   margin-top: 0.7rem;
-  width: 79.5%;
+  width: clamp(15rem, 30vw, 30rem);
 }
 #filter-row-time-active #time-input-container {
-  max-height: 200px; 
+  max-height: clamp(1rem, 2vw, 3rem); 
   align-items: center;
   justify-content: center;
   opacity: 1;
@@ -350,24 +347,23 @@ html, body {
 }
 
 .filter-item {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   margin-bottom: 10px;
 }
 .filter-item.bubble {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 7px;
-  padding-bottom: 7px;
-  padding-left: 23px;
-  padding-right: 23px;
+  padding: clamp(0.3rem, 0.5vw, 1rem);
   border: 2px solid black;
   border-radius: 3px;
   background-color: #FFFFFF;
   cursor: pointer;
   transition: border-color 0.3s ease, transform 0.2s ease, background-color 0.3s ease; 
+  font-size: clamp(0.6rem, 1.1vw, 2rem);
+  flex: 1;
 }
 .filter-item.bubble:active {
   transform: scale(0.9);
@@ -387,11 +383,12 @@ html, body {
 .filter-item.bubble.time {
   display: flex; 
   align-items: center;
-  width: 88%;
+  flex: 1;
   margin-bottom: 0;
+  border-bottom: 2px solid black;
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
-.filter-item.bubble.outdoor {
+/* .filter-item.bubble.outdoor {
   padding-left: 28.5px;
   padding-right: 28.5px;
 }
@@ -406,9 +403,10 @@ html, body {
 .filter-item.bubble.outlet {
   padding-left: 26px;
   padding-right: 26px;
-}
+} */
 .filter-item.bubble.time:active, .filter-item.bubble.time.selected {
   transform: none;
+  border-radius: 0;
 }
 .filter-item.bubble.time.selected:active #time-input-container {
   max-height: 0;
@@ -418,8 +416,8 @@ html, body {
 }
 .filter-icon {
   margin-right: 0.5vw;
-  height: 1.7rem;
-  width: 1.7rem;
+  height: clamp(1rem, 2vw, 3rem);
+  width: clamp(1rem, 2vw, 3rem);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -434,17 +432,17 @@ html, body {
 .info-icon {
   display: inline-block;
   margin-left: 6px;
-  width: 7px;
-  height: 7px;
+  width: clamp(0.2rem, 0.5vw, 0.7rem);
+  height: clamp(0.2rem, 0.5vw, 0.7rem);
   background-color: #ddd;
   border-radius: 50%;
   text-align: center; 
-  line-height: 6px;
-  padding: 4px;
-  font-size: 10px;
+  line-height: clamp(0.1rem, 0.45vw, 5rem);
+  padding: clamp(0.1rem, 0.3vw, 0.5rem);
+  font-size: clamp(0.3rem, 0.7vw, 1rem);
   cursor: pointer;
   position: relative;
-  margin-top: 2px;
+  margin-top: clamp(0.1rem, 0.2vw, 0.3rem);
   color: black;
   transition: background-color 0.3s ease;
 }
@@ -537,7 +535,7 @@ html, body {
   margin-left: 3px;
 }
 .stacked-button {
-  width: 17px;
+  width: clamp(0.8rem, 1.1vw, 1.5rem);
   height: 18px;
   background-color: #FFFFFF;
   color: black;
@@ -567,6 +565,7 @@ html, body {
   background-color: #FFFFFF;
   color: black;
   cursor: pointer;
+  font-size: clamp(0.6rem, 1.0vw, 1.2rem);
 }
 .time-field:focus {
   outline: none;
@@ -598,17 +597,17 @@ html, body {
   height: 1.3vw;
 }
 #time-input-ampm-active {
-  font-size: clamp(0.7rem, 1.0vw, 1.2rem);
+  font-size: clamp(0.6rem, 1.0vw, 1.2rem);
   border-radius: 3px;
   border: 2px solid #000000;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 8.5px;
-  padding-bottom: 8.5px;
+  padding-left: clamp(0.5rem, 0.7vw, 1rem);
+  padding-right: clamp(0.5rem, 0.7vw, 1rem);
+  padding-top: clamp(0.45rem, 0.6vw, 1rem);
+  padding-bottom: clamp(0.45rem, 0.6vw, 1rem);
   color: #000000;
   background-color: #FFFFFF;
   transition: border 0.3s ease, background-color 0.3s ease, transform 0.1s ease;
-  height: clamp(0.5rem, 1.8vw, 1.1rem);
+  /* height: clamp(0.5rem, 1.8vw, 1.1rem); */
   display: flex;
   justify-content: center;
 }
@@ -840,7 +839,7 @@ html, body {
   stroke: white;
 }
 #data-cards {
-  overflow-y: hidden;
+  overflow-y: auto;
   flex-grow: 1;
   transition: opacity 3.0s ease;
 }
@@ -882,6 +881,7 @@ html, body {
 .card-container.expanded {
   padding-top: 20px;
   padding-bottom: 20px;
+  scroll-margin-top: 11.5vw;
 }
 .card-container:last-child {
   border-bottom: 2px solid black;
@@ -944,11 +944,11 @@ html, body {
 }
 .card-neighborhood {
   font-family: Mulish Bold;
-  font-size: 0.9vw;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  font-size: clamp(0.3rem, 0.8vw, 1rem);
+  padding-left: clamp(0.5rem, 0.8vw, 1rem);
+  padding-right: clamp(0.5rem, 0.8vw, 1.2rem);
+  padding-top: clamp(0.1rem, 0.1vw, 0.2rem);
+  padding-bottom: clamp(0.1rem, 0.1vw, 0.2rem);
   color: white;
   display: inline-flex;
   text-align: left;

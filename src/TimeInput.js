@@ -10,13 +10,13 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
   const [isAmPmPressed, setIsAmPmPressed] = useState(false);
 
   const options = [
-    { value: 0, label: 'Sunday' },
-    { value: 1, label: 'Monday' },
-    { value: 2, label: 'Tuesday' },
-    { value: 3, label: 'Wednesday' },
-    { value: 4, label: 'Thursday' },
-    { value: 5, label: 'Friday' },
-    { value: 6, label: 'Saturday' },
+    { value: 0, label: 'Sun' },
+    { value: 1, label: 'Mon' },
+    { value: 2, label: 'Tues' },
+    { value: 3, label: 'Wed' },
+    { value: 4, label: 'Thu' },
+    { value: 5, label: 'Fri' },
+    { value: 6, label: 'Sat' },
   ]
 
   const convertTimeToNumber = (hour, minute, ampm) => {
@@ -43,7 +43,6 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
           const newTimeNumber = convertTimeToNumber(newHour, minute, newAmPm);
           changeTime({ hour: newHour, minute, ampm: newAmPm, day, number: newTimeNumber});
       }
-      console.log(hour);
   };
 
   const addMinutes = () => {
@@ -87,18 +86,28 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
       boxShadow: 'none',
       border: isActive ? '2px solid #000000' : '2px solid transparent',
       borderRadius: '3px',
-      fontSize: 'clamp(0.7rem, 1.0vw, 1.2rem)',
+      fontSize: 'clamp(0.6rem, 1.0vw, 1.2rem)',
       cursor: 'pointer',
       ':hover': isMenuOpen ? {backgroundColor: '#000000', borderColor: '#000000'} : { backgroundColor: '#D2D2D2', borderColor: '#000000'},
       backgroundColor: isMenuOpen ? '#000000' : '#FFFFFF',
       transition: 'border 0.3s ease, background-color 0.3s ease',
-      height: 'clamp(0.1rem, 1.5vw, 1.5rem)',
-      width: 'clamp(8rem, 10vw, 12rem)'
+      // width: 'clamp(3rem, 8vw, 10rem)',
+      height: 'clamp(2rem, 2.8vw, 3rem)',
+      minHeight: 0
     }),
     valueContainer: (styles) => ({
       ...styles,
-      padding: '8.5px 10px',
-      height: '100%', 
+      // padding: '8.5px 10px',
+      // paddingTop: 'clamp(0.3rem, 0.6vw, 0.9rem)',
+      // paddingBottom: 'clamp(0.3rem, 0.6vw, 0.9rem)',
+      // height: '100%', 
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingLeft: 'clamp(0.7rem, 1vw, 0.7rem)',
+      paddingRight: 0,
+      marginRight: 0,
+      padding: 0,
     }),
     option: (styles, { isFocused }) => ({
       ...styles,
@@ -117,17 +126,21 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
       ...styles,
       paddingTop: 0,  
       paddingBottom: 0,
-      fontSize: 'clamp(0.7rem, 1.0vw, 1.2rem)',
+      fontSize: 'clamp(0.6rem, 1.0vw, 1.2rem)',
       backgroundColor: 'black'
     }),
     singleValue: (styles) => ({
       ...styles,
-      height: '100%', 
-      color: isMenuOpen ? '#FFFFFF' : '#000000'
+      // height: '100%', 
+      color: isMenuOpen ? '#FFFFFF' : '#000000',
     }),
     indicatorsContainer: (styles) => ({
       ...styles,
-      height: '100%'
+      height: '100%',
+      svg: {
+        width: 'clamp(0.7rem, 1.2vw, 1.2rem)', // Adjust width of the SVG icon
+        height: 'clamp(0.7rem, 1.2vw, 1.2rem)', // Adjust height of the SVG icon
+      }
     }),
     dropdownIndicator: (styles) => ({
       ...styles,
@@ -135,6 +148,7 @@ const TimeInput = ({ hour, minute, ampm, day, isActive, setIsActive, changeTime 
       marginLeft: '0',
       paddingRight: '0',
       transform: 'rotate(180deg)', 
+      marginTop: 'clamp(0.2rem, 0.3vw, 0.2rem)',
     }),
     indicatorSeparator: (styles) => ({
       ...styles,
