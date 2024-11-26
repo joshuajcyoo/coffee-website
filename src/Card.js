@@ -122,8 +122,19 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                         </div>
                     </div>
 
-                    <div className='cafe-modal-about-title'>About</div>
-                    <div className='cafe-modal-description'>This is a placeholder for the short description about the cafe. The description will only apply for coffee shops not towards the bottom of the list.</div>
+                    {cardData.description && 
+                    <>
+                        <div className='cafe-modal-about-title'>About</div>
+                        <div className='cafe-modal-description'>{cardData.description}
+                        {cardData.suggested_drink && 
+                            <div className='cafe-modal-suggestion'>For a drink recommendation, try the <span className='cafe-modal-suggested-drink'>{cardData.suggested_drink}</span>.</div>
+                        }
+                        {cardData.suggested_food && 
+                            <div className='cafe-modal-suggestion'>For a food recommendation, try the <span className='cafe-modal-suggested-food'>{cardData.suggested_food}</span>.</div>
+                        }
+                        </div>
+                    </>
+                    }
 
                     <div className='cafe-modal-score-title'>Score</div>
                     <div className='cafe-modal-score-bar'>
@@ -167,8 +178,13 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                             </table>
                         </div>
                     </div>
+
                     <div className='cafe-modal-tags-title'>Filters</div>
                     <CardTags cardData={cardData} />
+
+                    {cardData.thanks && 
+                    <div className='cafe-modal-thanks'>{cardData.thanks}</div>
+                    }
                 </CafeModal>
 
                 <div className='card-address'><span className="card-address-title">Address:</span> {cardData.address}</div>

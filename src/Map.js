@@ -3,6 +3,7 @@ import Marker from './Marker';
 import * as maptilersdk from '@maptiler/sdk';
 import "@maptiler/sdk/dist/maptiler-sdk.css";
 import './App.css';
+import WelcomeModal from './WelcomeModal';
 import {ReactComponent as ListOpen} from './Logos/toggle-open.svg'
 import {ReactComponent as ListClose} from './Logos/toggle-close.svg'
 import {ReactComponent as ResetView} from './Logos/reset-view2.svg'
@@ -19,6 +20,7 @@ import {ReactComponent as ScoreIcon} from './Logos/sort-score.svg'
 import {ReactComponent as AmbianceIcon} from './Logos/sort-ambiance.svg'
 import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability.svg'
 import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
+import {ReactComponent as WelcomeInfo} from './Logos/welcome-info.svg'
 
 export default function Map({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, hoveredCafe, selectedCafe, changeZoom, neighborhoodFunction, allFilters, sort, setSort, showSortPanel, setShowSortPanel}) {
   const mapContainer = useRef(null);
@@ -144,6 +146,11 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
     }
   };
 
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
+  const toggleWelcomeModal = () => {
+    setShowWelcomeModal(!showWelcomeModal);
+  };
+
   const getSortName = (sort) => {
     switch (sort) {
       case 0: return "Overall"
@@ -200,10 +207,12 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
             selectedCafes={data.filter(cafe => cafe.is_selected)}
           />
         ))}
+
         <button className="map-button" id="map-toggle-list" onClick={handleMapToggle}>
           {displayRight ? "Close List" : "Open List"}
           {displayRight ? <ListClose className='map-icon' id='map-close-icon'/> : <ListOpen className='map-icon'/>}
         </button>
+
         {showResetView && 
           <button className="map-button" id="map-reset-view" onClick={handleResetView}>
             Reset View
@@ -216,6 +225,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
             <CafeView className='map-icon' id='map-icon-cafe-view'/>
           </button>
         }
+
         {allFilters.length !== 0 && showFiltersPanel &&
           <div className="map-display" id="map-filters-list">
             <button id="map-panel-close-button" onClick={handleClose}><CloseFilters className='map-icon' id='map-icon-close-filters'/></button>
@@ -253,6 +263,15 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
             </div>
           </div>
         }
+
+        <button className="map-button" id="map-welcome-button" onClick={toggleWelcomeModal}>
+          <WelcomeInfo className='map-icon' id='map-welcome-icon'/>
+        </button>
+        <WelcomeModal show={showWelcomeModal} handleClose={toggleWelcomeModal}>
+          <div id="welcome-title">About</div>
+          
+          <div id='welcome-message'>Eight years ago I moved to LA, and very quickly made it a goal to visit as many coffee shops as I possibly could. Just for fun, I decided to create a simple scoring system that I could assess a coffee shop by and recorded this data in my Notes app, with the hope that I’d find a use for it one day.</div>
+        </WelcomeModal>
     </div>
   );
 }
