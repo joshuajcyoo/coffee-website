@@ -58,7 +58,7 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
             ...styles,
             border: '2px solid' + selectedNeighborhood.color,
             boxShadow: 'none',
-            fontSize: 'clamp(0.8rem, 1.1vw, 1.2rem)',
+            fontSize: 'clamp(0.8rem, 1.1vw, 1rem)',
             cursor: 'pointer',
             ':hover': { cursor: 'pointer', borderColor: selectedNeighborhood.color },
             backgroundColor: isHovered && !isMenuOpen ? selectedNeighborhood.color : 'transparent',
@@ -80,7 +80,7 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
             paddingTop: 0,
             paddingBottom: 0,
             // minHeight: '32.5vw',
-            fontSize: 'clamp(0.8rem, 1.1vw, 1.2rem)',
+            fontSize: 'clamp(0.8rem, 1.1vw, 1rem)',
             borderRadius: '3px'
         }),
         singleValue: (styles) => ({

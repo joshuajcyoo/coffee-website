@@ -369,22 +369,22 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
 
     const scoreHighLow = (cafe1, cafe2) => {
         if (cafe1.score < cafe2.score) return 1;
-        if (cafe1.score > cafe1.score) return -1;
+        if (cafe1.score > cafe2.score) return -1;
         return 0;
     };
     const ambianceHighLow = (cafe1, cafe2) => {
         if (cafe1.ambiance < cafe2.ambiance) return 1;
-        if (cafe1.ambiance > cafe1.ambiance) return -1;
+        if (cafe1.ambiance > cafe2.ambiance) return -1;
         return 0;
     };
     const workabilityHighLow = (cafe1, cafe2) => {
         if (cafe1.workability < cafe2.workability) return 1;
-        if (cafe1.workability > cafe1.workability) return -1;
+        if (cafe1.workability > cafe2.workability) return -1;
         return 0;
     };
     const drinksHighLow = (cafe1, cafe2) => {
         if (cafe1.drinks < cafe2.drinks) return 1;
-        if (cafe1.drinks > cafe1.drinks) return -1;
+        if (cafe1.drinks > cafe2.drinks) return -1;
         return 0;
     };
 
@@ -396,6 +396,9 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
     useEffect(() => {
         handleSort(currentSort);
         setSort(currentSort);
+        if (rightRef.current) {
+            rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }, [currentSort]);
 
     const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -463,20 +466,6 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
             
             cardElement.addEventListener('transitionend', handleTransitionEnd);
             setExpandedCard(selectedCard.id);
-
-            console.log(document.querySelector('#data-cards'))
-
-            // const cardElement = cardRefs.current[selectedCard.id].current;
-            // const container = document.querySelector('#data-cards');
-            // const cardPosition = cardElement.offsetTop - container.offsetTop; // Position relative to container
-            // const headerHeight = 60; // Adjust for fixed headers
-            // console.log(container);
-
-            // container.scrollTo({
-            //     top: cardPosition - headerHeight,
-            //     behavior: 'smooth'
-            // });
-            // setExpandedCard(selectedCard.id);
         }
         else {
             setExpandedCard(null);
@@ -554,7 +543,7 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
                     </div>
                 
                     <FiltersModal show={showFiltersModal} handleClose={toggleFiltersModal}>
-                        <div id="filters-title"><h2>All Filters</h2></div>
+                        <div id="filters-title">All Filters</div>
                         <div className="filter-row">
                             <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''} outlet`} onClick={() => toggleFilter('has_outlets')}>
                                 <OutletIcon id='filter-outlet-icon' className='filter-icon' />

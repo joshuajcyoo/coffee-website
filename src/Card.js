@@ -34,10 +34,25 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                 openAmPm = 'AM';
             }
     
-            if ((cardData.hours[i].close) >= 2200) {
+            if ((cardData.hours[i].close) === 2400) {
+                closeHour = "12"
+                closeMinutes = "00";
+                closeAmPm = 'AM';
+            }
+            else if ((cardData.hours[i].close) == 1200) {
+                closeHour = "12"
+                closeMinutes = "00";
+                closeAmPm = 'PM';
+            }
+            else if ((cardData.hours[i].close) >= 2200) {
                 closeHour = (cardData.hours[i].close - 1200).toString().slice(0, 2);
                 closeMinutes = cardData.hours[i].close.toString().slice(2, 4);
                 closeAmPm = 'PM';
+            }
+            else if ((cardData.hours[i].close) <= 400) {
+                closeHour = (cardData.hours[i].close).toString().slice(0, 1);
+                closeMinutes = cardData.hours[i].close.toString().slice(1, 3);
+                closeAmPm = 'AM';
             }
             else {
                 closeHour = (cardData.hours[i].close - 1200).toString().slice(0, 1);
@@ -106,7 +121,7 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                     <OpenCardIcon className="card-open-icon" />
                 </div>
 
-                <CafeModal show={showCafeModal} handleClose={toggleCafeModal}>
+                <CafeModal show={showCafeModal} handleClose={toggleCafeModal} color={cardData.color_code}>
                     <div className='cafe-modal-title'>{cardData.name}<span className='cafe-modal-subname'>{cardData.subname}</span></div>
                     <div><span className='cafe-modal-neighborhood' style={{border: '2px solid ' + cardData.color_code, color: cardData.color_code}}>{cardData.neighborhood}</span></div>
 

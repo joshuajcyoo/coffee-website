@@ -26,27 +26,28 @@ const ScoreBar = ({ cardData, cafeModal }) => {
         let modalPosition = 0;
         let position = 0;
         if (subscore === 0) {
-            addedWidth = `${((cardData.ambiance / cardData.score / 2) * 100) - 0.005}%`;
+            addedWidth = `${((cardData.ambiance / cardData.score / 2) * 100) - 0.09}%`;
             subscoreTitle = 'Ambiance';
-            if (value !== 1 && value !== 3) position = -0.02;
+            if (value !== 0 && value !== 3) position = -0.05;
         }
         else if (subscore === 1) {
             if (cafeModal) modalPosition = 0.002;
+            else modalPosition = 0.001;
             addedWidth = `${((cardData.ambiance / cardData.score) + (cardData.workability / cardData.score / 2) - 0.004 + modalPosition) * 100}%`;
             subscoreTitle = 'Workability';
-            if (value !== 1 && value !== 3) position = -0.02;
+            if (value !== 0 && value !== 3) position = -0.05;
         }
         else if (subscore === 2) {
             if (cafeModal) modalPosition = 0.005;
             addedWidth = `${((cardData.ambiance / cardData.score) + (cardData.workability / cardData.score) + (cardData.drinks / cardData.score / 2) - 0.009 + modalPosition) * 100}%`;
             subscoreTitle = 'Drinks';
-            if (value !== 1 && value !== 3) position = -0.02;
+            if (value !== 0 && value !== 3) position = -0.05;
         }
         else if (subscore === 3) {
             if (cafeModal) modalPosition = 0.003;
             addedWidth = `${((cardData.ambiance / cardData.score) + (cardData.workability / cardData.score) + (cardData.drinks / cardData.score) + (cardData.outlets / cardData.score / 2) - 0.004 + modalPosition) * 100}%`;
             subscoreTitle = 'Outlets';
-            if (value === -0.5) position = -0.02;
+            if (value === -0.5) position = -0.05;
         }
 
         return (
@@ -62,12 +63,12 @@ const ScoreBar = ({ cardData, cafeModal }) => {
                         <div
                             className="scale-tick"
                             style={subscore !== 3 ? {
-                                left: `${((value - 1) / 2 + position + modalPosition) * 100}%`,
+                                left: `${((value) / 3 + position + modalPosition) * 100}%`,
                                 backgroundColor: cardData.color_code
                             } : {
                                 left: `${((value) / 1 + position + modalPosition) * 100}%`,
                                 backgroundColor: cardData.color_code
-                            }}
+                            }} 
                         ></div>
                     </div>
                 </div>
@@ -85,22 +86,22 @@ const ScoreBar = ({ cardData, cafeModal }) => {
                 {scoreHover ? <><div className="subscore ambiance" onMouseEnter={() => setHoveredSubscore('ambiance')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: ambianceWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'ambiance' && renderHoverPopup(cardData.ambiance, 0)}
                     {/* {hoveredSubscore === 'ambiance' ? cardData.ambiance : <AmbianceIcon className='score-block-icon' />} */}
-                    <AmbianceIcon className='score-block-icon' />
+                    {cardData.ambiance !== 0 ? <AmbianceIcon className='score-block-icon' style={cardData.ambiance <= 0.5 && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.7rem)', fill: 'white'}} /> : <></>}
                 </div>
                 <div className="subscore workability" onMouseEnter={() => setHoveredSubscore('workability')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: workabilityWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'workability' && renderHoverPopup(cardData.workability, 1)}
                     {/* {hoveredSubscore === 'workability' ? cardData.workability : <WorkabilityIcon className='score-block-icon' id='score-block-icon-workability' />} */}
-                    <WorkabilityIcon className='score-block-icon' id='score-block-icon-workability' />
+                    {cardData.workability !== 0 ? <WorkabilityIcon className='score-block-icon' id='score-block-icon-workability' style={(cardData.workability <= 0.5 || cardData.ambiance <= 0.5 || cardData.drinks <= 0.5) && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.5rem)', fill: 'white'}} /> : <></>}
                 </div>
                 <div className="subscore drinks" onMouseEnter={() => setHoveredSubscore('drinks')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: drinksWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'drinks' && renderHoverPopup(cardData.drinks, 2)}
                     {/* {hoveredSubscore === 'drinks' ? cardData.drinks : <DrinksIcon className='score-block-icon' id='score-block-icon-drinks' />} */}
-                    <DrinksIcon className='score-block-icon' id='score-block-icon-drinks' />
+                    {cardData.drinks !== 0 ? <DrinksIcon className='score-block-icon' id='score-block-icon-drinks' style={cardData.drinks <= 0.5 && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.7rem)', fill: 'white'}} /> : <></>}
                 </div>
                 <div className="subscore outlets" onMouseEnter={() => setHoveredSubscore('outlets')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: outletsWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'outlets' && renderHoverPopup(cardData.outlets, 3)}
                     {/* {hoveredSubscore === 'outlets' ? (cardData.outlets > 0 ? cardData.outlets : "") : <OutletIcon className='score-block-icon' id='score-block-icon-outlets' style={{fill: 'white'}} />} */}
-                    {cardData.outlets !== 0 ? <OutletIcon className='score-block-icon' id={`score-block-icon-outlets${cafeModal ? '-cafe-modal' : ''}`} style={{fill: 'white'}} /> : <></>}
+                    {cardData.outlets !== 0 ? <OutletIcon className='score-block-icon' id={`score-block-icon-outlets${cafeModal ? '-cafe-modal' : ''}`} style={cardData.outlets <= 0.5 && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.2vw, 1.5rem)', fill: 'white'}} /> : <></>}
                 </div></> : <></>}
             </div>
         </div>

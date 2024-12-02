@@ -34,6 +34,9 @@ export default function Marker({map, markerData, selectCafe, hoveredCafe, select
         if (!markerData.visible) return;
         var color = markerData.color_code;
         if (markerData.is_selected) color = "#000000";
+        if (!markerData.latitude || !markerData.longitude || isNaN(markerData.latitude) || isNaN(markerData.longitude)) {
+            return;
+        }
         const marker = new maptilersdk.Marker({color: color})
         .setLngLat([markerData.longitude, markerData.latitude])
         .addTo(map);

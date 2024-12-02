@@ -19,8 +19,10 @@ import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as ScoreIcon} from './Logos/sort-score.svg'
 import {ReactComponent as AmbianceIcon} from './Logos/sort-ambiance.svg'
 import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability.svg'
+import {ReactComponent as WorkabilityIcon2} from './Logos/sort-workability2.svg'
 import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
 import {ReactComponent as WelcomeInfo} from './Logos/welcome-info.svg'
+import {ReactComponent as ArrowInfo2} from './Logos/arrow-info3.svg'
 
 export default function Map({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, hoveredCafe, selectedCafe, changeZoom, neighborhoodFunction, allFilters, sort, setSort, showSortPanel, setShowSortPanel}) {
   const mapContainer = useRef(null);
@@ -146,9 +148,11 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
     }
   };
 
-  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [showArrow, setShowArrow] = useState(true);
   const toggleWelcomeModal = () => {
     setShowWelcomeModal(!showWelcomeModal);
+    setShowArrow(false);
   };
 
   const getSortName = (sort) => {
@@ -270,8 +274,223 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
         <WelcomeModal show={showWelcomeModal} handleClose={toggleWelcomeModal}>
           <div id="welcome-title">About</div>
           
-          <div id='welcome-message'>Eight years ago I moved to LA, and very quickly made it a goal to visit as many coffee shops as I possibly could. Just for fun, I decided to create a simple scoring system that I could assess a coffee shop by and recorded this data in my Notes app, with the hope that I’d find a use for it one day.</div>
+          <div id='welcome-message1'>Eight years ago I moved to LA, and I very quickly made it a goal to visit as many coffee shops as I possibly could. Just for fun, I created a simple scoring system that I could assess a coffee shop by, and I recorded all of the data for every single coffee shop into my Notes app, with the hope that I’d find some use for it one day. This website is my best attempt to make use of that data.</div>
+          <div id='welcome-message2'>With the much appreciated help from my friend Josh, I've been working on this website for about three months so far, but I'm sorry for any bugs and design flaws you may run into. I plan on this being a continually iterative project to work on until I run out of new ideas.</div>
+          <div id='welcome-message3'>Thank you for taking the time to check my website out. I hope it makes it easier for you to discover new coffee shops yourself, or also let me know how wrong my opinions are.</div>
+
+          {/* <div id='welcome-score-title'>Explaining the Scoring System</div> */}
+          <hr id='welcome-divider' />
+
+          <div id='welcome-message3'>Each coffee shop is <span style={{fontWeight: 'bold'}}>scored out of 10</span>, comprised of four categories of subscores:</div>
+          <div id='welcome-score-container'>
+            <div className='welcome-score-item'>
+              <AmbianceIcon className='welcome-score-icon'/>
+              <div className='welcome-score-title'>Ambiance</div>
+              {/* <div className='welcome-score-subtitle'>(0 to 3)</div> */}
+              <div className="welcome-score-bar-container">
+                <div className="welcome-score-bar">
+                  <div className="welcome-tick-container" style={{left: '0%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">0</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '16.6%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '33.3%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '50%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">1.5</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '66.7%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '83.3%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '100%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='welcome-score-add'>+</div>
+            <div className='welcome-score-item'>
+              <WorkabilityIcon2 className='welcome-score-icon'/>
+              <div className='welcome-score-title'>Workability</div>
+              {/* <div className='welcome-score-subtitle'>(0 to 3)</div> */}
+              <div className="welcome-score-bar-container">
+                <div className="welcome-score-bar">
+                  <div className="welcome-tick-container" style={{left: '0%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">0</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '16.6%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '33.3%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '50%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">1.5</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '66.7%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '83.3%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '100%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='welcome-score-add'>+</div>
+            <div className='welcome-score-item'>
+              <DrinksIcon className='welcome-score-icon'/>
+              <div className='welcome-score-title'>Drinks</div>
+              {/* <div className='welcome-score-subtitle'>(0 to 3)</div> */}
+              <div className="welcome-score-bar-container">
+                <div className="welcome-score-bar">
+                  <div className="welcome-tick-container" style={{left: '0%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">0</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '16.6%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '33.3%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '50%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">1.5</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '66.7%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '83.3%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '100%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">3</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='welcome-score-add'>+</div>
+            <div className='welcome-score-item'>
+              <OutletIcon className='welcome-score-icon'/>
+              <div className='welcome-score-title'>Outlets</div>
+              {/* <div className='welcome-score-subtitle'>(0 to 1)</div> */}
+              <div className="welcome-score-bar-container">
+                <div id='welcome-score-bar-outlets'>
+                  <div className="welcome-tick-container" style={{left: '0%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">0</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '25%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '50%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">0.5</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '75%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '100%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='welcome-score-equals'>=</div>
+            <div className='welcome-score-item'>
+              <ScoreIcon id='welcome-overall-score-icon'/>
+              <div className='welcome-score-title'>Overall Score</div>
+              <div className="welcome-score-bar-container">
+                <div id="welcome-score-bar-overall">
+                  <div className="welcome-tick-container" style={{left: '0%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">0</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '5%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '10%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '15%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '20%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '25%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '30%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '35%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '40%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '45%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '50%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">5</span>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '55%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '60%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '65%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '70%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '75%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '80%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '85%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '90%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '95%'}}>
+                    <div className="welcome-tick welcome-tick-small"></div>
+                  </div>
+                  <div className="welcome-tick-container" style={{left: '100%'}}>
+                    <div className="welcome-tick welcome-tick-large"></div>
+                    <span className="welcome-tick-label">10</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </WelcomeModal>
+
+        {showArrow && <ArrowInfo2 className='map-icon' id='map-arrow-info-icon'/>}
     </div>
   );
 }
