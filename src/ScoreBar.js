@@ -21,6 +21,12 @@ const ScoreBar = ({ cardData, cafeModal }) => {
         if (cafeModal) setScoreHover(true);
     });
 
+    const [shrinkIcons, setShrinkIcons] = useState(false);
+
+    useState(() => {
+        if (cardData.ambiance === 0.5 || cardData.workability === 0.5 || cardData.drinks === 0.5 || cardData.outlets === 0.5) setShrinkIcons(true);
+    })
+
     const renderHoverPopup = (value, subscore) => {
         let addedWidth, subscoreTitle;
         let modalPosition = 0;
@@ -86,22 +92,22 @@ const ScoreBar = ({ cardData, cafeModal }) => {
                 {scoreHover ? <><div className="subscore ambiance" onMouseEnter={() => setHoveredSubscore('ambiance')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: ambianceWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'ambiance' && renderHoverPopup(cardData.ambiance, 0)}
                     {/* {hoveredSubscore === 'ambiance' ? cardData.ambiance : <AmbianceIcon className='score-block-icon' />} */}
-                    {cardData.ambiance !== 0 ? <AmbianceIcon className='score-block-icon' style={cardData.ambiance <= 0.5 && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.7rem)', fill: 'white'}} /> : <></>}
+                    {cardData.ambiance !== 0 ? <AmbianceIcon className='score-block-icon' style={shrinkIcons && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.7rem)', fill: 'white'}} /> : <></>}
                 </div>
                 <div className="subscore workability" onMouseEnter={() => setHoveredSubscore('workability')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: workabilityWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'workability' && renderHoverPopup(cardData.workability, 1)}
                     {/* {hoveredSubscore === 'workability' ? cardData.workability : <WorkabilityIcon className='score-block-icon' id='score-block-icon-workability' />} */}
-                    {cardData.workability !== 0 ? <WorkabilityIcon className='score-block-icon' id='score-block-icon-workability' style={(cardData.workability <= 0.5 || cardData.ambiance <= 0.5 || cardData.drinks <= 0.5) && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.5rem)', fill: 'white'}} /> : <></>}
+                    {cardData.workability !== 0 ? <WorkabilityIcon className='score-block-icon' id='score-block-icon-workability' style={shrinkIcons && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.5rem)', fill: 'white'}} /> : <></>}
                 </div>
                 <div className="subscore drinks" onMouseEnter={() => setHoveredSubscore('drinks')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: drinksWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'drinks' && renderHoverPopup(cardData.drinks, 2)}
                     {/* {hoveredSubscore === 'drinks' ? cardData.drinks : <DrinksIcon className='score-block-icon' id='score-block-icon-drinks' />} */}
-                    {cardData.drinks !== 0 ? <DrinksIcon className='score-block-icon' id='score-block-icon-drinks' style={cardData.drinks <= 0.5 && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.7rem)', fill: 'white'}} /> : <></>}
+                    {cardData.drinks !== 0 ? <DrinksIcon className='score-block-icon' id='score-block-icon-drinks' style={shrinkIcons && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.3vw, 1.7rem)', fill: 'white'}} /> : <></>}
                 </div>
                 <div className="subscore outlets" onMouseEnter={() => setHoveredSubscore('outlets')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: outletsWidth, backgroundColor: cardData.color_code }}>
                     {hoveredSubscore === 'outlets' && renderHoverPopup(cardData.outlets, 3)}
                     {/* {hoveredSubscore === 'outlets' ? (cardData.outlets > 0 ? cardData.outlets : "") : <OutletIcon className='score-block-icon' id='score-block-icon-outlets' style={{fill: 'white'}} />} */}
-                    {cardData.outlets !== 0 ? <OutletIcon className='score-block-icon' id={`score-block-icon-outlets${cafeModal ? '-cafe-modal' : ''}`} style={cardData.outlets <= 0.5 && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.2vw, 1.5rem)', fill: 'white'}} /> : <></>}
+                    {cardData.outlets != 0 ? <OutletIcon className='score-block-icon' id={`score-block-icon-outlets${cafeModal ? '-cafe-modal' : ''}`} style={shrinkIcons && !cafeModal ? {height: 'clamp(0.3rem, 1vw, 1.3rem)', fill: 'white'} : {height: 'clamp(0.3rem, 1.2vw, 1.5rem)', fill: 'white'}} /> : <></>}
                 </div></> : <></>}
             </div>
         </div>

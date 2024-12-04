@@ -1077,7 +1077,7 @@ html, body {
 .card-container.expanded {
   padding-top: 20px;
   padding-bottom: 20px;
-  scroll-margin-top: clamp(10.5rem, 13.5vw, 20rem);
+  scroll-margin-top: clamp(10.5rem, 13.5vw, 17rem);
 }
 .card-container:last-child {
   border-bottom: 2px solid black;

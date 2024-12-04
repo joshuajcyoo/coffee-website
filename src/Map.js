@@ -422,64 +422,64 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                     <div className="welcome-tick welcome-tick-large"></div>
                     <span className="welcome-tick-label">0</span>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '5%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '5%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '10%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '15%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '15%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '20%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '25%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '25%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '30%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '35%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '35%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '40%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '45%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '45%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '50%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                     <span className="welcome-tick-label">5</span>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '55%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '55%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '60%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '65%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '65%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '70%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '75%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '75%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '80%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '85%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '85%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '90%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '95%'}}>
+                  {/* <div className="welcome-tick-container" style={{left: '95%'}}>
                     <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
+                  </div> */}
                   <div className="welcome-tick-container" style={{left: '100%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                     <span className="welcome-tick-label">10</span>

@@ -460,7 +460,7 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
                         behavior: 'smooth',
                         block: 'start',
                     });
-                }, 150);
+                }, 175);
                 cardElement.removeEventListener('transitionend', handleTransitionEnd);
             };
             
