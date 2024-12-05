@@ -24,6 +24,29 @@ export default function Home() {
 
   const [displayRight, setDisplayRight] = useState(false);
 
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  useEffect(() => {
+      const handleResize = () => {
+          setWindowWidth(window.innerWidth);
+      };
+
+      const debounceResize = debounce(handleResize, 100);
+
+      window.addEventListener('resize', debounceResize);
+      handleResize();
+      return () => {
+          window.removeEventListener('resize', debounceResize);
+      };
+  }, []);
+
   const changeZoom = (data, neighborhoodCheck) => {
     const selectedCafes = data.filter(cafe => cafe.is_selected);
     const visibleCafes = data.filter(cafe => cafe.visible);
@@ -167,66 +190,77 @@ export default function Home() {
   }, [filterFunction, neighborhoodFunction, searchValue])
 
   return (
-    <div className="home-content">
-      <div className="home-left" style={{ width: displayRight ? '67%' : '100%' }}>      
-        <Map
-          data={data}
-          setData={setData}
-          displayRight={displayRight}
-          setDisplayRight={setDisplayRight}
-          latitude={latitude}
-          setLatitude={setLatitude}
-          longitude={longitude}
-          setLongitude={setLongitude}
-          zoom={zoom}
-          setZoom={setZoom}
-          changeZoom={changeZoom}
-          selectCafe={handleSelectCafe}
-          hoveredCafe={hoveredCafe}
-          selectedCafe={selectedCafe}
-          neighborhoodFunction={neighborhoodFunction}
-          filterFunction={filterFunction}
-          allFilters={allFilters}
-          sort={sort}
-          setSort={setSort}
-          showSortPanel={showSortPanel}
-          setShowSortPanel={setShowSortPanel}
-        />
-          <div className="home-title-container">
-            <div className="home-title">A Guide to LA Coffee Shops</div>
-          </div>
-          <NeighborhoodPanel
-            setNeighborhoodFunction={setNeighborhoodFunction}
-            setScrollToTop={setScrollToTop}
-            setSelectedCafe={setSelectedCafe}
+    <>
+      {windowWidth > 760 ?
+      <div className="home-content">
+        <div className="home-left" style={{ width: displayRight ? '67%' : '100%' }}>      
+          <Map
             data={data}
             setData={setData}
+            displayRight={displayRight}
+            setDisplayRight={setDisplayRight}
+            latitude={latitude}
+            setLatitude={setLatitude}
+            longitude={longitude}
+            setLongitude={setLongitude}
+            zoom={zoom}
+            setZoom={setZoom}
+            changeZoom={changeZoom}
+            selectCafe={handleSelectCafe}
+            hoveredCafe={hoveredCafe}
+            selectedCafe={selectedCafe}
+            neighborhoodFunction={neighborhoodFunction}
+            filterFunction={filterFunction}
+            allFilters={allFilters}
+            sort={sort}
+            setSort={setSort}
+            showSortPanel={showSortPanel}
+            setShowSortPanel={setShowSortPanel}
           />
+            <div className="home-title-container">
+              <div className="home-title">A Guide to LA Coffee Shops</div>
+            </div>
+            <NeighborhoodPanel
+              setNeighborhoodFunction={setNeighborhoodFunction}
+              setScrollToTop={setScrollToTop}
+              setSelectedCafe={setSelectedCafe}
+              data={data}
+              setData={setData}
+            />
+        </div>
+        <div className={`home-right ${displayRight ? '' : 'hidden'}`} ref={rightRef}> 
+          <ResultsPanel 
+            data={data}
+            setData={setData}
+            selectCafe={handleSelectCafe}
+            setSort={setSort}
+            setShowSortPanel={setShowSortPanel}
+            pickSortingOption={handlePickSortingOption}
+            addFilter={handleAddFilter}
+            rightRef={rightRef}
+            allFilters={allFilters}
+            setAllFilters={setAllFilters}
+            filterFunction={filterFunction}
+            setFilterFunction={setFilterFunction}
+            scrollToTop={scrollToTop}
+            setScrollToTop={setScrollToTop}
+            hoveredCafe={hoveredCafe}
+            setHoveredCafe={setHoveredCafe}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            selectedCafe={selectedCafe}
+          />
+        </div>
       </div>
-      <div className={`home-right ${displayRight ? '' : 'hidden'}`} ref={rightRef}> 
-        <ResultsPanel 
-          data={data}
-          setData={setData}
-          selectCafe={handleSelectCafe}
-          setSort={setSort}
-          setShowSortPanel={setShowSortPanel}
-          pickSortingOption={handlePickSortingOption}
-          addFilter={handleAddFilter}
-          rightRef={rightRef}
-          allFilters={allFilters}
-          setAllFilters={setAllFilters}
-          filterFunction={filterFunction}
-          setFilterFunction={setFilterFunction}
-          scrollToTop={scrollToTop}
-          setScrollToTop={setScrollToTop}
-          hoveredCafe={hoveredCafe}
-          setHoveredCafe={setHoveredCafe}
-          searchValue={searchValue}
-          setSearchValue={setSearchValue}
-          selectedCafe={selectedCafe}
-        />
+      : 
+      <div id="mobile-container">
+        <div id="mobile-div">
+          <div id="mobile-title">Sorry!</div>
+          <div className="mobile-message">Unfortunately the mobile version of the website isn't finished yet. However, you can still view the website on a laptop or desktop.</div>
+        </div>
       </div>
-    </div>
+    }
+    </>
   );
 }
 

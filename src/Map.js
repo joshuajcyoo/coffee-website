@@ -272,21 +272,25 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
           <WelcomeInfo className='map-icon' id='map-welcome-icon'/>
         </button>
         <WelcomeModal show={showWelcomeModal} handleClose={toggleWelcomeModal}>
+          {/* <div className='welcome-message' style={{marginTop: 'clamp(1.5rem, 2vw, 2rem)'}}>Thank you for taking the time to check my website out. I wanted to include some information below that hopefully helps you understand the site.</div> */}
+
+
           <div id="welcome-title">About</div>
           
-          <div id='welcome-message1'>Eight years ago I moved to LA, and I very quickly made it a goal to visit as many coffee shops as I possibly could. Just for fun, I created a simple scoring system that I could assess a coffee shop by, and I recorded all of the data for every single coffee shop into my Notes app, with the hope that I’d find some use for it one day. This website is my best attempt to make use of that data.</div>
-          <div id='welcome-message2'>With the much appreciated help from my friend Josh, I've been working on this website for about three months so far, but I'm sorry for any bugs and design flaws you may run into. I plan on this being a continually iterative project to work on until I run out of new ideas.</div>
-          <div id='welcome-message3'>Thank you for taking the time to check my website out. I hope it makes it easier for you to discover new coffee shops yourself, or also let me know how wrong my opinions are.</div>
+          <div className='welcome-message'>Eight years ago I moved to LA, and I very quickly made it a goal to visit as many coffee shops as I possibly could. Just for fun, I created a simple scoring system that I could assess a coffee shop by, and I recorded all of the data for every single coffee shop into my Notes app, with the hope that I’d find some use for it one day. This website is my best attempt to make use of that data.</div>
+          <div className='welcome-message'>With the much appreciated help from my friend Josh, I've been working on this website for about three months so far, but there's still more features and components I want to add soon. I plan on this being a continually iterative project to work on until I run out of new ideas.</div>
+          <div className='welcome-message'>Thank you for taking the time to check my website out. I hope it can help you discover new coffee shops yourself. If you're already a coffee shop enthusiast, please let me know how wrong my opinions are.</div>
 
-          {/* <div id='welcome-score-title'>Explaining the Scoring System</div> */}
-          <hr id='welcome-divider' />
+          <div id='welcome-score-title'>Scoring</div>
+          {/* <hr id='welcome-divider' /> */}
 
-          <div id='welcome-message3'>Each coffee shop is <span style={{fontWeight: 'bold'}}>scored out of 10</span>, comprised of four categories of subscores:</div>
+          <div className='welcome-message' >Each coffee shop is <span style={{fontWeight: 'bold'}}>scored out of 10</span>, comprised of four categories of subscores. You can sort by clicking the sorting button at the top of the right panel, which <span style={{fontWeight: 'bold'}}>shuffles through</span> each category in the order below.</div>
           <div id='welcome-score-container'>
             <div className='welcome-score-item'>
               <AmbianceIcon className='welcome-score-icon'/>
-              <div className='welcome-score-title'>Ambiance</div>
-              {/* <div className='welcome-score-subtitle'>(0 to 3)</div> */}
+              <div className='welcome-score-title'>
+                <span>Ambiance</span>
+              </div>
               <div className="welcome-score-bar-container">
                 <div className="welcome-score-bar">
                   <div className="welcome-tick-container" style={{left: '0%'}}>
@@ -315,12 +319,14 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                   </div>
                 </div>
               </div>
+              <div className='welcome-score-description'>Interior aesthetics, photogenic nature, decorative elements, visual beauty.</div>
             </div>
+
             <div className='welcome-score-add'>+</div>
+
             <div className='welcome-score-item'>
               <WorkabilityIcon2 className='welcome-score-icon'/>
-              <div className='welcome-score-title'>Workability</div>
-              {/* <div className='welcome-score-subtitle'>(0 to 3)</div> */}
+              <div className='welcome-score-title'>Workability</div>              
               <div className="welcome-score-bar-container">
                 <div className="welcome-score-bar">
                   <div className="welcome-tick-container" style={{left: '0%'}}>
@@ -349,12 +355,14 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                   </div>
                 </div>
               </div>
+              <div className='welcome-score-description'>Ergonomic design, availability and quality of seating, noise level, outlet accessibility.</div>
             </div>
+            
             <div className='welcome-score-add'>+</div>
+
             <div className='welcome-score-item'>
               <DrinksIcon className='welcome-score-icon'/>
               <div className='welcome-score-title'>Drinks</div>
-              {/* <div className='welcome-score-subtitle'>(0 to 3)</div> */}
               <div className="welcome-score-bar-container">
                 <div className="welcome-score-bar">
                   <div className="welcome-tick-container" style={{left: '0%'}}>
@@ -383,12 +391,14 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                   </div>
                 </div>
               </div>
+              <div className='welcome-score-description'>Drink quality, breadth of menu, sourcing and roasting, non-coffee options.</div>
             </div>
+
             <div className='welcome-score-add'>+</div>
+
             <div className='welcome-score-item'>
               <OutletIcon className='welcome-score-icon'/>
               <div className='welcome-score-title'>Outlets</div>
-              {/* <div className='welcome-score-subtitle'>(0 to 1)</div> */}
               <div className="welcome-score-bar-container">
                 <div id='welcome-score-bar-outlets'>
                   <div className="welcome-tick-container" style={{left: '0%'}}>
@@ -411,9 +421,12 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                   </div>
                 </div>
               </div>
+              <div className='welcome-score-description'>Availability of outlets, abundance and positioning, ease of access.</div>
             </div>
+
             <div className='welcome-score-equals'>=</div>
-            <div className='welcome-score-item'>
+
+            <div className='welcome-score-item' id='welcome-overall-score-item'>
               <ScoreIcon id='welcome-overall-score-icon'/>
               <div className='welcome-score-title'>Overall Score</div>
               <div className="welcome-score-bar-container">
@@ -486,6 +499,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                   </div>
                 </div>
               </div>
+              <div className='welcome-score-description' style={{opacity: 0}}>Ergonomic design, availability and quality of seating, noise level, outlet accessibility.</div>
             </div>
           </div>
         </WelcomeModal>
