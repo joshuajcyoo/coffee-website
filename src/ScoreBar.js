@@ -5,8 +5,9 @@ import {ReactComponent as AmbianceIcon} from './Logos/sort-ambiance.svg'
 import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability.svg'
 import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
 import {ReactComponent as OutletIcon} from './Logos/filter-outlet.svg'
+import {ReactComponent as CursorIcon} from './Logos/cursor.svg'
 
-const ScoreBar = ({ cardData, cafeModal }) => {
+const ScoreBar = ({ cardData, cafeModal, scoreBarHover, setScoreBarHover }) => {
     const filledWidth = `${(cardData.score / 10) * 100}%`;
 
     const ambianceWidth = `${(cardData.ambiance / cardData.score) * 100}%`;
@@ -26,6 +27,14 @@ const ScoreBar = ({ cardData, cafeModal }) => {
     useState(() => {
         if (cardData.ambiance === 0.5 || cardData.workability === 0.5 || cardData.drinks === 0.5 || cardData.outlets === 0.5) setShrinkIcons(true);
     })
+
+    const handleScoreHover = (hover) => {
+        if (hover) {
+            setScoreHover(true);
+            setScoreBarHover(false);
+        }
+        else setScoreHover(false);
+    }
 
     const renderHoverPopup = (value, subscore) => {
         let addedWidth, subscoreTitle;
@@ -83,10 +92,11 @@ const ScoreBar = ({ cardData, cafeModal }) => {
     };
   
     return (
-        <div className={`score-block-container${cafeModal ? '-cafe-modal' : ''}`} onMouseEnter={() => setScoreHover(true)} onMouseLeave={cafeModal ? (() => setScoreHover(true)) : (() => setScoreHover(false))} style={{border: '2px solid ' + cardData.color_code}}>
+        <div className={`score-block-container${cafeModal ? '-cafe-modal' : ''}`} onMouseEnter={() => handleScoreHover(true)} onMouseLeave={cafeModal ? (() => setScoreHover(true)) : (() => handleScoreHover(false))} style={{border: '2px solid ' + cardData.color_code}}>
             <div className="filled-score" style={{ width: filledWidth }}>
-                {scoreHover ? <></> : <div className="subscore score" style={{ width: '100%', backgroundColor: cardData.color_code }}>
-                    <ScoreIcon className='score-block-icon' />
+                {scoreHover ? <></> : 
+                <div className="subscore score" style={{ width: '100%', backgroundColor: cardData.color_code }}>
+                    {scoreBarHover ? <CursorIcon className='score-block-icon' id='score-block-icon-cursor'/> : <ScoreIcon className='score-block-icon' />}
                 </div>}
 
                 {scoreHover ? <><div className="subscore ambiance" onMouseEnter={() => setHoveredSubscore('ambiance')} onMouseLeave={() => setHoveredSubscore(null)} style={{ width: ambianceWidth, backgroundColor: cardData.color_code }}>

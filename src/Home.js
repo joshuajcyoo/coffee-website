@@ -19,6 +19,7 @@ export default function Home() {
   const [hoveredCafe, setHoveredCafe] = useState(null);
   const [selectedCafe, setSelectedCafe] = useState(null);
   const [searchValue, setSearchValue] = useState('Search By Name');
+  const [scoreBarHover, setScoreBarHover] = useState(true);
 
   const rightRef = useRef();
 
@@ -249,6 +250,8 @@ export default function Home() {
             searchValue={searchValue}
             setSearchValue={setSearchValue}
             selectedCafe={selectedCafe}
+            scoreBarHover={scoreBarHover}
+            setScoreBarHover={setScoreBarHover}
           />
         </div>
       </div>

@@ -13,7 +13,7 @@ import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability2.svg'
 import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
 import { format } from 'maplibre-gl';
 
-const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe}, ref) => {
+const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe, scoreBarHover, setScoreBarHover}, ref) => {
     let formattedHours = [];
     for (let i = 0; i < 7; i++) {
         let openHour, openMinutes, openAmPm, closeHour, closeMinutes, closeAmPm;
@@ -207,7 +207,7 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                 <div className='card-score-title'>Score:</div>
 
                 <div className='card-score-bar'>
-                    <ScoreBar cardData={cardData} />
+                    <ScoreBar cardData={cardData} scoreBarHover={scoreBarHover} setScoreBarHover={setScoreBarHover}/>
                     <div className='card-score-score' style={{color: cardData.color_code}}>{cardData.score}/10</div>
                 </div>
 

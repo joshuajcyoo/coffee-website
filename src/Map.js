@@ -391,7 +391,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                   </div>
                 </div>
               </div>
-              <div className='welcome-score-description'>Drink quality, breadth of menu, sourcing and roasting, non-coffee options.</div>
+              <div className='welcome-score-description'>Drink quality, breadth of menu, sourcing and roast, non-coffee options.</div>
             </div>
 
             <div className='welcome-score-add'>+</div>

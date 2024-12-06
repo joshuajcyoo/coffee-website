@@ -21,7 +21,7 @@ import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
 import {ReactComponent as ScrollUpIcon} from './Logos/scroll-top.svg'
 
-export default function ResultsPanel({data, setData, selectCafe, addFilter, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue, selectedCafe}) {
+export default function ResultsPanel({data, setData, selectCafe, addFilter, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue, selectedCafe, scoreBarHover, setScoreBarHover}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [calculatedHeight, setCalculatedHeight] = useState(82);
 
@@ -652,6 +652,8 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
                                 addFilter={addFilter}
                                 hoveredCafe={hoveredCafe}
                                 setHoveredCafe={setHoveredCafe}
+                                scoreBarHover={scoreBarHover}
+                                setScoreBarHover={setScoreBarHover}
                             />
                         )
                     })

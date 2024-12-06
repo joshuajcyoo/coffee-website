@@ -223,7 +223,7 @@ html, body {
   width: 4vw;
   height: 4vw;
   top: clamp(0.4rem, 0.8vw, 2rem);
-  left: clamp(3rem, 4.5vw, 5rem);
+  left: clamp(4rem, 4.5vw, 5rem);
   animation: fadeInOut 2s infinite;
 }
 #map-panel-close-button {
@@ -1665,6 +1665,9 @@ html, body {
 #score-block-icon-outlets {
   height: clamp(0.5rem, 1vw, 1.3rem);
   width: clamp(0.5rem, 1.5vw, 1.2rem);
+}
+#score-block-icon-cursor {
+  animation: fadeInOut 2s infinite;
 }
 .hover-popup {
   position: absolute;
