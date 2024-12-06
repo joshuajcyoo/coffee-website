@@ -279,7 +279,7 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
           
           <div className='welcome-message'>Eight years ago I moved to LA, and I very quickly made it a goal to visit as many coffee shops as I possibly could. Just for fun, I created a simple scoring system that I could assess a coffee shop by, and I recorded all of the data for every single coffee shop into my Notes app, with the hope that I’d find some use for it one day. This website is my best attempt to make use of that data.</div>
           <div className='welcome-message'>With the much appreciated help from my friend Josh, I've been working on this website for about three months so far, but there's still more features and components I want to add soon. I plan on this being a continually iterative project to work on until I run out of new ideas.</div>
-          <div className='welcome-message'>Thank you for taking the time to check my website out. I hope it can help you discover new coffee shops yourself. If you're already a coffee shop enthusiast, please let me know how wrong my opinions are.</div>
+          <div className='welcome-message'>Thank you for taking the time to check my website out. I hope it can help you discover new coffee shops yourself. If you're already a coffee shop enthusiast, I really want to hear your opinions and criticisms.</div>
 
           <div id='welcome-score-title'>Scoring</div>
           {/* <hr id='welcome-divider' /> */}
