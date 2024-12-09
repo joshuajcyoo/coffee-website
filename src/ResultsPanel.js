@@ -453,19 +453,36 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
             //     behavior: 'smooth',
             //     block: 'start'
             // });
-            const cardElement = cardRefs.current[selectedCard.id].current;
-            const handleTransitionEnd = () => {
-                setTimeout(() => {
-                    cardElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                    });
-                }, 175);
-                cardElement.removeEventListener('transitionend', handleTransitionEnd);
-            };
-            
-            cardElement.addEventListener('transitionend', handleTransitionEnd);
-            setExpandedCard(selectedCard.id);
+            if (selectedCard.id === 0) {
+                const cardElement = cardRefs.current[selectedCard.id].current;
+                const handleTransitionEnd = () => {
+                    setTimeout(() => {
+                        if (rightRef.current) {
+                            rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                        setScrollToTop(false);
+                    }, 175);
+                    cardElement.removeEventListener('transitionend', handleTransitionEnd);
+                };
+                
+                cardElement.addEventListener('transitionend', handleTransitionEnd);
+                setExpandedCard(selectedCard.id);
+            }
+            else {
+                const cardElement = cardRefs.current[selectedCard.id].current;
+                const handleTransitionEnd = () => {
+                    setTimeout(() => {
+                        cardElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                        });
+                    }, 175);
+                    cardElement.removeEventListener('transitionend', handleTransitionEnd);
+                };
+                
+                cardElement.addEventListener('transitionend', handleTransitionEnd);
+                setExpandedCard(selectedCard.id);
+            }
         }
         else {
             setExpandedCard(null);
