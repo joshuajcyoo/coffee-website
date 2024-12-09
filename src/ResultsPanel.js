@@ -657,7 +657,7 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
                     })
                     .map((element) => {
                         cardRefs.current[element.id] = React.createRef();
-                        const isFirstThreeExpanded = data.filter(card => card.visible && card.id === expandedCard).slice(0, 3).some(card => card.id === element.id);
+                        const isFirstThreeExpanded = data.filter(card => card.visible && card.id === expandedCard).slice(1, 3).some(card => card.id === element.id);
 
 
                         return (
