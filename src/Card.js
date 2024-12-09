@@ -13,7 +13,7 @@ import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability2.svg'
 import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
 import { format } from 'maplibre-gl';
 
-const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe, scoreBarHover, setScoreBarHover, additionalClass}, ref) => {
+const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe, scoreBarHover, setScoreBarHover}, ref) => {
     let formattedHours = [];
     for (let i = 0; i < 7; i++) {
         let openHour, openMinutes, openAmPm, closeHour, closeMinutes, closeAmPm;
@@ -90,7 +90,7 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
     const [hoveredImage, setHoveredImage] = useState(null);
 
     return (
-        <div className={`card-container ${isExpanded ? 'expanded' : ''} ${additionalClass}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)} ref={ref}>
+        <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)} ref={ref}>
             <div className="card-header" onClick={() => handleCardClick(cardData)}>
                 <div className="card-name-neighborhood">
                     <div className="card-name">

@@ -1138,9 +1138,6 @@ html, body {
   padding-bottom: 20px;
   scroll-margin-top: clamp(10.5rem, 12vw, 16rem);
 }
-.card-container.first-three-expanded {
-  scroll-margin-top: 15vw;
-}
 .card-container:last-child {
   border-bottom: 2px solid black;
 }
