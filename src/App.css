@@ -1136,7 +1136,10 @@ html, body {
 .card-container.expanded {
   padding-top: 20px;
   padding-bottom: 20px;
-  scroll-margin-top: clamp(10.5rem, 13.5vw, 17rem);
+  scroll-margin-top: clamp(10.5rem, 13vw, 17rem);
+}
+.card-container.expanded.first-three-expanded {
+  scroll-margin-top: 15vw;
 }
 .card-container:last-child {
   border-bottom: 2px solid black;
@@ -1499,7 +1502,7 @@ html, body {
 }
 .cafe-modal-score-title {
   margin-top: 3vh;
-  margin-bottom: clamp(0.7rem, 1vw, 1rem);
+  margin-bottom: clamp(0.7rem, 0.9vw, 0.9rem);
   font-size: clamp(0.5rem, 1.3vw, 1.5rem);
 }
 .cafe-modal-score {
