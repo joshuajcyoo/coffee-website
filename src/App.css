@@ -350,11 +350,15 @@ html, body {
   margin-right: clamp(1rem, 1.5vw, 1.7rem);
   margin-bottom: clamp(0.5rem, 0.8vw, 0.8rem);
 }
+#welcome-form-link {
+  color: black;
+  text-decoration: underline;
+}
 #welcome-score-title {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: clamp(2rem, 2.5vw, 2.5rem);
+  margin-top: clamp(1.5rem, 2vw, 2rem);
   margin-bottom: clamp(0.5rem, 1.5vw, 2rem);
   cursor: default;
   font-family: Elmond;
@@ -504,6 +508,24 @@ html, body {
   font-size: clamp(0.4rem, 0.7vw, 0.8rem);
   color: black;
   text-align: center;
+}
+.welcome-disclaimer {
+  font-size: clamp(0.5rem, 1vw, 1.1rem);
+  margin-left: clamp(0.7rem, 1vw, 1.1rem);
+  margin-top: clamp(0.3rem, 0.4vw, 0.4rem);
+  font-family: Mulish Regular;
+}
+#welcome-disclaimer-top { 
+  padding-bottom: clamp(0.1rem, 0.2vw, 0.2rem);
+  font-family: Mulish Bold;
+}
+#welcome-form-message {
+  font-size: clamp(0.5rem, 1vw, 1.1rem);
+  margin-left: clamp(0.7rem, 1vw, 1.1rem);
+  margin-top: clamp(4.5rem, 5vw, 5rem);
+  padding-bottom: clamp(0.5rem, 0.5vw, 0.6rem);
+  font-family: Mulish Bold;
+
 }
 
 /* FiltersModal.js */
@@ -1477,7 +1499,13 @@ html, body {
 }
 .cafe-modal-score-title {
   margin-top: 3vh;
+  margin-bottom: clamp(0.7rem, 1vw, 1rem);
   font-size: clamp(0.5rem, 1.3vw, 1.5rem);
+}
+.cafe-modal-score {
+  margin-top: clamp(0.3rem, 0.5vw, 0.5rem);
+  margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);
+  font-size: clamp(0.8rem, 1.2vw, 1.2rem);
 }
 .cafe-modal-score-bar {
   display: flex;

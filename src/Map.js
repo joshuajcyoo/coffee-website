@@ -279,7 +279,8 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
           
           <div className='welcome-message'>Eight years ago I moved to LA, and I very quickly made it a goal to visit as many coffee shops as I possibly could. Just for fun, I created a simple scoring system that I could assess a coffee shop by, and I recorded all of the data for every single coffee shop into my Notes app, with the hope that I’d find some use for it one day. This website is my best attempt to make use of that data.</div>
           <div className='welcome-message'>With the much appreciated help from my friend Josh, I've been working on this website for about three months so far, but there's still more features and components I want to add soon. I plan on this being a continually iterative project to work on until I run out of new ideas.</div>
-          <div className='welcome-message'>Thank you for taking the time to check my website out. I hope it can help you discover new coffee shops yourself. If you're already a coffee shop enthusiast, I really want to hear your opinions and criticisms.</div>
+          <div className='welcome-message'>Thank you for taking the time to check my website out. If you're already a coffee shop enthusiast, I really genuinely want to hear all of your opinions and feedback. I hope this website can help you discover new coffee shops yourself.</div>
+          <div className='welcome-message'>~Joshua</div>
 
           <div id='welcome-score-title'>Scoring</div>
           {/* <hr id='welcome-divider' /> */}
@@ -502,6 +503,13 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
               <div className='welcome-score-description' style={{opacity: 0}}>Ergonomic design, availability and quality of seating, noise level, outlet accessibility.</div>
             </div>
           </div>
+
+          <div id='welcome-form-message'>If you have any coffee shop suggestions or feedback about the website, please fill out <a id='welcome-form-link' href="https://form.jotform.com/243407347471053" target="_blank">this form</a> and I'll get right on it.</div>
+          
+          <div className='welcome-disclaimer' id='welcome-disclaimer-top'>Just a couple of disclaimers:</div>
+          <div className='welcome-disclaimer'>Some of the photos on this website are mine, but some are sourced from both Yelp and the businesses themselves.</div>
+          <div className='welcome-disclaimer'>The hours of operation may not always be the most up-to-date. I will try my best to keep them as accurate as possible, but I think it's always a good idea to check the Yelp page just to make sure whenever viewing a coffee shop.</div>
+          <div className='welcome-disclaimer'>Unfortunately I pushed off writing all of my descriptions until the end, so I apologize but a lot of the coffee shops still don't have an About section.</div>
         </WelcomeModal>
 
         {showArrow && <ArrowInfo2 className='map-icon' id='map-arrow-info-icon'/>}

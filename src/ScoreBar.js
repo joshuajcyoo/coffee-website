@@ -33,7 +33,9 @@ const ScoreBar = ({ cardData, cafeModal, scoreBarHover, setScoreBarHover }) => {
             setScoreHover(true);
             setScoreBarHover(false);
         }
-        else setScoreHover(false);
+        else {
+            setScoreHover(false);
+        }
     }
 
     const renderHoverPopup = (value, subscore) => {

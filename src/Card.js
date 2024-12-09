@@ -151,11 +151,6 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                     </>
                     }
 
-                    <div className='cafe-modal-score-title'>Score</div>
-                    <div className='cafe-modal-score-bar'>
-                        <ScoreBar cardData={cardData} cafeModal={true}/>
-                        <div className='card-score-score' style={{color: cardData.color_code}}>{cardData.score}/10</div>
-                    </div>
                     <div className='cafe-modal-hours-title'>Hours & Location</div>
                     <div className='cafe-modal-hours-location'>
                         <div className='cafe-modal-location'>
@@ -192,6 +187,13 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <div className='cafe-modal-score-title'>Score</div>
+                    <div className='cafe-modal-score' style={{color: cardData.color_code}}><span style={{border: '2px solid ' + cardData.color_code, borderRadius: '3px', paddingLeft: '0.3vw', paddingRight: '0.3vw', paddingTop: '0.1vw', paddingBottom: '0.1vw'}}>{cardData.score}/10</span></div>
+                    <div className='cafe-modal-score-bar'>
+                        <ScoreBar cardData={cardData} cafeModal={true} scoreBarHover={scoreBarHover} setScoreBarHover={setScoreBarHover}/>
+                        {/* <div className='card-score-score' style={{color: cardData.color_code}}>{cardData.score}/10</div> */}
                     </div>
 
                     <div className='cafe-modal-tags-title'>Filters</div>
