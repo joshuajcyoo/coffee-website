@@ -1303,8 +1303,8 @@ html, body {
   border: 2px solid #3AAB59;
   padding-left: 1vw;
   padding-right: 1vw;
-  padding-top: clamp(0.1rem, 0.5vw, 0.7rem);
-  padding-bottom: clamp(0.1rem, 0.5vw, 0.7rem);
+  padding-top: clamp(0.1rem, 0.52vw, 0.7rem);
+  padding-bottom: clamp(0.1rem, 0.52vw, 0.7rem);
   border-radius: 3px;
   text-decoration: none;
   margin-top: 0.1vw;
