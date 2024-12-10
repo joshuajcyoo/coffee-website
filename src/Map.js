@@ -406,15 +406,9 @@ export default function Map({longitude, setLongitude, latitude, setLatitude, zoo
                     <div className="welcome-tick welcome-tick-large"></div>
                     <span className="welcome-tick-label">0</span>
                   </div>
-                  <div className="welcome-tick-container" style={{left: '25%'}}>
-                    <div className="welcome-tick welcome-tick-small"></div>
-                  </div>
                   <div className="welcome-tick-container" style={{left: '50%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
                     <span className="welcome-tick-label">0.5</span>
-                  </div>
-                  <div className="welcome-tick-container" style={{left: '75%'}}>
-                    <div className="welcome-tick welcome-tick-small"></div>
                   </div>
                   <div className="welcome-tick-container" style={{left: '100%'}}>
                     <div className="welcome-tick welcome-tick-large"></div>
