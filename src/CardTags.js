@@ -12,6 +12,7 @@ export default function CardTags({cardData}) {
         if (cardData.is_aesthetic) newFilterList.set("Aesthetic", "#A2A2A2");
         if (cardData.has_food) newFilterList.set("Food Menu", "#A2A2A2");
         if (cardData.hidden_gem) newFilterList.set("Hidden Gem", "#A2A2A2");
+        if (cardData.open_late) newFilterList.set("Open Late", "#A2A2A2");
 
         if (cardData.wifi_issues) newFilterList.set("Wifi Issues", "#CBCBCB");
         if (cardData.often_crowded) newFilterList.set("Often Crowded", "#CBCBCB");

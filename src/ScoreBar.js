@@ -34,6 +34,7 @@ const ScoreBar = ({ cardData, cafeModal, scoreBarHover, setScoreBarHover }) => {
             setScoreBarHover(false);
         }
         else {
+            setScoreBarHover(true);
             setScoreHover(false);
         }
     }

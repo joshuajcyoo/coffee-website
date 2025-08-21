@@ -93,8 +93,14 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
         <div className={`card-container ${isExpanded ? 'expanded' : ''}`} style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, color: '#FFFFFF' } : {color : '#000000'}} onMouseEnter={() => handleHover(true)} onMouseLeave={() => handleHover(false)} ref={ref}>
             <div className="card-header" onClick={() => handleCardClick(cardData)}>
                 <div className="card-name-neighborhood">
+                    {cardData.new && 
+                        <div className="card-new">
+                            <span className="card-new-tag" style={isHovered && !isExpanded ? { backgroundColor: '#FFFFFF', color: '#048204' } : { backgroundColor: '#048204', color: "#FFFFFF" }}>NEW</span>
+                        </div>
+                        }
                     <div className="card-name">
-                        {cardData.name}<span className="card-subname">{cardData.subname}</span>
+                        {cardData.name}
+                        <span className="card-subname">{cardData.subname}</span>
                     </div>
                     <div className="card-neighborhood" style={isHovered && !isExpanded ? { backgroundColor: cardData.color_code, border: '2px solid #FFFFFF' } : { color: cardData.color_code, border: "2px solid" + cardData.color_code }} >
                         {cardData.neighborhood}
