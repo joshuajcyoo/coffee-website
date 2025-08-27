@@ -5,6 +5,7 @@ import { useRef, useEffect, useState } from 'react';
 import Map from './Map';
 import NeighborhoodPanel from './NeighborhoodPanel';
 import ResultsPanel from './ResultsPanel';
+import LogoBlack from "./Logos/newlogoblack.png";
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -257,10 +258,11 @@ export default function Home() {
         </div>
       </div>
       : 
-      <div id="mobile-container">
-        <div id="mobile-div">
-          <div id="mobile-title">Sorry!</div>
-          <div className="mobile-message">Unfortunately the mobile version of the website isn't finished yet. However, you can still view the website on a laptop or desktop.</div>
+      <div id="mobile-content">
+        <div id="mobile-nav">
+          <div >
+            <img id="mobile-nav-logo" src={LogoBlack}></img>
+          </div>
         </div>
       </div>
     }

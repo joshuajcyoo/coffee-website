@@ -1,29 +1,33 @@
-/* Mobile Development */
-#mobile-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-  #mobile-div {
-    width: 85vw;
-    height: 90vh;
+@font-face {font-family: Lora Regular; src: url(Fonts/Lora-Regular.ttf)}
+@font-face {font-family: Lora Medium; src: url(Fonts/Lora-Medium.ttf)}
+@font-face {font-family: Lora Bold; src: url(Fonts/Lora-Bold.ttf)}
+@font-face {font-family: Mulish Regular; src: url(Fonts/Mulish-Regular.ttf)}
+@font-face {font-family: Mulish SemiBold; src: url(Fonts/Mulish-SemiBold.ttf)}
+@font-face {font-family: Mulish Bold; src: url(Fonts/Mulish-Bold.ttf)}
+@font-face {font-family: Mulish ExtraBold; src: url(Fonts/Mulish-ExtraBold.ttf)}
+@font-face {font-family: Montserrat SemiBold; src: url(Fonts/Montserrat-SemiBold.ttf)}
+@font-face {font-family: Montserrat Bold; src: url(Fonts/Montserrat-Bold.ttf)}
+@font-face {font-family: Nexa Heavy; src: url(Fonts/Nexa-Heavy.ttf)}
+@font-face {font-family: Elmond; src: url(Fonts/Elmond.ttf)}
+
+/* Home.js (Mobile) */
+#mobile-content {
+    height: 100vh;
+    width: 100%;
     border: 2px solid black;
-    border-radius: 3px;
-    margin-top: 5vh;
+}
+#mobile-nav {
+    height: 10%;
+    width: 100%;
+    border-bottom: 2px solid black;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  #mobile-title {
-    font-size: 10vw; 
-    text-align: center;
-    font-family: Elmond;
-  }
-  .mobile-message {
-    font-family: Mulish SemiBold;
-    text-align: center;
-    width: 90%;
-    margin-top: 3vw;
-  }
+    align-items: center; 
+    justify-content: space-between; 
+    padding: 0 4vw; 
+    gap: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* x y blur color */
+}
+#mobile-nav-logo {
+    width: clamp(30px, 14vw, 80px); /* responsive logo size */
+    height: auto;
+}

@@ -23,7 +23,7 @@
 html, body {
   overflow: hidden;
 }
-/* Home.js */
+/* Home.js (Desktop) */
 .home-content {
   display: flex; 
   height: 100vh;
