@@ -12,22 +12,499 @@
 
 /* Home.js (Mobile) */
 #mobile-content {
-    height: 100vh;
-    width: 100%;
-    border: 2px solid black;
+  height: 100vh;
+  width: 100%;
+  border: 3px solid black;
 }
 #mobile-nav {
-    height: 10%;
-    width: 100%;
-    border-bottom: 2px solid black;
-    display: flex;
-    align-items: center; 
-    justify-content: space-between; 
-    padding: 0 4vw; 
-    gap: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* x y blur color */
+  height: 10%;
+  width: 100%;
+  border-bottom: 3px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4vw;
+  box-sizing: border-box;
+  gap: 1rem;
+  position: sticky;
 }
 #mobile-nav-logo {
-    width: clamp(30px, 14vw, 80px); /* responsive logo size */
-    height: auto;
+  width: clamp(30px, 14vw, 80px);
+  height: auto;
+  cursor: pointer;
 }
+#mobile-nav-about {
+  color: black;
+  background-color: transparent;
+  border: 3px solid black;
+  border-radius: 4px;
+  font-family: Mulish Bold;
+  font-size: clamp(14px, 3vw, 18px);
+  cursor: pointer;
+  margin: 0; 
+  padding: 6px 8px;
+}
+#mobile-toggle {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 6%;
+  border-bottom: 3px solid black;
+  position: sticky;
+}
+.mobile-toggle-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 1rem;
+  z-index: 2;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  font-family: Mulish Bold;
+  font-size: clamp(14px, 4vw, 18px);
+  color: black;
+}
+.mobile-toggle-btn.active {
+  color: white;
+}
+.mobile-toggle-slider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: black;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+.mobile-toggle-slider.map {
+  transform: translateX(0%);
+}
+.mobile-toggle-slider.list {
+  transform: translateX(100%);
+}
+
+/* MapMobile.js */
+.mobile-map-wrap {
+  font-family: Mulish Bold;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.mobile-map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-bottom: 3px solid black;
+}
+
+@keyframes popup-bounce-up {
+  0% {
+    transform: translate(-50%, 100%); /* start off screen bottom */
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -5%); /* overshoot upward a bit */
+  }
+  80% {
+    transform: translate(-50%, 2.5%); /* settle back down */
+  }
+  100% {
+    transform: translate(-50%, 0); /* final resting position */
+    opacity: 0.95;
+  }
+}
+@keyframes popup-bounce {
+  0% {
+    transform: translate(-50%, 0); /* start off screen bottom */
+    opacity: 0.95;
+  }
+  40% {
+    transform: translate(-50%, -5%); /* overshoot upward a bit */
+  }
+  70% {
+    transform: translate(-50%, 2.5%); /* settle back down */
+  }
+  100% {
+    transform: translate(-50%, 0); /* final resting position */
+    opacity: 0.95;
+  }
+}
+.mobile-map-popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px;
+  background-color: white;
+  border: 4px solid black;
+  border-radius: 3px;
+  position: absolute;
+  width: 80%;
+  min-height: 20%;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  opacity: 0;
+}
+.mobile-map-popup.first {
+  animation: popup-bounce-up 0.4s ease-out forwards;
+}
+.mobile-map-popup.again {
+  animation: popup-bounce 0.4s ease-out forwards;
+}
+.mobile-map-popup-namescore {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 6%;
+  user-select: text;
+  cursor: text;
+}
+.mobile-map-popup-namescore-left {
+  flex: 7.8;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  user-select: text;
+  cursor: text;
+}
+.mobile-map-popup-namescore-left-name {
+  font-family: Mulish Extrabold;
+  font-size: clamp(18px, 5.2vw, 24px);
+}
+.mobile-map-popup-namescore-left-subname {
+  font-size: clamp(8px, 2.6vw, 13px);
+}
+.mobile-map-popup-namescore-left-neighborhood {
+  font-size: clamp(8px, 2.6vw, 13px);
+  margin-top: 5%;
+}
+.mobile-map-popup-namescore-left-neighborhood-style {
+  padding: 0.5% 4%;
+  border-radius: 4px;
+}
+.mobile-map-popup-namescore-right {
+  flex: 2.2;
+  display: flex;
+  justify-content: right;
+}
+.mobile-map-popup-namescore-right-score {
+  font-size: clamp(24px, 6.5vw, 28px);
+  font-family: Mulish Extrabold;
+  text-align: center;
+  border-radius: 4px;
+  min-width: 50px;
+}
+.mobile-map-popup-hoursaddress {
+  display: flex;
+  flex-direction: column;
+  padding-left: 5%;
+  padding-right: 5%;
+  /* padding-top: 6%; */
+  font-size: clamp(13px, 3.4vw, 18px);
+}
+.mobile-map-popup-hours {
+  display: flex;
+  flex-direction: row;
+}
+.mobile-map-popup-hours-numbers {
+  flex: 7.75;
+  font-family: Mulish ExtraBold;
+}
+.mobile-map-popup-hours-status {
+  flex: 2.25;
+  text-align: right;
+  padding-right: 0.5%;
+}
+.mobile-map-popup-address {
+  font-family: Mulish Extrabold;
+  font-size: clamp(13px, 3.4vw, 18px);
+  margin-bottom: 5px;
+}
+.mobile-map-popup-pagedirections {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-bottom: 6%;
+  /* padding-top: 4%; */
+}
+.mobile-map-popup-pagedirections-page {
+  flex: 9;
+  display: flex;
+  /* justify-content: end; */
+  align-items: center;
+  text-align: center;
+}
+.mobile-map-popup-page-directions-page-button {
+  background-color: black;
+  border: 3px solid black;
+  border-radius: 4px;
+  font-family: Mulish ExtraBold;
+  font-size: clamp(10px, 3.6vw, 18px);
+  color: white;
+  width: 100%;
+  min-height: 40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 15px;
+}
+.mobile-map-popup-page-directions-page-button-icon {
+  margin-left: 0.4rem;
+  margin-top: 0.1rem;
+  height: clamp(0.5rem, 4vw, 1.5rem);
+  width: clamp(0.5rem, 5vw, 1.5rem);
+}
+.mobile-map-popup-page-directions-page-button-icon path {
+  fill: white;
+}
+.mobile-map-popup-pagedirections-directions {
+  flex: 1;
+  display: flex;
+}
+.mobile-map-popup-pagedirections-directions-button {
+  min-height: 40px;
+  min-width: 80%;
+  aspect-ratio: 1 / 1;
+  border: 3px solid #3AAB59;
+  /* background-color: #3AAB59; */
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mobile-map-popup-pagedirections-directions-logo {
+  width: 4vw;
+}
+
+/* ListMobile.js */
+#mobile-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+#mobile-list-filters {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  height: 4vh;
+  border-bottom: 3px solid black;
+  scrollbar-width: none;
+  position: sticky;
+  height: 5%;
+}
+#mobile-list-cards {
+  overflow-y: auto;
+  height: 95%;
+}
+#mobile-list-cards > :first-child {
+  border-top: none;
+}
+
+/* CardMobile.js */
+.mobile-card {
+  padding-top: clamp(0.3rem, 1.8vw, 0.7rem);
+  border-top: 2px solid black;
+  font-family: Mulish Bold;
+}
+.mobile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  cursor: pointer;
+  padding-top: 0.5vw;
+  padding-bottom: 2.5vw;
+  transition: background-color 0.3s ease
+}
+.mobile-card-header-nameneighborhood {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 1.5vw;
+  padding-bottom: 1.5vw;
+  gap: 1vw;
+  padding-left: 15px;
+}
+.mobile-card-new {
+  font-size: clamp(8px, 2.2vw, 11px);
+  margin-bottom: 3px;
+  margin-top: 2px;
+}
+.mobile-card-new-tag {
+  border-radius: 4px;
+  padding: 0.2rem 0.2rem;
+  font-weight: bold;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.mobile-card-name {
+  font-family: Mulish Extrabold;
+  font-size: clamp(18px, 5vw, 20px);
+}
+.mobile-card-name-style {
+  width: 100%;
+}
+.mobile-card-subname {
+  font-size: clamp(8px, 2.6vw, 13px);
+  margin-top: 0;
+  margin-bottom: 2px;
+}
+.mobile-card-neighborhood-style {
+  border-radius: 4px;
+  font-size: clamp(8px, 2.6vw, 13px);
+  padding: 0.25% 2%;
+}
+.mobile-card-header-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(24px, 6.5vw, 28px);
+  border-radius: 4px;
+  text-align: center;
+  width: 20%;
+  padding-right: 10px;
+  transition: border 0.2s ease, color 0.2s ease;
+}
+.mobile-card-score {
+  border-radius: 4px;
+  font-family: Mulish Extrabold;
+  min-width: 50px;
+}
+.mobile-card-minimize {
+  width: 30px;
+  height: 30px;
+  fill: white;
+  padding-top: 1.5vw;
+}
+.mobile-card-divider {
+  background-color: white;
+  border: none;                /* remove default hr border */
+  border-top: 3px solid white;
+  border-radius: 4px;
+  width: 91vw;
+  margin: 0.5rem auto;
+  margin-top: 0.25rem;
+}
+.mobile-card-body {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 1s ease, opacity 0.8s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.mobile-card-body.expanded {
+  max-height: 70vh;
+  opacity: 1;
+}
+.mobile-card-image {
+  width: 90vw;
+  height: 22vh;
+  object-fit: cover;
+  border: 3px solid white;
+  border-radius: 4px;
+  margin-top: 2.5vw;
+  padding-left: 0;
+  margin-bottom: 4vw;
+}
+.mobile-card-info {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 5%;
+  padding-right: 5%;
+  /* padding-top: 6%; */
+  font-size: clamp(13px, 3.4vw, 18px);
+  width: 91vw;
+  margin-bottom: 4vw;
+  /* background-color: white; */
+}
+.mobile-card-hoursaddress {
+  flex: 8;
+  font-family: Mulish ExtraBold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+.mobile-card-hours {
+  margin-bottom: 1vw;
+}
+.mobile-card-body-score {
+  flex: 1;
+  font-size: clamp(24px, 6.5vw, 28px);
+  border-radius: 4px;
+  border: 3px solid white;
+  text-align: center;
+  /* width: 20%; */
+}
+.mobile-card-body-score-number {
+  border-radius: 4px;
+  font-family: Mulish Extrabold;
+  min-width: 50px;
+}
+.mobile-card-hours-status {
+  flex: 2;
+  text-align: right;
+}
+.mobile-card-pagedirections {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 91vw;
+  margin-bottom: 4vw;
+}
+.mobile-card-page {
+  flex: 9;
+  border: 3px solid black;
+  background-color: white;
+  color: black;
+  min-height: 40px;
+  border-radius: 4px;
+  font-family: Mulish ExtraBold;
+  font-size: clamp(10px, 3.6vw, 18px);
+  width: 100%;
+  min-height: 40px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 15px;
+}
+.mobile-card-page-icon {
+  margin-left: 0.4rem;
+  margin-top: 0.1rem;
+  height: clamp(0.5rem, 4vw, 1.5rem);
+  width: clamp(0.5rem, 5vw, 1.5rem);
+}
+.mobile-card-directions {
+  flex: 1;
+  display: flex;
+}
+.mobile-card-directions-button {
+  min-height: 40px;
+  min-width: 80%;
+  aspect-ratio: 1 / 1;
+  border: 3px solid #3AAB59;
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mobile-card-directions-button-logo {
+  width: 4vw;
+}
+
+

@@ -3,9 +3,11 @@ import './Mobile.css';
 import * as React from 'react';
 import { useRef, useEffect, useState } from 'react';
 import Map from './Map';
+import MapMobile from './MapMobile';
 import NeighborhoodPanel from './NeighborhoodPanel';
 import ResultsPanel from './ResultsPanel';
 import LogoBlack from "./Logos/newlogoblack.png";
+import ListMobile from './ListMobile';
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -22,6 +24,8 @@ export default function Home() {
   const [selectedCafe, setSelectedCafe] = useState(null);
   const [searchValue, setSearchValue] = useState('Search By Name');
   const [scoreBarHover, setScoreBarHover] = useState(true);
+
+  const [mobileState, setMobileState] = useState('map');
 
   const rightRef = useRef();
 
@@ -87,9 +91,15 @@ export default function Home() {
       if (element === cafe) {
         if (!element.is_selected) {
           element.is_selected = true;
-          setLatitude(cafe.latitude);
           setLongitude(cafe.longitude);
-          setZoom(14);
+          if (windowWidth > 760) {
+            setLatitude(cafe.latitude);
+            setZoom(14);
+          }
+          else {
+            setLatitude(cafe.latitude - 0.01);
+            setZoom(13);
+          }
           setSelectedCafe(cafe);
         }
         else {
@@ -192,6 +202,10 @@ export default function Home() {
     handleAddFilter();
   }, [filterFunction, neighborhoodFunction, searchValue])
 
+  useEffect(() => {
+    console.log("mobileState changed:", mobileState);
+  }, [mobileState]);
+
   return (
     <>
       {windowWidth > 760 ?
@@ -260,13 +274,82 @@ export default function Home() {
       : 
       <div id="mobile-content">
         <div id="mobile-nav">
-          <div >
+          <div>
             <img id="mobile-nav-logo" src={LogoBlack}></img>
           </div>
+          <button id="mobile-nav-about">About</button>
         </div>
+        <div id="mobile-toggle" style={mobileState === "page" ? {display: 'none'} : {display: 'flex'}}>
+          <button
+            className={`mobile-toggle-btn ${mobileState === "map" ? "active" : ""}`}
+            onClick={() => setMobileState("map")}
+          >
+            Map View
+          </button>
+          <button
+            className={`mobile-toggle-btn ${mobileState === "list" ? "active" : ""}`}
+            onClick={() => setMobileState("list")}
+          >
+            List View
+          </button>
+          <div className={`mobile-toggle-slider ${mobileState}`}></div>
+        </div>
+        <MapMobile
+            data={data}
+            setData={setData}
+            displayRight={displayRight}
+            setDisplayRight={setDisplayRight}
+            latitude={latitude}
+            setLatitude={setLatitude}
+            longitude={longitude}
+            setLongitude={setLongitude}
+            zoom={zoom}
+            setZoom={setZoom}
+            changeZoom={changeZoom}
+            selectCafe={handleSelectCafe}
+            selectedCafe={selectedCafe}
+            setSelectedCafe={setSelectedCafe}
+            neighborhoodFunction={neighborhoodFunction}
+            filterFunction={filterFunction}
+            allFilters={allFilters}
+            sort={sort}
+            setSort={setSort}
+            showSortPanel={showSortPanel}
+            setShowSortPanel={setShowSortPanel}
+            mobileState={mobileState}
+            setMobileState={setMobileState}
+        />
+        <div style={{height: '84%'}}>
+          <ListMobile 
+          data={data}
+          setData={setData}
+          selectCafe={handleSelectCafe}
+          setSort={setSort}
+          setShowSortPanel={setShowSortPanel}
+          pickSortingOption={handlePickSortingOption}
+          addFilter={handleAddFilter}
+          rightRef={rightRef}
+          allFilters={allFilters}
+          setAllFilters={setAllFilters}
+          filterFunction={filterFunction}
+          setFilterFunction={setFilterFunction}
+          scrollToTop={scrollToTop}
+          setScrollToTop={setScrollToTop}
+          hoveredCafe={hoveredCafe}
+          setHoveredCafe={setHoveredCafe}
+          searchValue={searchValue}
+          setSearchValue={setSearchValue}
+          selectedCafe={selectedCafe}
+          scoreBarHover={scoreBarHover}
+          setScoreBarHover={setScoreBarHover}
+          mobileState={mobileState}
+          setMobileState={setMobileState}
+        />
+        </div>
+        <>
+        </>
       </div>
     }
     </>
   );
 }
-

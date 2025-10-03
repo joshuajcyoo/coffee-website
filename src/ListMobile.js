@@ -4,6 +4,7 @@ import Select from 'react-select';
 import FiltersModal from './FiltersModal';
 import Card from './Card';
 import TimeInput from './TimeInput';
+import CardMobile from './CardMobile';
 import {ReactComponent as SortIcon} from './Logos/sort-sort.svg'
 import {ReactComponent as SearchIcon} from './Logos/sort-search.svg'
 import {ReactComponent as ScoreIcon} from './Logos/sort-score.svg'
@@ -21,7 +22,7 @@ import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
 import {ReactComponent as ScrollUpIcon} from './Logos/scroll-top.svg'
 
-export default function ResultsPanel({data, setData, selectCafe, addFilter, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, rightRef, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue, selectedCafe, scoreBarHover, setScoreBarHover}) {
+export default function ListMobile({data, setData, selectCafe, addFilter, rightRef, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue, selectedCafe, scoreBarHover, setScoreBarHover, mobileState, setMobileState}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     const cardRefs = useRef({});
@@ -49,7 +50,6 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
         else if (ampm === 'AM' && hour === 12) {adjustedHour = 0;}
 
         const timeAsNumber = adjustedHour * 100 + minute;
-        console.log(timeAsNumber);
         return timeAsNumber;
     };
 
@@ -242,9 +242,6 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
         }
     }, [filters, timeData, timeState]);
 
-    const [isHovered, setIsHovered] = useState(false);
-    const [isPressed, setIsPressed] = useState(false);
-
     const sortOptions = ["overall", "ambiance", "workability", "drinks"];
 
     const sortIcons = [<ScoreIcon className='sort-icon' id='sort-icon-score'/>, <AmbianceIcon className='sort-icon' />, <WorkabilityIcon className='sort-icon' id='sort-icon-workability'/>, <DrinksIcon className='sort-icon' id='sort-icon-drinks'/>];
@@ -347,6 +344,12 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
 
     useEffect(() => {
         const selectedCard = data.find((element) => element.is_selected);
+        selectedCard && console.log("selected: " + selectedCard.id);
+        (selectedCard && cardRefs.current[selectedCard.id].current) && console.log("bleh" + cardRefs.current[selectedCard.id].current);
+        // const containerHeight = rightRef.current.offsetHeight; // includes padding + border
+        // console.log("Container height:", containerHeight);
+        const windowHeight = window.innerHeight;
+        console.log("Window height: " + windowHeight);
         if (scrollToTop) {
             if (rightRef.current) {
                 rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -372,15 +375,26 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
             else {
                 const cardElement = cardRefs.current[selectedCard.id].current;
                 const handleTransitionEnd = () => {
+                  if (mobileState === "map") {
                     setTimeout(() => {
-                        cardElement.scrollIntoView({
+                        rightRef.current.scrollTo({
                             behavior: 'smooth',
-                            block: 'start',
+                            top: cardElement.offsetTop - (windowHeight * 0.3)
                         });
-                    }, 175);
+                    }, 550);
                     cardElement.removeEventListener('transitionend', handleTransitionEnd);
+                  }
+                  else if (mobileState === "list") {
+                    setTimeout(() => {
+                        rightRef.current.scrollTo({
+                            behavior: 'smooth',
+                            top: cardElement.offsetTop - (windowHeight * 0.3)
+                        });
+                    }, 550);
+                    cardElement.removeEventListener('transitionend', handleTransitionEnd);
+                  }
                 };
-                
+              
                 cardElement.addEventListener('transitionend', handleTransitionEnd);
                 setExpandedCard(selectedCard.id);
             }
@@ -389,6 +403,40 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
             setExpandedCard(null);
         }        
     }, [data]);
+
+    useEffect(() => {
+      const selectedCard = data.find((element) => element.is_selected);
+      const windowHeight = window.innerHeight;
+      if (selectedCard && cardRefs.current[selectedCard.id]) {
+            if (selectedCard.id === 0) {
+                const cardElement = cardRefs.current[selectedCard.id].current;
+                const handleTransitionEnd = () => {
+                    setTimeout(() => {
+                        if (rightRef.current) {
+                            rightRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                        setScrollToTop(false);
+                    }, 175);
+                    cardElement.removeEventListener('transitionend', handleTransitionEnd);
+                };
+                
+                cardElement.addEventListener('transitionend', handleTransitionEnd);
+                setExpandedCard(selectedCard.id);
+            }
+            else {
+              const cardElement = cardRefs.current[selectedCard.id].current;
+              setTimeout(() => {
+                rightRef.current.scrollTo({
+                  behavior: 'smooth',
+                  top: cardElement.offsetTop - (windowHeight * .25)
+              });
+              }, 175);
+            }
+        }
+        else {
+            setExpandedCard(null);
+        }   
+    }, [mobileState])
 
     const handleCardClick = (cardData) => {
         setExpandedCard((id) => (id === cardData.id ? null : cardData.id));
@@ -422,154 +470,55 @@ export default function ResultsPanel({data, setData, selectCafe, addFilter, setS
     }, []);
 
     return (
-        <div id="results-panel">
-            <div id="sorting-options-container">
-                <div className='filter-search-container'>
-                    <div className={`filter-search${isSearchFocused ? '-focused' : (isSearchSet ? '-set' : '')}`}>
-                        <SearchIcon className='filter-search-icon'/>
-                        <input type="text" className='filter-search-input' value={searchValue} onFocus={handleFocus} onBlur={handleBlur} onChange={handleSearchChange}></input>
-                    </div>
-                </div>
-
-                <div id="sorting-options">
-                    <div id="sorting-buttons">
-                        <button id={`filters-button${filtersApplied ? "-applied" : ""}`} onClick={toggleFiltersModal}>
-                            <div className='sort-filters-button-container' id="filters-button-container">
-                                <FilterIcon id="filter-filter-icon" className='sort-icon' />
-                                <span id="filters-button-title">Filters</span>
-                            </div>
-                        </button>
-                        <button id="sort-button" onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)} onMouseDown={() => setIsPressed(true)} onMouseUp={() => setIsPressed(false)} onClick={handleSortClick}>
-                            <div className='sort-filters-button-container' style={{transform: isPressed ? 'scale(0.9)' : 'scale(1)'}}>
-                                {isHovered ? sortIcons[currentSort] : <SortIcon className='sort-icon' id='sort-standard-icon'/>}
-                                <span id="sort-button-title">{isHovered ? capitalize(sortOptions[currentSort]) : "Sort By"}</span>
-                                {isHovered ? sortDescriptions[currentSort] : <span id="sort-info-icon-hidden">i</span>}
-                            </div>
-                        </button>
-                    </div>
-                
-                    <FiltersModal show={showFiltersModal} handleClose={toggleFiltersModal}>
-                        <div id="filters-title">All Filters</div>
-                        <div className="filter-row">
-                            <div id="filter-has-outlets" className={`filter-item bubble ${filters.has_outlets ? 'selected' : ''} outlet`} onClick={() => toggleFilter('has_outlets')}>
-                                <OutletIcon id='filter-outlet-icon' className='filter-icon' />
-                                <span className='filter-checkbox'>Outlets</span>
-                                <span className="info-icon">
-                                    i
-                                    <span className="info-tooltip">Coffee shops with outlets for charging.</span>
-                                </span>
-                            </div>
-                            <div id="filter-study-work" className={`filter-item bubble ${filters.study_work ? 'selected' : ''} study`} onClick={() => toggleFilter('study_work')}>
-                                <StudyIcon id='filter-study-icon' className='filter-icon' />
-                                <span className='filter-checkbox'>Study / Work</span>
-                                <span className="info-icon">
-                                    i
-                                    <span className="info-tooltip">Coffee shops that are good for productivity.</span>
-                                </span>
-                            </div>
-                        </div>
-                        <div className="filter-row">
-                            <div id="filter-outdoor-area" className={`filter-item bubble ${filters.outdoor_area ? 'selected' : ''} outdoor`} onClick={() => toggleFilter('outdoor_area')}>
-                                <OutdoorIcon id='filter-outdoor-icon' className='filter-icon' />
-                                <span className='filter-checkbox'>Outdoor Area</span>
-                                <span className="info-icon">
-                                    i
-                                    <span className="info-tooltip">Coffee shops with a significant amount of curated outdoor space.</span>
-                                </span>
-                            </div>
-                            <div id="filter-is-aesthetic" className={`filter-item bubble ${filters.is_aesthetic ? 'selected' : ''} aesthetic`} onClick={() => toggleFilter('is_aesthetic')}>
-                                <AestheticIcon id='filter-aesthetic-icon' className='filter-icon' />
-                                <span className='filter-checkbox'>Aesthetic</span>
-                                <span className="info-icon">
-                                    i
-                                    <span className="info-tooltip">Coffee shops that are visually and aesthetically pleasing.</span>
-                                </span>
-                            </div>
-                        </div>
-                        <div className="filter-row">
-                            <div id="filter-has-food" className={`filter-item bubble ${filters.has_food ? 'selected' : ''} food`} onClick={() => toggleFilter('has_food')}>
-                                <FoodIcon id='filter-food-icon' className='filter-icon' />
-                                <span className='filter-checkbox'>Food Menu</span>
-                                <span className="info-icon">
-                                    i
-                                    <span className="info-tooltip">Coffee shops that offer sufficient food menus (more than traditional pastries).</span>
-                                </span>
-                            </div>
-                            <div id="filter-hidden_gem" className={`filter-item bubble ${filters.hidden_gem ? 'selected' : ''}`} onClick={() => toggleFilter('hidden_gem')}>
-                                <GemIcon id='filter-gem-icon' className='filter-icon' />
-                                <span className='filter-checkbox'>Hidden Gem</span>
-                                <span className="info-icon">
-                                    i
-                                    <span className="info-tooltip">Coffee shops that aren't well-known and less likely to be busy.</span>
-                                </span>
-                            </div>
-                        </div>
-                        <div id={`filter-row-time${timeState ? '-active' : ''}`} className="filter-row">
-                            <div className={`filter-item bubble ${timeState ? 'selected' : ''} time`} onClick={toggleTimeState}>
-                                <TimeIcon id='filter-time-icon' className='filter-icon' />
-                                <span className='filter-checkbox'>Open At</span>
-                                <span className="info-icon">
-                                    i
-                                    <span className="info-tooltip">Coffee shops that are open at this time.</span>
-                                </span>
-                            </div>
-                            <div id="time-input-container">
-                                <TimeInput 
-                                    hour={timeData.hour >= 12 ? timeData.hour - 12: timeData.hour}
-                                    minute={timeData.minute}
-                                    ampm={timeData.ampm}
-                                    day={timeData.day}
-                                    changeTime={handleTimeChange} 
-                                    isActive={timeState} 
-                                    setIsActive={toggleTimeState}
-                                />
-                            </div>
-                            {timeState ? 
-                            <div onClick={toggleTimeState} id="time-input-up">
-                                <TimeUpIcon id="time-input-up-icon"/>
-                            </div> 
-                            : <></>}
-                        </div>
-                    </FiltersModal>
-                </div>
-            </div>
-
-            <div id="data-cards" >
-                {data.filter(element => {
-                        if (element.visible) {
-                            return element;
-                        }
-                    })
-                    .map((element) => {
-                        cardRefs.current[element.id] = React.createRef();
-                        return (
-                            <Card 
-                                key={element.id}
-                                ref={cardRefs.current[element.id]}
-                                cardData={element} 
-                                selectCafe={selectCafe} 
-                                isExpanded={element.id === expandedCard} 
-                                handleCardClick={handleCardClick}
-                                addFilter={addFilter}
-                                hoveredCafe={hoveredCafe}
-                                setHoveredCafe={setHoveredCafe}
-                                scoreBarHover={scoreBarHover}
-                                setScoreBarHover={setScoreBarHover}
-                            />
-                        )
-                    })
-                }
-            </div>
-
-            {!expandedCard && scrollTop >= 5 &&
-                <div id='data-cards-scroll-button-container'>
-                    <button id='data-cards-scroll' onClick={() => rightRef.current.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        <ScrollUpIcon id='data-cards-scroll-icon'/>
-                    </button>
-                </div>
-            }
-            
+      <div id="mobile-list" style={mobileState === 'list' ? {display: 'block'} : {display: 'none'}}>
+        <div id="mobile-list-filters">
+          <div id="mobile-list-filter">Filter 1</div>
+          <div id="mobile-list-filter">Filter 2</div>
+          <div id="mobile-list-filter">Filter 3</div>
+          <div id="mobile-list-filter">Filter 4</div>
+          <div id="mobile-list-filter">Filter 5</div>
+          <div id="mobile-list-filter">Filter 6</div>
+          <div id="mobile-list-filter">Filter 7</div>
+          <div id="mobile-list-filter">Filter 8</div>
+          <div id="mobile-list-filter">Filter 9</div>
         </div>
+        <div id="mobile-list-cards" ref={rightRef}>
+          {/* {selectedCafe && selectedCafe.name} */}
+          {data.filter(element => {
+            if (element.visible) {
+              return element;
+            }
+          })
+          .map((element) => {
+            cardRefs.current[element.id] = React.createRef();
+            return (
+              <CardMobile 
+                key={element.id}
+                ref={cardRefs.current[element.id]}
+                cardData={element} 
+                selectCafe={selectCafe} 
+                isExpanded={element.id === expandedCard} 
+                handleCardClick={handleCardClick}
+                addFilter={addFilter}
+                hoveredCafe={hoveredCafe}
+                setHoveredCafe={setHoveredCafe}
+                scoreBarHover={scoreBarHover}
+                setScoreBarHover={setScoreBarHover}
+                selectedCafe={selectedCafe}
+              />
+            )
+          })
+          }
+        </div>
+
+          {/* {!expandedCard && scrollTop >= 5 &&
+              <div id='data-cards-scroll-button-container'>
+                  <button id='data-cards-scroll' onClick={() => rightRef.current.scrollTo({ top: 0, behavior: 'smooth' })}>
+                      <ScrollUpIcon id='data-cards-scroll-icon'/>
+                  </button>
+              </div>
+          } */}
+          
+      </div>
     )
 }
