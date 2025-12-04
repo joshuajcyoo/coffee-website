@@ -19,7 +19,7 @@
 #mobile-nav {
   height: 10%;
   width: 100%;
-  border-bottom: 3px solid black;
+  border-bottom: 3px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -386,7 +386,7 @@
 }
 .mobile-card-divider {
   background-color: white;
-  border: none;                /* remove default hr border */
+  border: none;
   border-top: 3px solid white;
   border-radius: 4px;
   width: 91vw;
@@ -397,7 +397,7 @@
   max-height: 0;
   overflow: hidden;
   opacity: 0;
-  transition: max-height 1s ease, opacity 0.8s ease;
+  transition: max-height 0.6s ease, opacity 0.6s ease;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -437,7 +437,7 @@
   align-items: start;
 }
 .mobile-card-hours {
-  margin-bottom: 1vw;
+  margin-top: 5px;
 }
 .mobile-card-body-score {
   flex: 1;
@@ -505,6 +505,149 @@
 }
 .mobile-card-directions-button-logo {
   width: 4vw;
+}
+
+
+/* CafeMobile.js */
+.mobile-cafe {
+  position: absolute;
+  background: white;
+  height: 100%;
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.mobile-cafe.show {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  padding-left: 2px;
+}
+.mobile-cafe-back {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 8px;
+  cursor: pointer;
+  height: 20px;
+}
+.mobile-cafe-back-arrow {
+  width: 20px;
+  padding-top: 1px;
+}
+.mobile-cafe-back-text {
+  font-family: Mulish ExtraBold;
+  font-size: clamp(13px, 3.4vw, 18px);
+  margin-left: 3px;
+  text-align: center;
+}
+.mobile-cafe-names {
+  font-family: Mulish Extrabold;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+}
+.mobile-cafe-name {
+  font-size: clamp(22px, 6.5vw, 30px);
+}
+.mobile-cafe-subname {
+  font-size: clamp(10px, 3vw, 20px);
+  padding-top: 3px;
+}
+.mobile-cafe-neighborhood {
+  font-size: clamp(8px, 2.7vw, 18px);
+  text-align: left;
+  margin-top: 10px;
+}
+.mobile-cafe-neighborhood-style {
+  border-radius: 4px;
+  padding: 1px 8px;
+}
+
+.photo-gallery {
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  justify-content: start;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 4px;
+  margin-left: 15px;
+  margin-right: -15px;
+}
+
+.photo-gallery-inner {
+  display: flex;
+}
+
+.photo-gallery-inner img {
+  flex: 0 0 85%;
+  scroll-snap-align: center;
+  object-fit: cover;
+  border-radius: 4px;
+  height: 200px;
+  width: 25vw;
+  margin-right: 15px;
+  margin-top: 20px;
+  transition: transform 0.3s ease;
+}
+
+.photo-gallery-inner img:active {
+  transform: scale(0.98);
+}
+
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+  width: 100%;
+  margin: 0;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 85%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: 2px solid white;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  line-height: 20px;
+  cursor: pointer;
+  padding: 6px 10px;
+  transition: opacity 0.2s ease;
+}
+
+.lightbox-close:hover {
+  opacity: 0.8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 

@@ -22,7 +22,7 @@ import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
 import {ReactComponent as TimeUpIcon} from './Logos/filter-time-up.svg'
 import {ReactComponent as ScrollUpIcon} from './Logos/scroll-top.svg'
 
-export default function ListMobile({data, setData, selectCafe, addFilter, rightRef, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue, selectedCafe, scoreBarHover, setScoreBarHover, mobileState, setMobileState}) {
+export default function ListMobile({data, setData, selectCafe, addFilter, rightRef, setSort, setShowSortPanel, allFilters, setAllFilters, setFilterFunction, pickSortingOption, scrollToTop, setScrollToTop, hoveredCafe, setHoveredCafe, searchValue, setSearchValue, selectedCafe, scoreBarHover, setScoreBarHover, mobileState, setMobileState, exitMobilePage, setExitMobilePage}) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     const cardRefs = useRef({});
@@ -381,7 +381,7 @@ export default function ListMobile({data, setData, selectCafe, addFilter, rightR
                             behavior: 'smooth',
                             top: cardElement.offsetTop - (windowHeight * 0.3)
                         });
-                    }, 550);
+                    }, 250);
                     cardElement.removeEventListener('transitionend', handleTransitionEnd);
                   }
                   else if (mobileState === "list") {
@@ -390,7 +390,7 @@ export default function ListMobile({data, setData, selectCafe, addFilter, rightR
                             behavior: 'smooth',
                             top: cardElement.offsetTop - (windowHeight * 0.3)
                         });
-                    }, 550);
+                    }, 250);
                     cardElement.removeEventListener('transitionend', handleTransitionEnd);
                   }
                 };
@@ -505,6 +505,10 @@ export default function ListMobile({data, setData, selectCafe, addFilter, rightR
                 scoreBarHover={scoreBarHover}
                 setScoreBarHover={setScoreBarHover}
                 selectedCafe={selectedCafe}
+                mobileState={mobileState}
+                setMobileState={setMobileState}
+                exitMobilePage={exitMobilePage}
+                setExitMobilePage={setExitMobilePage}
               />
             )
           })

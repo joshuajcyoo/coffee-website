@@ -13,7 +13,7 @@ import {ReactComponent as DrinksIcon} from './Logos/sort-drinks2.svg'
 import {ReactComponent as ScrollUpIcon} from './Logos/scroll-top.svg'
 import { format } from 'maplibre-gl';
 
-const CardMobile = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe, scoreBarHover, setScoreBarHover, selectedCafe}, ref) => {
+const CardMobile = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, setHoveredCafe, scoreBarHover, setScoreBarHover, selectedCafe, mobileState, setMobileState, exitMobilePage, setExitMobilePage}, ref) => {
   let formattedHours = [];
   const [cafePopupOpen, setCafePopupOpen] = useState("")
   const [cafePopupClose, setCafePopupClose] = useState("")
@@ -117,6 +117,11 @@ const CardMobile = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCa
     }
   }, [selectedCafe])
 
+  const openCafePage = () => {
+    setExitMobilePage(mobileState);
+    setMobileState("page");
+  }
+
     return (
         <div className="mobile-card" style={selectedCafe && selectedCafe.id === cardData.id ? {backgroundColor: selectedCafe.color_code, color: 'white'}: {backgroundColor: 'white', color: cardData.color_code}} ref={ref}>
             <div className="mobile-card-header" onClick={() => handleCardClick(cardData)}>
@@ -161,22 +166,21 @@ const CardMobile = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCa
 
               <div className="mobile-card-info">
                 <div className="mobile-card-hoursaddress">
-                  <div className="mobile-card-hours">
-                    Hours Today: <span style={{fontFamily: 'Mulish SemiBold'}}>{cafePopupOpen === "CLOSED" ? "Closed" : `${cafePopupOpen} – ${cafePopupClose}`}</span>
-                  </div>
                   <div className="mobile-card-address">
                     Address: <span style={{fontFamily: 'Mulish SemiBold'}}>{cardData.address}</span>
+                  </div>
+                  <div className="mobile-card-hours">
+                    Hours Today: <span style={{fontFamily: 'Mulish SemiBold'}}>{cafePopupOpen === "CLOSED" ? "Closed" : `${cafePopupOpen} – ${cafePopupClose}`}</span>
                   </div>
                 </div>
                 
                 <div className="mobile-card-body-score">
                   <div className="mobile-card-body-score-number">{cardData.score}</div>
                 </div>
-                {/* <div className="mobile-card-hours-status" style={inHours(cardData, number, day) ? {color: "#058205"} : {color: "#FF0000"}}>{inHours(cardData, number, day) ? "Open" : "Closed"}</div> */}
               </div>
 
               <div className="mobile-card-pagedirections">
-                <div className="mobile-card-page">
+                <div className="mobile-card-page" onClick={openCafePage}>
                   <span>Open Full Page</span>
                   <OpenCardIcon className="mobile-card-page-icon" />
                 </div>

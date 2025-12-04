@@ -8,6 +8,7 @@ import NeighborhoodPanel from './NeighborhoodPanel';
 import ResultsPanel from './ResultsPanel';
 import LogoBlack from "./Logos/newlogoblack.png";
 import ListMobile from './ListMobile';
+import CafeMobile from './CafeMobile';
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -26,6 +27,7 @@ export default function Home() {
   const [scoreBarHover, setScoreBarHover] = useState(true);
 
   const [mobileState, setMobileState] = useState('map');
+  const [exitMobilePage, setExitMobilePage] = useState('');
 
   const rightRef = useRef();
 
@@ -97,7 +99,7 @@ export default function Home() {
             setZoom(14);
           }
           else {
-            setLatitude(cafe.latitude - 0.01);
+            setLatitude(cafe.latitude - 0.015);
             setZoom(13);
           }
           setSelectedCafe(cafe);
@@ -273,7 +275,7 @@ export default function Home() {
       </div>
       : 
       <div id="mobile-content">
-        <div id="mobile-nav">
+        <div id="mobile-nav" style={{borderBottom: mobileState === "page" ? "3px solid " + selectedCafe.color_code : "3px solid black"}}>
           <div>
             <img id="mobile-nav-logo" src={LogoBlack}></img>
           </div>
@@ -318,8 +320,10 @@ export default function Home() {
             setShowSortPanel={setShowSortPanel}
             mobileState={mobileState}
             setMobileState={setMobileState}
+            exitMobilePage={exitMobilePage}
+            setExitMobilePage={setExitMobilePage}
         />
-        <div style={{height: '84%'}}>
+        <div style={mobileState === "page" ? {height: '0%'} : {height: '84%'}}>
           <ListMobile 
           data={data}
           setData={setData}
@@ -344,10 +348,17 @@ export default function Home() {
           setScoreBarHover={setScoreBarHover}
           mobileState={mobileState}
           setMobileState={setMobileState}
+          exitMobilePage={exitMobilePage}
+          setExitMobilePage={setExitMobilePage}
         />
         </div>
-        <>
-        </>
+        <CafeMobile
+        mobileState={mobileState}
+        setMobileState={setMobileState}
+        exitMobilePage={exitMobilePage}
+        setExitMobilePage={setExitMobilePage}
+        selectedCafe={selectedCafe}
+        />
       </div>
     }
     </>

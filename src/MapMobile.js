@@ -27,7 +27,7 @@ import {ReactComponent as ArrowInfo2} from './Logos/arrow-info3.svg'
 import {ReactComponent as OpenCardIcon} from './Logos/open-card.svg'
 import GoogleMaps from "./Logos/googlemapslogo.png";
 
-export default function MapMobile({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, selectedCafe, setSelectedCafe, changeZoom, neighborhoodFunction, allFilters, sort, setSort, showSortPanel, setShowSortPanel, mobileState, setMobileState}) {
+export default function MapMobile({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, selectedCafe, setSelectedCafe, changeZoom, neighborhoodFunction, allFilters, sort, setSort, showSortPanel, setShowSortPanel, mobileState, setMobileState, exitMobilePage, setExitMobilePage}) {
   const mapContainer = useRef(null);
   maptilersdk.config.apiKey = 'bFXUsq2lCBRLxW1UauI0';
   const [theMap, setTheMap] = useState(null);
@@ -379,7 +379,7 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
 
   useEffect(() => {
     if (selectedCafe) {
-      if (selectedCafe.name.length >= 19 && selectedCafe.name.length < 23) setTruncateName(true);
+      if (selectedCafe.name.length >= 19 && selectedCafe.name.length < 24) setTruncateName(true);
       else setTruncateName(false);
 
       if (popupState === 'off') {
@@ -415,11 +415,16 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
       }
     };
   }, [selectedCafe])
+
+  const openCafePage = () => {
+    setExitMobilePage(mobileState);
+    setMobileState("page");
+  }
   
   return (
     <div className="mobile-map-wrap" style={mobileState === 'map' ? {display: 'block'} : {display: 'none'}}>
       {selectedCafe && 
-        <div key={selectedCafe.id} ref={popupRef} className={`mobile-map-popup ${popupState === "off" ? "" : (popupState === "again" ? "again" : "first")}`} style={((truncateName || selectedCafe.name.length < 19) && selectedCafe.subname === '') ? {height: '28vh'} : {height: '33vh'}}>
+        <div key={selectedCafe.id} ref={popupRef} className={`mobile-map-popup ${popupState === "off" ? "" : (popupState === "again" ? "again" : "first")}`} style={((truncateName || selectedCafe.name.length < 19) && selectedCafe.subname === '') ? {height: '28vh', border: '3px solid ' + (selectedCafe && selectedCafe.color_code)} : {height: '33vh', border: '3px solid ' + (selectedCafe && selectedCafe.color_code)}}>
           <div className="mobile-map-popup-namescore">
             <div className="mobile-map-popup-namescore-left">
               <div className="mobile-map-popup-namescore-left-name" style={truncateName ? {fontSize: 'clamp(14px, 4.6vw, 18px)'} : {fontSize: 'clamp(18px, 5.2vw, 24px)'}}>
@@ -449,7 +454,7 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
           
           <div className="mobile-map-popup-pagedirections">
             <div className="mobile-map-popup-pagedirections-page">
-              <div className="mobile-map-popup-page-directions-page-button">
+              <div className="mobile-map-popup-page-directions-page-button" onClick={openCafePage}>
                 <span>Open Full Page</span>
                 <OpenCardIcon className="mobile-map-popup-page-directions-page-button-icon" />
               </div>
