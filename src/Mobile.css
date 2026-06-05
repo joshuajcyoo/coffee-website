@@ -10,6 +10,35 @@
 @font-face {font-family: Nexa Heavy; src: url(Fonts/Nexa-Heavy.ttf)}
 @font-face {font-family: Elmond; src: url(Fonts/Elmond.ttf)}
 
+#landscape-warning {
+  display: none;
+}
+@media screen and (orientation: landscape) {
+  /* Hide your main app */
+  #main-app-container {
+    display: none !important;
+  }
+  
+  /* Show the warning overlay */
+  #landscape-warning {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    z-index: 9999;
+    text-align: center;
+    padding: 20px;
+    font-family: 'Mulish Bold', sans-serif;
+  }
+}
+
 /* Home.js (Mobile) */
 #mobile-content {
   height: 100vh;
@@ -82,6 +111,11 @@
 .mobile-toggle-slider.list {
   transform: translateX(100%);
 }
+.maplibregl-ctrl-top-right,
+.maplibregl-ctrl-top-left {
+  margin-top: 4vh; 
+  margin-right: 1vw;
+}
 
 /* MapMobile.js */
 .mobile-map-wrap {
@@ -96,6 +130,20 @@
   width: 100%;
   height: 100%;
   border-bottom: 3px solid black;
+}
+
+#mobile-map-filters {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  height: 6vh;
+  scrollbar-width: none;
+  position: absolute;
+  top: 0%;
+  width: 98%; /* Constrains the div so overflow occurs */
+  z-index: 10;
+  padding-right: 10px;
 }
 
 @keyframes popup-bounce-up {
@@ -141,7 +189,7 @@
   position: absolute;
   width: 80%;
   min-height: 20%;
-  bottom: 30%;
+  bottom: 25%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9000;
@@ -241,12 +289,12 @@
   text-align: center;
 }
 .mobile-map-popup-page-directions-page-button {
-  background-color: black;
-  border: 3px solid black;
+  background-color: #FFFFFF;
+  border: 3px solid #000000;
   border-radius: 4px;
   font-family: Mulish ExtraBold;
   font-size: clamp(10px, 3.6vw, 18px);
-  color: white;
+  color: black;
   width: 100%;
   min-height: 40px;
   text-align: center;
@@ -263,7 +311,7 @@
   width: clamp(0.5rem, 5vw, 1.5rem);
 }
 .mobile-map-popup-page-directions-page-button-icon path {
-  fill: white;
+  fill: #000000;
 }
 .mobile-map-popup-pagedirections-directions {
   flex: 1;
@@ -295,18 +343,160 @@
   align-items: center;
   overflow-x: auto;
   white-space: nowrap;
-  height: 4vh;
+  height: 6vh;
   border-bottom: 3px solid black;
   scrollbar-width: none;
   position: sticky;
-  height: 5%;
+  padding-right: 10px;
 }
 #mobile-list-cards {
   overflow-y: auto;
-  height: 95%;
+  height: 100%;
 }
 #mobile-list-cards > :first-child {
   border-top: none;
+}
+#mobile-list-cards > :last-child {
+  border-bottom: 2px solid black;
+}
+.mobile-list-filter {
+  margin-left: 7px;
+}
+.mobile-list-filter.searchback {
+  flex: 2;
+}
+.mobile-list-filter.search {
+  flex: 8;
+}
+.mobile-filter-item.bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  /* color: #FFFFFF; */
+  cursor: pointer;
+  transition: border-color 0.3s ease, transform 0.2s ease, background-color 0.3s ease; 
+  font-size: 12px;
+  flex: 1;
+  font-family: Mulish Bold;
+  height: 2.5vh;
+}
+.mobile-filter-item.bubble:active {
+  transform: scale(0.9);
+}
+.mobile-filter-item.bubble.search:active {
+  transform: scale(1.0);
+}
+.mobile-filter-item.bubble.selected {
+  border-color: #000000;
+  background-color: #000000;
+  color: white;
+  transform: scale(1.0);
+}
+.mobile-filter-item.bubble.time, .mobile-filter-item.bubble.day {
+  position: relative; /* This is the most crucial part! */
+}
+.mobile-filter-item.bubble.time-apply {
+  width: 30px;
+}
+/* 2. Create the invisible overlay class */
+.hidden-native-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* Makes it completely invisible */
+  cursor: pointer; /* Ensures the tap registers correctly */
+  z-index: 10; /* Ensures it sits on top of your custom text */
+}
+.mobile-filter-icon {
+  margin-right: 1vw;
+  height: 15px;
+  width: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* fill: black; */
+}
+.mobile-filter-item.bubble.selected .mobile-filter-icon, .mobile-filter-item.bubble.selected #mobile-filter-food-icon path, .mobile-filter-item.bubble.selected #mobile-filter-gem-icon path, .mobile-filter-item.bubble.selected #mobile-filter-time-icon path {
+  fill: #FFFFFF;
+}
+#mobile-filter-time-icon {
+  height: 12px;
+  width: 12px;
+}
+#mobile-filter-outlet-icon {
+  margin-right: 0.9vw;
+}
+#mobile-filter-search-icon {
+  margin-right: 0px;
+  height: 12px;
+  width: 12px;
+}
+#mobile-filter-search-icon-searching {
+  margin-right: 3px;
+  height: 12px;
+  width: 12px;
+  fill: white;
+  stroke: white;
+}
+.mobile-filter-search-overall {
+  display: flex;
+  flex-direction: row;
+}
+.mobile-filter-search, .mobile-filter-search-set, .mobile-filter-search-focused {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  /* border: 2px solid black;
+  border-radius: 3px; */
+  /* width: clamp(5rem, 25.75vw, 30rem);
+  height: clamp(0.5rem, 2vw, 3rem); */
+}
+.mobile-filter-item.bubble.search, .mobile-filter-item.bubble.search.focused, .mobile-filter-item.bubble.search.set {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding: 3px 10px;
+  border: 2px solid black;
+  border-radius: 4px;
+  background-color: #000000;
+  color: #FFFFFF;
+  cursor: pointer;
+  /* transition: border-color 0.3s ease, transform 0.2s ease, background-color 0.3s ease;  */
+  flex: 1;
+  font-family: Mulish Bold;
+  height: 2.5vh;
+  /* width: 40vw; */
+}
+.mobile-filter-search, .mobile-filter-search:focus, .mobile-filter-search-input:focus, .mobile-filter-search-focused, .mobile-filter-search-set, .mobile-filter-search-set .mobile-filter-search-input {
+  background-color: #000000;
+  color: #FFFFFF;
+  cursor: pointer;
+  /* transition: color 0.3s ease, background-color 0.3s ease; */
+}
+.mobile-filter-search-input {
+  outline: none;
+  border: none;
+  font-family: Mulish Bold;
+  background-color: #000000;
+  color: #FFFFFF;
+  transform: scale(0.8); 
+  transform-origin: left center;
+  font-size: 16px;
+  /* width: clamp(5rem, 23vw, 25rem);
+  height: clamp(0.5rem, 1.3vw, 2.5rem); */
+  /* font-size: clamp(0.5rem, 1vw, 1.1rem); */
+  cursor: text;
+  width: 40vw;
+}
+.mobile-filter-search-focused .mobile-filter-search-input {
+  cursor: text;
+  /* transition: color 0.3s ease; */
 }
 
 /* CardMobile.js */
@@ -513,24 +703,47 @@
   position: absolute;
   background: white;
   height: 100%;
+  width: 100vw;
   transform: translateX(100%);
   opacity: 0;
   visibility: hidden;
   transition: transform 0.4s ease, opacity 0.4s ease;
+  overflow-y: scroll;
+  /* overflow-x: hidden; */
 }
 .mobile-cafe.show {
   transform: translateX(0);
   opacity: 1;
   visibility: visible;
   padding-left: 2px;
+  padding-right: 2px;
+  width: 95vw;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.mobile-cafe.lightbox {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  padding-left: 2px;
+  padding-right: 2px;
+  width: 100vw;
 }
 .mobile-cafe-back {
+}
+.mobile-cafe-back-sticky {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 8px;
+  padding-top: 8px;
   cursor: pointer;
   height: 20px;
+  padding-right: 5px;
+  /* padding-bottom: 4px; */
+  /* padding-bottom: 8px; */
+  /* border-right: 3px solid black; */
+  /* border-bottom: 3px solid black; */
+  /* border-radius: 4px; */
 }
 .mobile-cafe-back-arrow {
   width: 20px;
@@ -558,7 +771,7 @@
 .mobile-cafe-neighborhood {
   font-size: clamp(8px, 2.7vw, 18px);
   text-align: left;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 .mobile-cafe-neighborhood-style {
   border-radius: 4px;
@@ -566,7 +779,7 @@
 }
 
 .photo-gallery {
-  width: 100%;
+  width: 95%;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   display: flex;
@@ -589,7 +802,7 @@
   height: 200px;
   width: 25vw;
   margin-right: 15px;
-  margin-top: 20px;
+  margin-top: 25px;
   transition: transform 0.3s ease;
 }
 
@@ -598,56 +811,272 @@
 }
 
 .lightbox-overlay {
+  /* Fixes it to the entire screen */
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.9);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  
+  /* Background: Black (rgba(0,0,0,1)) with 80% opacity */
+  background-color: rgba(0, 0, 0, 0.8);
+  
+  /* Ensures it is on top of everything */
+  z-index: 1000;
+  
+  /* Center the content vertically and horizontally */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease;
-  width: 100%;
-  margin: 0;
 }
 
+/* 2. The Modal Content Container */
 .lightbox-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 85%;
+  /* Center the container relative to the viewport */
+  position: relative; 
+  
+  /* Set a maximum width so the image doesn't take up the entire screen */
+  max-width: 90%; 
+  max-height: 90%;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+/* 3. The Image */
+.lightbox-image {
+  /* Scale the image down to fit within the modal container */
+  display: block;
+  max-width: 100%; 
+  max-height: 80vh; /* Max height of the viewport */
+  object-fit: contain; /* Ensures the image is fully visible */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7); /* Optional: Adds a lift effect */
+}
+
+/* 4. The Close Button */
+.lightbox-close-btn {
+  /* --- 💡 THE FIX: Pin it directly to the overlay/viewport --- */
+  position: absolute; /* It will position relative to the fixed parent (.lightbox-overlay) */
+  top: 20px;         /* Distance from the top edge of the screen */
+  right: 30px;       /* Distance from the right edge of the screen */
+  
+  /* Styling for the 'x' */
+  color: white;
+  background: none;
+  border: none;
+  font-size: 40px; /* Made it a little bigger for easier tapping/clicking */
+  cursor: pointer;
+  padding: 30px 17px;
+  line-height: 1;
+  font-weight: 300;
+  text-shadow: 0 0 5px black;
+  
+  /* Ensure it's clickable above the image */
+  z-index: 1001; 
+}
+
+@media (max-width: 768px) {
+  /* Move close button closer on smaller screens */
+  .lightbox-close-btn {
+    top: -25px;
+    right: 0px;
+  }
+}
+
+.mobile-cafe-about {
+  margin-left: 20px;
+  font-family: Mulish ExtraBold;
+  margin-top: 18px;
+  font-size: 18px;
+}
+.mobile-cafe-description {
+  margin-top: 10px;
+  font-family: Mulish Regular;
+  margin-left: 20px;
+  font-size: 14px;
+  margin-right: 20px;
+}
+.mobile-cafe-suggested-drink, .mobile-cafe-suggested-food {
+  margin-top: 5px;
+}
+
+.mobile-cafe-hours-location {
+  margin-left: 20px;
+  font-family: Mulish ExtraBold;
+  margin-top: 22px;
+  font-size: 18px;
+}
+.mobile-cafe-hours-location-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  font-size: 13px;
+  margin-right: 0px;
+  margin-bottom: 120px;
+}
+.mobile-cafe-hours-container {
+  display: flex;
+  justify-content: end;
+  margin-top: 12px;
+  margin-left: 20px;
+  border-radius: 4px;
+  width: 48%;
+  border: 3px solid black;
+}
+.mobile-cafe-hours {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+.mobile-cafe-hours th {
+  background-color: black;
+  color: white;
+  font-family: Mulish SemiBold;
+  /* font-weight: normal; */
+  border: 2px solid black;
+  width: 14px;
+}
+.mobile-cafe-hours td {
+  font-family: Mulish SemiBold;
+  border: 2px solid black;
+  text-align: center;
+  width: 60px;
+}
+.mobile-cafe-hours td.right {
+  border-right: none;
+}
+.mobile-cafe-hours td.first-row, .mobile-cafe-hours th.first-row {
+  border-top: none;
+}
+.mobile-cafe-hours td.last-row, .mobile-cafe-hours th.last-row {
+  border-bottom: none;
+}
+.mobile-cafe-location-container {
+  margin-top: 10px;
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 45%;
+}
+.mobile-cafe-location-address {
+  font-family: Mulish Bold;
+}
+.mobile-cafe-location-googlemaps {
+  margin-top: 10px;
+  min-height: 30px;
+  padding-left: 9px;
+  padding-top: 2px;
+  padding-right: 7px;
+  border: 3px solid #017AFF;
+  background-color: #FFFFFF;
+  color: #017AFF;
+  border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: Mulish Bold;
+  /* color: #3AAB59; */
+  font-size: 12px;
+  padding-bottom: 3px;
+  min-width: 34vw;
+}
+.mobile-cafe-location-googlemaps-logo {
+  width: 4vw;
+  margin-right: 2px;
+}
+.mobile-cafe-location-applemaps-logo {
+  width: 3vw;
+  margin-right: 2px;
+}
+.mobile-cafe-location-yelp {
+  margin-top: 10px;
+  min-height: 30px;
+  padding-left: 9px;
+  padding-top: 2px;
+  padding-right: 7px;
+  border: 3px solid #EE3739;
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Mulish Bold;
+  color: #EE3739;
+  font-size: 12px;
+  padding-bottom: 3px;
+  min-width: 34vw;
+}
+.mobile-cafe-location-yelp-logo {
+  width: 4vw;
+  margin-right: 2px;
+}
+.mobile-cafe-score-title {
+  margin-left: 20px;
+  font-family: Mulish ExtraBold;
+  margin-top: 20px;
+  font-size: 18px;
+}
+.mobile-cafe-score-container {
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
-.lightbox-content img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  object-fit: contain;
+.mobile-score-container {
+  display: flex;
+  flex-direction: row;
 }
-
-.lightbox-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: none;
-  border: 2px solid white;
-  border-radius: 50%;
-  color: white;
-  font-size: 20px;
-  line-height: 20px;
-  cursor: pointer;
-  padding: 6px 10px;
-  transition: opacity 0.2s ease;
+.mobile-score-overall {
+  flex: 2;
 }
-
-.lightbox-close:hover {
-  opacity: 0.8;
+.mobile-score-overall-number {
+  color: #FFFFFF;
+  font-family: Mulish ExtraBold;
+  font-size: 40px;
+  border-radius: 3px;
+  width: 25vw;
+  height: 25vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.mobile-score-subscores {
+  flex: 8;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 12px;
+  margin-top: 1px;
 }
-
-
+.mobile-score-subscore {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.mobile-score-subscore-icon {
+  width: 5.2vw;
+  height: 5.5vw;
+}
+.mobile-score-subscore-icon.drinks {
+  fill: black;
+}
+.mobile-score-subscore-number {
+  margin-left: 6px;
+  font-family: Mulish Bold;
+}
+.mobile-score-bar-container {
+  margin-left: 6px;
+  margin-top: 2px;
+  width: 40vw;
+  height: 6px;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+.mobile-score-bar-container.outlet {
+  width: 13.3vw;
+}
+.mobile-score-bar-fill {
+  height: 100%;
+  background-color: black;
+  border-radius: 4px;
+  transition: width 0.3s ease-in-out;
+}

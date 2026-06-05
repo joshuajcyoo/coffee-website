@@ -10,13 +10,14 @@ import {ReactComponent as ListClose} from './Logos/toggle-close.svg'
 import {ReactComponent as ResetView} from './Logos/reset-view2.svg'
 import {ReactComponent as CafeView} from './Logos/reset-cafe.svg'
 import {ReactComponent as CloseFilters} from './Logos/close-filters.svg'
-import {ReactComponent as OutletIcon} from './Logos/filter-outlet.svg'
+import {ReactComponent as SearchIcon} from './Logos/sort-search2.svg'
+import {ReactComponent as OutletIcon} from './Logos/filter-outlet2.svg'
 import {ReactComponent as StudyIcon} from './Logos/filter-study.svg'
 import {ReactComponent as FoodIcon} from './Logos/filter-food.svg'
 import {ReactComponent as GemIcon} from './Logos/filter-gem.svg'
 import {ReactComponent as AestheticIcon} from './Logos/filter-aesthetic.svg'
 import {ReactComponent as OutdoorIcon} from './Logos/filter-outdoor.svg'
-import {ReactComponent as TimeIcon} from './Logos/filter-time.svg'
+import {ReactComponent as TimeIcon} from './Logos/filter-time2.svg'
 import {ReactComponent as ScoreIcon} from './Logos/sort-score.svg'
 import {ReactComponent as AmbianceIcon} from './Logos/sort-ambiance.svg'
 import {ReactComponent as WorkabilityIcon} from './Logos/sort-workability.svg'
@@ -26,8 +27,9 @@ import {ReactComponent as WelcomeInfo} from './Logos/welcome-info.svg'
 import {ReactComponent as ArrowInfo2} from './Logos/arrow-info3.svg'
 import {ReactComponent as OpenCardIcon} from './Logos/open-card.svg'
 import GoogleMaps from "./Logos/googlemapslogo.png";
+import { motion } from 'framer-motion'; // 1. Import motion
 
-export default function MapMobile({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, selectedCafe, setSelectedCafe, changeZoom, neighborhoodFunction, allFilters, sort, setSort, showSortPanel, setShowSortPanel, mobileState, setMobileState, exitMobilePage, setExitMobilePage}) {
+export default function MapMobile({longitude, setLongitude, latitude, setLatitude, zoom, setZoom, data, setData, selectCafe, displayRight, setDisplayRight, selectedCafe, setSelectedCafe, changeZoom, neighborhoodFunction, allFilters, sort, setSort, showSortPanel, setShowSortPanel, mobileState, setMobileState, exitMobilePage, setExitMobilePage, mobileFilters, setMobileFilters, setNeighborhoodFunction, isSelectingNeighborhoodMobile, setIsSelectingNeighborhoodMobile, neighborhoodFilter, setNeighborhoodFilter, selectedNeighborhood, setSelectedNeighborhood, isSelectingTimeMobile, setIsSelectingTimeMobile, mobileTimeState, setMobileTimeState, timeData, setTimeData, trackTimeUpdate, setTrackTimeUpdate, selectedMobileDay, setSelectedMobileDay, selectedMobileTime, setSelectedMobileTime, isSearchingMobile, setIsSearchingMobile, searchValue, setSearchValue, isSearchFocused, setIsSearchFocused, isSearchSet, setIsSearchSet, handleFocus, handleBlur, handleSearchChange}) {
   const mapContainer = useRef(null);
   maptilersdk.config.apiKey = 'bFXUsq2lCBRLxW1UauI0';
   const [theMap, setTheMap] = useState(null);
@@ -110,36 +112,76 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
   //   }
   // }, [longitude, latitude, zoom, neighborhoodFunction, selectedCafe]);
 
-  useEffect(() => {
-    if (!theMap) return;
-
-    if (mobileState === "map") {
-      theMap.flyTo({
-        center: [longitude, latitude],
-        zoom: zoom,
-        speed: 1,
-        curve: 1,
-      });
-    } else if (mobileState === "list") {
-      theMap.jumpTo({
-        center: [longitude, latitude],
-        zoom: zoom,
-      });
-    }
-  }, [selectedCafe]);
+  // ... inside your component:
+  const isInteracting = useRef(false);
 
   useEffect(() => {
     if (!theMap) return;
 
-    if (theMap) {
-      theMap.on('moveend', () => {
+    const handleStart = () => { isInteracting.current = true; };
+    const handleEnd = () => {
+      // A 300ms delay ensures React has time to process any final "moveend" state updates 
+      // without accidentally triggering the camera jump after you let go.
+      setTimeout(() => { isInteracting.current = false; }, 300);
+    };
+
+    // Listen for manual user interactions
+    theMap.on('dragstart', handleStart);
+    theMap.on('zoomstart', handleStart);
+    theMap.on('pitchstart', handleStart);
+
+    theMap.on('dragend', handleEnd);
+    theMap.on('zoomend', handleEnd);
+    theMap.on('pitchend', handleEnd);
+
+    // Cleanup listeners on unmount
+    return () => {
+      theMap.off('dragstart', handleStart);
+      theMap.off('zoomstart', handleStart);
+      theMap.off('pitchstart', handleStart);
+      theMap.off('dragend', handleEnd);
+      theMap.off('zoomend', handleEnd);
+      theMap.off('pitchend', handleEnd);
+    };
+  }, [theMap]);
+
+  useEffect(() => {
+    if (!theMap) return;
+
+    // If the user's fingers are on the map, or the map is gliding from momentum, DO NOTHING!
+    if (isInteracting.current) return;
+
+    theMap.resize();
+
+    setTimeout(() => {
+      if (mobileState === "map") {
+        theMap.flyTo({
+          center: [longitude, latitude],
+          zoom: zoom,
+          speed: 1,
+          curve: 1,
+        });
+      } else if (mobileState === "list") {
+        theMap.jumpTo({
+          center: [longitude, latitude],
+          zoom: zoom,
+        });
+      }
+    }, 50);
+
+  }, [latitude, longitude, zoom, mobileState, theMap]);
+
+  useEffect(() => {
+      if (!theMap) return;
+  
+      const handleMoveEnd = () => {
         const newCenter = theMap.getCenter();
         setLongitude(newCenter.lng);
         setLatitude(newCenter.lat);
-
+  
         var newLatitude;
         var newLongitude;
-
+  
         if (neighborhoodFunction) {
           var newData = [...data];
           newData.forEach(element => {
@@ -148,33 +190,39 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
               newLongitude = element.n_longitude;
             }
           });
-
+  
           if (newCenter.lat === newLatitude && newCenter.lng === newLongitude) {
             setShowResetView(false);
-          }
-          else {
+          } else {
             setShowResetView(true);
             setShowCafeView(false);
           }
-        }
-        else {
+        } else {
           if (newCenter.lat === 34.06248189100365 && newCenter.lng === -118.34569321430635) {
             setShowResetView(false);
-          }
-          else {
+          } else {
             setShowResetView(true);
             setShowCafeView(false);
           }
         }
-      });
-
-      theMap.on('zoomend', () => {
-        // setShowResetView(true);
+      };
+  
+      const handleZoomEnd = () => {
+        setShowResetView(true);
         const newZoom = theMap.getZoom();
         setZoom(newZoom);
-      });
-    }
-  }, [longitude, latitude, zoom, neighborhoodFunction]);
+      };
+  
+      // Attach the listeners
+      theMap.on('moveend', handleMoveEnd);
+      theMap.on('zoomend', handleZoomEnd);
+  
+      // CRITICAL: Clean up the listeners so they don't infinitely stack!
+      return () => {
+        theMap.off('moveend', handleMoveEnd);
+        theMap.off('zoomend', handleZoomEnd);
+      };
+    }, [theMap, neighborhoodFunction, data, setLongitude, setLatitude, setZoom]);
 
   // const handleMapToggle = () => {
   //   if (mobileState === 'map') {
@@ -268,6 +316,14 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
     else setShowFiltersPanel(true);
   }, [allFilters])
 
+  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  const handleTimeChange = (newTimeData) => {
+    setTimeData((prev) => ({
+        ...prev,
+        ...newTimeData,
+    }));
+  };
   
   let formattedHours = [];
   const [cafePopupOpen, setCafePopupOpen] = useState("")
@@ -420,6 +476,132 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
     setExitMobilePage(mobileState);
     setMobileState("page");
   }
+
+  const toggleFilter = (filter) => {
+    setMobileFilters((prevFilters) => ({
+        ...prevFilters,
+        [filter]: !prevFilters[filter],
+    }));
+  };
+
+  const scrollContainerRef = useRef(null);
+  
+  // 1. Create an array of all your filter configurations
+  const filterOptions = [
+  { id: 'has_outlets', label: 'Outlets', Icon: OutletIcon, className: 'outlet' },
+  { id: 'study_work', label: 'Study / Work', Icon: StudyIcon, className: 'study' },
+  { id: 'outdoor_area', label: 'Outdoor Area', Icon: OutdoorIcon, className: 'outdoor' },
+  { id: 'is_aesthetic', label: 'Aesthetic', Icon: AestheticIcon, className: 'aesthetic' },
+  { id: 'has_food', label: 'Food Menu', Icon: FoodIcon, className: 'food' },
+  { id: 'hidden_gem', label: 'Hidden Gem', Icon: GemIcon, className: 'gem' },
+  // ... add your other 8 filters to this array in the exact same format
+  ];
+
+  const [isTimeFilterActive, setIsTimeFilterActive] = useState(false);
+
+  const allPills = [
+    { id: 'neighborhood', label: 'Neighborhood', isNeighborhood: true },
+    { id: 'open_at', label: 'Open At', isOpenAt: true },
+    { id: 'search', label: 'Search', isSearching: true },
+    ...filterOptions
+  ];
+
+  const sortedFilters = allPills.sort((a, b) => {
+      let aSelected = false;
+      if (a.isNeighborhood) aSelected = !!selectedNeighborhood;
+      else if (a.isOpenAt) aSelected = mobileTimeState; // Toggles based on if the time filter is applied
+      else if (a.isSearching) aSelected = searchValue != "Search By Name" || searchValue != "";
+      else aSelected = mobileFilters[a.id];
+
+      // Check 'b' based on what type of pill it is
+      let bSelected = false;
+      if (b.isNeighborhood) bSelected = !!selectedNeighborhood;
+      else if (b.isOpenAt) bSelected = mobileTimeState;
+      else if (a.isSearching) aSelected = searchValue != "Search By Name" || searchValue != "";
+      else bSelected = mobileFilters[b.id];
+      
+      if (aSelected && !bSelected) return -1; // Move selected to the left
+      if (!aSelected && bSelected) return 1;  // Move selected to the left
+      return 0;
+  }); 
+
+  const handleFilterClick = (filterId) => {
+      toggleFilter(filterId);
+
+      // Trigger the smooth scroll back to the leftmost position
+      if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTo({
+          left: 0,
+          behavior: 'smooth'
+          });
+      }
+  };
+
+  const neighborhoodOptions = [
+    { value: 'USC/Exposition Park', label: 'USC/Exposition Park', color: '#FF6961' },
+    { value: 'Silver Lake/Los Feliz/Frogtown', label: 'Silver Lake/Los Feliz', color: '#F3A054' },
+    { value: 'Echo Park/Chinatown', label: 'Echo Park/Chinatown', color: '#F6C25C' },
+    { value: 'Highland Park/Eagle Rock', label: 'Highland Park/Eagle Rock', color: '#AEC986' },
+    { value: 'Culver City/Mid-City', label: 'Culver City/Mid-City', color: '#74B78C' },
+    { value: 'Santa Monica/Sawtelle', label: 'Santa Monica/Sawtelle', color: '#5BC6CC' },
+    { value: 'Venice/Mar Vista', label: 'Venice/Mar Vista', color: '#5FC5F9' },
+    { value: 'Downtown/Arts District', label: 'Downtown/Arts District', color: '#3683C2' },
+    { value: 'Koreatown/Larchmont', label: 'Koreatown/Larchmont', color: '#867BC0' },
+    { value: 'Beverly Hills/Century City', label: 'Beverly Hills/Century City', color: '#F2ACD8' },
+    { value: 'Hollywood/Fairfax/La Brea', label: 'Hollywood/Fairfax', color: '#F2729F' },
+  ];
+
+  const sortedNeighborhoodOptions = [...neighborhoodOptions].sort((a, b) => {
+    // Check if 'a' or 'b' is the currently selected neighborhood
+    const aSelected = selectedNeighborhood && selectedNeighborhood.value === a.value;
+    const bSelected = selectedNeighborhood && selectedNeighborhood.value === b.value;
+    
+    if (aSelected && !bSelected) return -1; // Move selected to the left
+    if (!aSelected && bSelected) return 1;  // Move selected to the left
+    return 0; // Keep original order for the rest
+  });
+
+  const inNeighborhood = (cafe, neighborhood) => {
+    return cafe.neighborhood === neighborhood;
+  };
+
+  const finalFilter = (cafe) => {
+    if (!selectedNeighborhood) return true; 
+    let applyFilter = true;
+    applyFilter = applyFilter && inNeighborhood(cafe, neighborhoodFilter.neighborhood);
+    return applyFilter;
+  };
+
+  const handleNeighborhoodClick = (neighborhood) => {
+    const isAlreadySelected = selectedNeighborhood && selectedNeighborhood.value === neighborhood.value;
+    // Run your original logic
+    setSelectedNeighborhood(isAlreadySelected ? null : neighborhood);
+    setNeighborhoodFilter((prevFilters) => ({
+        ...prevFilters,
+        neighborhood: neighborhood.value
+    }));
+    // setScrollToTop(true);
+    setSelectedCafe(null);
+    
+    var newData = [...data];
+    newData.forEach(element => element.is_selected = false);
+    setData(newData);
+
+    // Close the neighborhood menu and return to the main filters
+    // setIsSelectingNeighborhoodMobile(false);
+
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedNeighborhood) {
+        setNeighborhoodFunction(null); // No filter applied
+    } else {
+        setNeighborhoodFunction(() => finalFilter);
+    }
+  }, [neighborhoodFilter, selectedNeighborhood]);
   
   return (
     <div className="mobile-map-wrap" style={mobileState === 'map' ? {display: 'block'} : {display: 'none'}}>
@@ -481,6 +663,248 @@ export default function MapMobile({longitude, setLongitude, latitude, setLatitud
             selectedCafes={data.filter(cafe => cafe.is_selected)}
           />
         ))}
+      <div id="mobile-map-filters" ref={scrollContainerRef}>
+        {!isSelectingNeighborhoodMobile && !isSelectingTimeMobile && !isSearchingMobile ? (
+            <>
+              {sortedFilters.map((filter) => {
+                // 1. Render the Neighborhood Pill
+                if (filter.isNeighborhood) {
+                  return (
+                    <motion.div layout key="neighborhood" className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+                      <div 
+                          id="filter-neighborhood" 
+                          className={`mobile-filter-item bubble ${selectedNeighborhood ? 'selected' : ''}`}
+                          onClick={() => setIsSelectingNeighborhoodMobile(true)}
+                          style={selectedNeighborhood ? { borderColor: selectedNeighborhood.color, backgroundColor: '#FFFFFF', color: '#000000'} : {}}
+                      >
+                          <span className='filter-checkbox'>Neighborhood</span>
+                      </div>
+                    </motion.div>
+                  );
+                }
+  
+                if (filter.isOpenAt) {
+                  return (
+                    <motion.div layout key="open-at" className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+                      <div 
+                          id="filter-open-at" 
+                          // Highlight the pill if a time filter is currently active
+                          className={`mobile-filter-item bubble ${mobileTimeState ? 'selected' : ''}`} 
+                          onClick={() => {
+                              setIsSelectingTimeMobile(true);
+                              console.log(timeData.hour);
+                              console.log((parseInt(selectedMobileTime.slice(0, 2)) == 0 ? 12 : (parseInt(selectedMobileTime.slice(0, 2)) > 12 ? parseInt(selectedMobileTime.slice(0, 2)) - 12 : parseInt(selectedMobileTime.slice(0, 2)))));
+                          }}
+                      >
+                          <TimeIcon
+                            id='mobile-filter-time-icon' 
+                            className='mobile-filter-icon' 
+                          />
+                          <span className='filter-checkbox'>Open At</span>
+                      </div>
+                    </motion.div>
+                  );
+                }
+
+                if (filter.isSearching) {
+                  return (
+                    <motion.div layout key="search" className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+                      <div 
+                          id="filter-search" 
+                          // Highlight the pill if a time filter is currently active
+                          className={`mobile-filter-item bubble ${(searchValue != 'Search By Name' && searchValue != '') ? 'selected' : ''}`} 
+                          onClick={() => {
+                              setMobileState("list");
+                              setIsSearchingMobile(true);
+                          }}
+                      >
+                          <SearchIcon
+                            id='mobile-filter-search-icon' 
+                            className='mobile-filter-icon' 
+                          />
+                          <span className='filter-checkbox'></span>
+                      </div>
+                    </motion.div>
+                  );
+                }
+
+                // 2. Render the Standard Filter Pills
+                return (
+                  <motion.div layout key={filter.id} className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+                      <div 
+                          id={`filter-${filter.id.replace('_', '-')}`} 
+                          className={`mobile-filter-item bubble ${mobileFilters[filter.id] ? 'selected' : ''} ${filter.className}`} 
+                          onClick={() => handleFilterClick(filter.id)}
+                      >
+                          <filter.Icon 
+                            id={`mobile-filter-${filter.className}-icon`} 
+                            className='mobile-filter-icon' 
+                          />
+                          <span className='filter-checkbox'>{filter.label}</span>
+                      </div>
+                  </motion.div>
+                );
+              })}
+            </>
+        ) : isSelectingNeighborhoodMobile ? (
+          <>
+            {/* A way to back out without selecting anything */}
+            <motion.div layout className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <div className="mobile-filter-item bubble" onClick={() => setIsSelectingNeighborhoodMobile(false)}>
+                  <span className='filter-checkbox'>← Back</span>
+              </div>
+            </motion.div>
+            
+            {/* Map through all options */}
+            {sortedNeighborhoodOptions.map((option) => {
+              const isSelected = selectedNeighborhood && selectedNeighborhood.value === option.value;
+              return (
+                <motion.div layout key={option.value} className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+                    <div 
+                        className={`mobile-filter-item bubble ${isSelected ? 'selected' : ''}`}
+                        onClick={() => handleNeighborhoodClick(option)}
+                        style={isSelected ? { borderColor: option.color, backgroundColor: option.color } : {borderColor: option.color}}
+                    >
+                        <span className='filter-checkbox'>{option.label}</span>
+                    </div>
+                </motion.div>
+              );
+            })}
+          </>
+        ) : isSelectingTimeMobile ? (
+          <>
+            {/* Back Button */}
+            <motion.div layout className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <div className="mobile-filter-item bubble" onClick={() => {
+                setIsSelectingTimeMobile(false)
+              }}>
+                  <span className='filter-checkbox'>Back</span>
+              </div>
+            </motion.div>
+  
+            {/* Native Day Selector */}
+            <motion.div layout className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <div className="mobile-filter-item bubble day">
+                  {/* A completely invisible native select sitting on top of your pill design */}
+                  {/* 1. The Invisible Native Trigger */}
+                  <select 
+                    value={selectedMobileDay} 
+                    onChange={(e) => {
+                      setSelectedMobileDay(e.target.value);
+                      setTrackTimeUpdate(true);
+                  }}
+                    className="hidden-native-input"
+                  >
+                    <option value="0">Sunday</option>
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                  </select>
+                  <span className='filter-checkbox'>{dayNames[parseInt(selectedMobileDay)]} ▾</span>
+              </div>
+            </motion.div>
+  
+            {/* Native Time Selector */}
+            <motion.div layout className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <div className="mobile-filter-item bubble time">
+                  {/* 1. The Invisible Native Trigger */}
+                  <input 
+                  type="time" 
+                  value={selectedMobileTime}
+                  onChange={(e) => {
+                      setSelectedMobileTime(e.target.value);
+                      setTrackTimeUpdate(true);
+                  }}
+                    className="hidden-native-input"
+                  />
+  
+                  {/* 2. The Visible Custom UI underneath */}
+                  {/* (Assuming you have a helper function to format "16:13" to "4:13 PM") */}
+                  <span className='filter-checkbox'>{(parseInt(selectedMobileTime.slice(0, 2)) == 0 ? parseInt("12") : (parseInt(selectedMobileTime.slice(0, 2)) > 12 ? parseInt(selectedMobileTime.slice(0, 2)) - 12 : parseInt(selectedMobileTime.slice(0, 2)))) + ":" + (parseInt(selectedMobileTime.slice(-2)) < 10 ? (selectedMobileTime.slice(-2)).padStart(2, "0") : parseInt(selectedMobileTime.slice(-2)))  + " " + ((parseInt(selectedMobileTime.slice(0, 2)) >= 12 ? "PM" : "AM"))} ▾</span>
+              </div>
+            </motion.div>
+
+          {(() => {
+              // Determine if this button needs to behave like an "Apply" button
+              const showApply = !mobileTimeState || trackTimeUpdate;
+
+              return (
+                  <motion.div layout className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+                  <div 
+                      className="mobile-filter-item bubble time-apply" 
+                      style={showApply 
+                      ? {backgroundColor: "#058205", borderColor: "#058205", color: "#FFFFFF"} // Green Apply
+                      : {backgroundColor: "#FF0000", borderColor: "#FF0000", color: "#FFFFFF"} // Red Clear
+                      }
+                      onClick={() => {
+                      if (showApply) {
+                          // --- ACTION: APPLY / RE-APPLY ---
+                          setMobileTimeState(true);
+                          setTrackTimeUpdate(false); // Reset dirty tracking since it's now applied
+                          
+                          handleTimeChange({ 
+                          hour: parseInt(selectedMobileTime.slice(0, 2)), 
+                          minute: parseInt(selectedMobileTime.slice(-2)), 
+                          ampm: (parseInt(selectedMobileTime.slice(0, 2)) >= 12 ? "PM" : "AM"), 
+                          day: parseInt(selectedMobileDay), 
+                          number: parseInt(selectedMobileTime.replace(":", ""))
+                          });
+                      } else {
+                          // --- ACTION: CLEAR ---
+                          setMobileTimeState(false);
+                          setTrackTimeUpdate(false);
+                          
+                          handleTimeChange(null); // Clear out your backend filter data
+                      }
+                      }}
+                  >
+                      <span className='filter-checkbox'>{showApply ? "Apply" : "Clear"}</span>
+                  </div>
+                  </motion.div>
+              );
+          })()}
+
+          {/* {trackTimeUpdate && mobileTimeState &&
+            <motion.div layout className="mobile-list-filter" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <div className="mobile-filter-item bubble time-apply" style={{backgroundColor: "#058205", borderColor: "#058205", color: "#FFFFFF"}}
+              onClick={() => {
+              //   setIsSelectingTimeMobile(!isSelectingTimeMobile);
+              setTrackTimeUpdate(false);
+              handleTimeChange({ hour: parseInt(selectedMobileTime.slice(0, 2)), minute: parseInt(selectedMobileTime.slice(-2)), ampm: ((parseInt(selectedMobileTime.slice(0, 2))) >= 12 ? "PM" : "AM"), day: parseInt(selectedMobileDay), number: parseInt(selectedMobileTime.replace(":", ""))});
+              }}>
+                  <span className='filter-checkbox'>Apply</span>
+              </div>
+            </motion.div>
+          } */}
+          </>
+        ) : (
+          <div className="mobile-filter-search-overall">
+            {/* A way to back out without selecting anything */}
+            <motion.div layout className="mobile-list-filter searchback" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <div className="mobile-filter-item bubble" onClick={() => setIsSearchingMobile(false)}>
+                  <span className='filter-checkbox'>← Back</span>
+              </div>
+            </motion.div>
+
+            <motion.div layout className="mobile-list-filter search" transition={{ type: "spring", stiffness: 300, damping: 30 }}>
+              <div className={`mobile-filter-item bubble search ${isSearchFocused ? 'focused' : (isSearchSet ? 'set' : '')}`}>
+                  {/* <div className='filter-search-container'> */}
+                      <div className={`mobile-filter-search${isSearchFocused ? '-focused' : (isSearchSet ? '-set' : '')}`}>
+                          <SearchIcon
+                            id='mobile-filter-search-icon-searching' 
+                            className='mobile-filter-icon' 
+                          />
+                          <input type="text" className='mobile-filter-search-input' value={searchValue} onFocus={handleFocus} onBlur={handleBlur} onChange={handleSearchChange}></input>
+                      </div>
+                  {/* </div> */}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </div>
         
         {/* {showResetView && 
           <button className="mobile-map-button" id="mobile-map-reset-view" onClick={handleResetView}>

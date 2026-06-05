@@ -39,7 +39,7 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
     const neighborhoodOptions = [
         { value: 'All Neighborhoods', label: 'All Neighborhoods', color: '#000000' },
         { value: 'USC/Exposition Park', label: 'USC/Exposition Park', color: '#FF6961' },
-        { value: 'Silver Lake/Los Feliz/Frogtown', label: 'Silver Lake/Los Feliz/Frogtown', color: '#F3A054' },
+        { value: 'Silver Lake/Los Feliz/Frogtown', label: 'Silver Lake/Los Feliz', color: '#F3A054' },
         { value: 'Echo Park/Chinatown', label: 'Echo Park/Chinatown', color: '#F6C25C' },
         { value: 'Highland Park/Eagle Rock', label: 'Highland Park/Eagle Rock', color: '#AEC986' },
         { value: 'Culver City/Mid-City', label: 'Culver City/Mid-City', color: '#74B78C' },
@@ -48,7 +48,7 @@ export default function NeighborhoodPanel({setNeighborhoodFunction, setScrollToT
         { value: 'Downtown/Arts District', label: 'Downtown/Arts District', color: '#3683C2' },
         { value: 'Koreatown/Larchmont', label: 'Koreatown/Larchmont', color: '#867BC0' },
         { value: 'Beverly Hills/Century City', label: 'Beverly Hills/Century City', color: '#F2ACD8' },
-        { value: 'Hollywood/Fairfax/La Brea', label: 'Hollywood/Fairfax/La Brea', color: '#F2729F' },
+        { value: 'Hollywood/Fairfax/La Brea', label: 'Hollywood/Fairfax', color: '#F2729F' },
     ];
 
     const [selectedNeighborhood, setSelectedNeighborhood] = useState(neighborhoodOptions[0]);
