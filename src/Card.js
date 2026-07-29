@@ -194,6 +194,7 @@ const Card = forwardRef(({cardData, isExpanded, handleCardClick, hoveredCafe, se
                             </table>
                         </div>
                     </div>
+                    <div className='cafe-modal-hours-updated'>Last updated on {cardData.last_updated}</div>
 
                     <div className='cafe-modal-score-title'>Score</div>
                     <div className='cafe-modal-score' style={{color: cardData.color_code}}><span style={{border: '2px solid ' + cardData.color_code, borderRadius: '3px', paddingLeft: '0.3vw', paddingRight: '0.3vw', paddingTop: '0.1vw', paddingBottom: '0.1vw'}}>{cardData.score}/10</span></div>

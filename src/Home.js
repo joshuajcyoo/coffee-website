@@ -24,7 +24,7 @@ export default function Home() {
 
   const rightRef = useRef();
 
-  const [displayRight, setDisplayRight] = useState(false);
+  const [displayRight, setDisplayRight] = useState(true);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const debounce = (func, delay) => {
